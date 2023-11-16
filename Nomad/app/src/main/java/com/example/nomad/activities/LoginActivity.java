@@ -8,35 +8,32 @@ import android.widget.Button;
 
 import com.example.nomad.R;
 
-public class WelcomeActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity {
     Button registerButton;
     Button loginButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
-
+        setContentView(R.layout.activity_login);
         registerButton = findViewById(R.id.RegisterButton);
         loginButton = findViewById(R.id.LoginButton);
-
         setupLoginButton();
         setupRegisterButton();
     }
-
-    protected void setupRegisterButton () {
-        registerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        });
-    }
-
-    protected void setupLoginButton () {
+    protected void setupLoginButton(){
         loginButton.setOnClickListener(v -> {
-            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent.putExtra("title", "Cart");
             startActivity(intent);
         });
     }
+    protected void setupRegisterButton(){
+        registerButton.setOnClickListener(v -> {
 
-
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            intent.putExtra("title", "Cart");
+            startActivity(intent);
+        });
+    }
 }

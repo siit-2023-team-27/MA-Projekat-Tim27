@@ -31,7 +31,7 @@
         tools:layout_editor_absoluteX="129dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/LoginButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Already have an account"
@@ -41,12 +41,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/RegisterButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Let's get started"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/LoginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -54,7 +54,7 @@
         android:id="@+id/imageView3"
         android:layout_width="401dp"
         android:layout_height="462dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/RegisterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
