@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.nomad"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.nomad"
@@ -13,7 +13,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androi" +
+                "dx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
