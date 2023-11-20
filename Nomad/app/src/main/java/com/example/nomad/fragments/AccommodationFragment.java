@@ -17,17 +17,27 @@ import androidx.fragment.app.Fragment;
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
 import com.example.nomad.activities.SliderData;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 
 public class AccommodationFragment extends Fragment {
-
+    MapView mapView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accommodation, container, false);
-
+        mapView = rootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(googleMap -> {
+            LatLng marker = new LatLng(0, 0);
+            googleMap.addMarker(new MarkerOptions().position(marker).title("Markeeer"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        });
         // Create an array list for storing image URLs.
         ArrayList<SliderData> sliderDataArrayList = new ArrayList<SliderData>();
 
