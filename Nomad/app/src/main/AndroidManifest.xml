@@ -20,9 +20,9 @@
         <activity
             android:name=".activities.MapsActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.AccommodationActivity"
-            android:exported="false" />
+        <!--<activity
+            android:name=".fragments.AccommodationFragment"
+            android:exported="false" />-->
         <activity
             android:name=".activities.WelcomeActivity"
             android:exported="false" />
