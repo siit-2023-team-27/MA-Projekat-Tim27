@@ -6,4 +6,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
     </style>
+
+    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/nomad_brown</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

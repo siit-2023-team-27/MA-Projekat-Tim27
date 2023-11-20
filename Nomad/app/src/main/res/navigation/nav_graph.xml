@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/searchApartmentFragment">
+    app:startDestination="@id/nav_search">
 
     <fragment
-        android:id="@+id/searchApartmentFragment"
-        android:name="com.example.nomad.fragments.AccommodationFragment"
+        android:id="@+id/nav_search"
+        android:name="com.example.nomad.fragments.SearchApartmentFragment"
         android:label="fragment_search_apartment"
-        tools:layout="@layout/fragment_accommodation">
+        tools:layout="@layout/fragment_search_apartment">
     </fragment>
     <fragment
         android:id="@+id/nav_profile"
@@ -24,6 +24,13 @@
         android:name="com.example.nomad.fragments.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/nav_requests"
+        android:name="com.example.nomad.fragments.RequestsFragment"
+        android:label="fragment_requests"
+        tools:layout="@layout/fragment_requests"
         app:popUpTo="@+id/nav_search"
         app:popUpToInclusive="true"/>
 </navigation>

@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ActivityHomeBinding binding;
     private NavController navController;
     ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
