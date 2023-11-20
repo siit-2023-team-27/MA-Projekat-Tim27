@@ -119,6 +119,26 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"/>
 
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
+            android:text="Location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:apiKey="AIzaSyAxj9NM79Qi34jP5wtLXNA9DO05RsUPoXM"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            app:mapType="normal"
+            tools:ignore="MissingClass" />
+
         <LinearLayout
             android:id="@+id/comments_container"
             android:layout_width="match_parent"
