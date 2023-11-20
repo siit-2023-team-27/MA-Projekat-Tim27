@@ -3,8 +3,9 @@
     <style name="Theme.Nomad" parent="Base.Theme.Nomad">
         <!-- Transparent system bars for edge-to-edge. -->
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/nomad_brown</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowFullscreen">false</item>
     </style>
 
     <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.Light">

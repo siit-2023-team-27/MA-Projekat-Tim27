@@ -13,7 +13,9 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.nomad.R;
@@ -30,6 +32,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ActivityHomeBinding binding;
     private NavController navController;
     ActionBarDrawerToggle actionBarDrawerToggle;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         navigationView.bringToFront();
+
+        menu = navigationView.getMenu();
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -65,6 +70,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.nav_logout) {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         drawerLayout.close();
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item);
