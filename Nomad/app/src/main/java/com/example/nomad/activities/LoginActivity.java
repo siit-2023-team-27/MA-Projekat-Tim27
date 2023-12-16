@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
 
             try {
+
                     if(loginService.login(userName.getText().toString(), password.getText().toString())){
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("title", "Cart");

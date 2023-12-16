@@ -22,28 +22,31 @@ import java.util.concurrent.TimeoutException;
 
 public class LoginService extends Service {
     URL url = new URL("http://192.168.1.144:8080/auth/login");
+    private Future<?> future;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     HttpURLConnection client = null;
     public LoginService() throws MalformedURLException {
-        try {
 
-            this.client = (HttpURLConnection) url.openConnection();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 
     private boolean _login(String username, String password){
-        final int code;
+        try {
 
+            this.client = (HttpURLConnection) url.openConnection();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try{
+            try{
+                client.disconnect();
+            }catch (Exception e){e.printStackTrace();}
             client.setDoOutput(true);
             client.setRequestMethod("POST");
             client.setConnectTimeout(1000);
             client.addRequestProperty("Content-Type", "application/json");
-            client.connect();
 
             Log.d("TAG", "{\"username\": \""  + username + "\", \"password\": \"" + password + "\"}");
             OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
@@ -55,19 +58,27 @@ public class LoginService extends Service {
             osw.flush();
             osw.close();
             outputPost.close();
+
             return client.getResponseCode() == 200;
 
         }catch(ProtocolException protocolException){
             Log.d("TAG", "Protocol");
             protocolException.printStackTrace();
+            client.disconnect();
         } catch (IOException ioException){
             Log.d("TAG", "IO");
             ioException.printStackTrace();
+            client.disconnect();
+        }finally{
+            client.disconnect();
         }
         return false;
     }
     public boolean login(String username, String password) throws ExecutionException, InterruptedException, TimeoutException {
-        return (boolean)executor.submit(() -> {return _login(username, password);}).get(100, TimeUnit.SECONDS);
+        if( future == null|| future.isDone()){
+            future = executor.submit(() -> {return _login(username, password);});
+        }
+        return (boolean)future.get(100, TimeUnit.SECONDS);
     }
     @Override
     public IBinder onBind(Intent intent) {
