@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
@@ -14,12 +15,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.nomad.enums.AccommodationStatus;
+import com.example.nomad.enums.ConfirmationType;
+import com.example.nomad.enums.PriceType;
+import com.example.nomad.services.AccommodationClient;
+import com.example.nomad.services.AccomodationsService;
+import com.example.nomad.services.AuthService;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.Amenity;
+import com.example.nomad.dto.DateRange;
 import com.example.nomad.enums.AccommodationType;
 import com.example.nomad.services.AccommodationService;
 import com.google.android.gms.maps.MapFragment;
@@ -34,7 +48,9 @@ import org.osmdroid.views.MapView;
 
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -67,7 +83,11 @@ public class CreateAccommodationFragment extends Fragment {
     private ArrayList<Amenity> selectedAmenities = new ArrayList<>();
     private AccommodationDTO accommodation;
     private Spinner spinner;
-    private Button button;
+//    private Button setUnavailableButton;
+    private MaterialCalendarView calendar;
+//    private Button setPriceButton;
+//    private Button createButton;
+//    private AccomodationsService accomodationsService = new AccomodationsService();
 
 //    private MaterialCalendarView calendarView;
     public CreateAccommodationFragment() throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
@@ -128,42 +148,41 @@ public class CreateAccommodationFragment extends Fragment {
             }
             return Unit.INSTANCE;
         });
+//        setUnavailableButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setUnavailable();
+//            }
+//        });
         Fragment self = this;
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateAccommodation(v);
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                FragmentTransaction ftt = self.getParentFragmentManager().beginTransaction();
-                ftt.addToBackStack("");
-//                ft.replace(self.getParentFragment().getId(), new AccommodationLocationFragment(accommodation));
-                ftt.remove(self);
-                ft.add(new AccommodationLocationFragment(accommodation), "");
-                ft.commit();
-                ftt.commit();
-            }
-        });
-//        getActivity().setContentView(R.layout.activity_main);
 
 
-
-
-
-//        map = view.findViewById(R.id.map);
-//        map.setTileSource(TileSourceFactory.BASE_OVERLAY_NL);
-//        map.setBuiltInZoomControls(true);
-//        map.setMultiTouchControls(true);
-//        IMapController mapController = map.getController();
-//        mapController.setZoom(15);
-//        GeoPoint startPoint = new GeoPoint(51496994, -134733);
-//        mapController.setCenter(startPoint);
-//        Log.d("TAG",         map.getBoundingBox()
-//                .toString());
-//        map.setMinimumWidth(500);
-//        map.setMinimumHeight(500);
-//        map.setVisibility(View.VISIBLE);
 //        calendarView = view.findViewById(R.id.calendarView);
+//        createButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                generateAccommodation(v);
+//                accommodation.setImages(new ArrayList<String>());
+//                accommodation.setAddress("AAAAAAAAAAAA");
+//                accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+//                accommodation.setDefaultPrice(10);
+//                accommodation.setDeadlineForCancellation(10);
+//                accommodation.setConfirmationType(ConfirmationType.AUTOMATIC);
+//                accommodation.setHostId(AuthService.id);
+//                accommodation.setStatus(AccommodationStatus.APPROVED);
+//                Log.d("BBBBB", accommodation.toString());
+//                Log.d("BBBBB", String.valueOf(AuthService.id));
+//                Log.d("BBBBB", AuthService.token.toString());
+//                accomodationsService.create(accommodation);
+//            }
+//        });
     }
+
+    private void setUnavailable() {
+        List<CalendarDay> dates = calendar.getSelectedDates();
+
+    }
+
     public void setupSpinner(View view){
         spinner = view.findViewById(R.id.spinner);
 
@@ -183,6 +202,8 @@ public class CreateAccommodationFragment extends Fragment {
         this.accommodation.setName(name.getText().toString());
         this.accommodation.setDescription(description.getText().toString());
         this.accommodation.setAmenities(selectedAmenities);
+        this.accommodation.setVerified(true);
+        this.accommodation.setId(1l);
         Log.d("generateAccommodation: ", String.valueOf(multiSpinner.getSelectedItemPosition()));
         Log.d("generateAccommodation: ", String.valueOf(multiSpinner.getSelectedItemPosition()));
         Log.d("generateAccommodation: ", accommodation.toString());
@@ -199,6 +220,9 @@ public class CreateAccommodationFragment extends Fragment {
         description = view.findViewById(R.id.editTextAccommodationDescription);
         minGuests = view.findViewById(R.id.editTextNumberMin);
         maxGuests = view.findViewById(R.id.editTextNumberMax);
-        button = view.findViewById(R.id.createAccommodationNextButton);
+        calendar = view.findViewById(R.id.calendarView);
+//        setUnavailableButton = view.findViewById(R.id.SetUnavailableButton);
+//        setPriceButton = view.findViewById(R.id.SetPriceButton);
+//        createButton = view.findViewById(R.id.CreateAccommodationButton);
     }
 }

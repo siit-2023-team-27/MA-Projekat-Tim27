@@ -43,5 +43,16 @@
         android:name="com.example.nomad.fragments.CreateAccommodationFragment"
         android:label="fragment_create_accommodation"
         tools:layout="@layout/fragment_create_accommodation" />
+    <fragment
+        android:id="@+id/nav_accommodation_location"
+        android:name="com.example.nomad.fragments.AccommodationLocationFragment"
+        android:label="fragment_create_accommodation"
+        tools:layout="@layout/fragment_accommodation_location" />
+    <fragment
+        android:id="@+id/nav_calendar"
+        android:name="com.example.nomad.fragments.CalendarFragment"
+        android:label="fragment_create_accommodation"
+        tools:layout="@layout/fragment_calendar" />
+
 
 </navigation>

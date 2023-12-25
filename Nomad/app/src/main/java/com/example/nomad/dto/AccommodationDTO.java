@@ -7,10 +7,12 @@ import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.AccommodationType;
 import com.example.nomad.enums.ConfirmationType;
 import com.example.nomad.enums.PriceType;
+import com.example.nomad.services.AuthService;
 
 
 import org.w3c.dom.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationDTO {
@@ -49,6 +51,7 @@ public class AccommodationDTO {
         this.deadlineForCancellation = deadlineForCancellation;
         this.verified = verified;
     }
+
 
 
 

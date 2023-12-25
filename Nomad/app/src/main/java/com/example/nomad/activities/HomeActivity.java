@@ -5,22 +5,28 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.ActivityHomeBinding;
+import com.example.nomad.fragments.AccommodationLocationFragment;
+import com.example.nomad.fragments.CalendarFragment;
 import com.example.nomad.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,6 +41,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavController navController;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Menu menu;
+    AccommodationLocationFragment locationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
+
     }
 
 //    @Override
@@ -79,5 +87,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         drawerLayout.close();
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item);
+    }
+    public void click(View view){
+        Log.d("AAAA", "onClick: ");
+        locationFragment.click(view);
+
+    }
+    public void openCalendarFragment(View view){
+        locationFragment.nextFragment();
+
+    }
+
+    public void setLocationFragment(AccommodationLocationFragment locationFragment) {
+        this.locationFragment = locationFragment;
     }
 }
