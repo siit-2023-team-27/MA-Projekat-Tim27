@@ -57,6 +57,12 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation ("com.auth0.android:jwtdecode:2.0.2")
+    implementation ("org.mapsforge:mapsforge-core:0.20.0")
+    implementation ("org.mapsforge:mapsforge-map:0.20.0")
+    implementation ("org.mapsforge:mapsforge-map-reader:0.20.0")
+    implementation ("org.mapsforge:mapsforge-themes:0.20.0")
+    implementation ("org.mapsforge:mapsforge-map-android:0.20.0")
+    implementation ("com.caverock:androidsvg:1.4")
 
 
 

@@ -20,8 +20,8 @@ import retrofit2.Response;
 
 public class AuthService {
     private static UserType role;
-    private static JWT token;
-    private Long id;
+    public static JWT token;
+    public static Long id;
     private LoginActivity activity;
     public AuthService(LoginActivity activity){
         this.activity = activity;
