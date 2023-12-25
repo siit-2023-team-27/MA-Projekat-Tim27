@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -48,4 +49,16 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("com.github.smarteist:autoimageslider:1.3.9")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
+//    implementation      ("com.github.pratikbutani:MultiSelectSpinner:1.0.1")
+    implementation      ("com.github.puskal-khadka:MultiSelectSpinner:1.0.1")
+    implementation ("org.json:json:20171018")
+    implementation("org.osmdroid:osmdroid-android:6.1.17")
+    implementation ("com.github.prolificinteractive:material-calendarview:+")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation ("com.auth0.android:jwtdecode:2.0.2")
+
+
+
+
 }

@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.nomad.R;
-import com.example.nomad.services.LoginService;
+import com.example.nomad.dto.LoginDTO;
+import com.example.nomad.services.AccommodationService;
+import com.example.nomad.services.AuthService;
+
 
 import java.net.MalformedURLException;
 import java.util.concurrent.ExecutionException;
@@ -23,15 +27,11 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     EditText userName;
     EditText password;
-    LoginService loginService;
+    AuthService authService = new AuthService(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            loginService = new LoginService();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+
         setContentView(R.layout.activity_login);
         registerButton = findViewById(R.id.RegisterButton);
         loginButton = findViewById(R.id.LoginButton);
@@ -43,29 +43,23 @@ public class LoginActivity extends AppCompatActivity {
     protected void setupLoginButton(){
         loginButton.setOnClickListener(v -> {
 
-            try {
+            authService.login(new LoginDTO(userName.getText().toString(), password.getText().toString()));
 
-                    if(loginService.login(userName.getText().toString(), password.getText().toString())){
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        intent.putExtra("title", "Cart");
-                        startActivity(intent);
-                    }
-
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (TimeoutException e) {
-                throw new RuntimeException(e);
-            }
 
         });
+    }
+    public void loginSuccess(){
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+    public void loginFail(){
+        Toast.makeText(getApplicationContext(), "Greska pri loginu", Toast.LENGTH_SHORT);
+
     }
     protected void setupRegisterButton(){
         registerButton.setOnClickListener(v -> {
 
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            intent.putExtra("title", "Cart");
             startActivity(intent);
         });
     }
