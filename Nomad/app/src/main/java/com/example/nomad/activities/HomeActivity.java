@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.nomad.R;
 import com.example.nomad.databinding.ActivityHomeBinding;
 import com.example.nomad.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
+
 
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +39,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding =ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
