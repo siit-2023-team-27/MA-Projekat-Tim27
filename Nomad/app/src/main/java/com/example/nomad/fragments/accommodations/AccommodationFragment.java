@@ -1,6 +1,7 @@
-package com.example.nomad.fragments;
+package com.example.nomad.fragments.accommodations;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
 import com.example.nomad.activities.SliderData;
+import com.example.nomad.model.AccommodationDTO;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,6 +29,26 @@ import java.util.ArrayList;
 
 public class AccommodationFragment extends Fragment {
     MapView mapView;
+    private static final String ARG_PARAM2 = "name";
+    private String title;
+
+    public static AccommodationFragment newInstance(String name) {
+        AccommodationFragment fragment = new AccommodationFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM2, name);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("ShopApp", "SecondFragment onCreate()");
+
+        if (getArguments() != null) {
+            title = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +60,10 @@ public class AccommodationFragment extends Fragment {
             googleMap.addMarker(new MarkerOptions().position(marker).title("Markeeer"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
         });
+        TextView name = rootView.findViewById(R.id.textView4);
+        name.setText(title);
+
+
         // Create an array list for storing image URLs.
         ArrayList<SliderData> sliderDataArrayList = new ArrayList<SliderData>();
 
