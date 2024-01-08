@@ -18,10 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nomad.R;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.fragments.accommodations.AccommodationListFragment;
-import com.example.nomad.model.AccommodationDTO;
 
 import java.util.ArrayList;
 

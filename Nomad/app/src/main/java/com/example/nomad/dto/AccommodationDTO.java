@@ -2,6 +2,10 @@ package com.example.nomad.dto;
 
 
 import android.media.Rating;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 
 import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.AccommodationType;
@@ -15,7 +19,7 @@ import org.w3c.dom.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccommodationDTO {
+public class AccommodationDTO  implements Parcelable {
     private long id;
     private int minGuests;
     private int maxGuests;
@@ -53,7 +57,31 @@ public class AccommodationDTO {
     }
 
 
+    protected AccommodationDTO(Parcel in) {
+        id = in.readLong();
+        minGuests = in.readInt();
+        maxGuests = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        address = in.readString();
+        images = in.createStringArrayList();
+        defaultPrice = in.readDouble();
+        deadlineForCancellation = in.readInt();
+        verified = in.readByte() != 0;
+        hostId = in.readLong();
+    }
 
+    public static final Creator<AccommodationDTO> CREATOR = new Creator<AccommodationDTO>() {
+        @Override
+        public AccommodationDTO createFromParcel(Parcel in) {
+            return new AccommodationDTO(in);
+        }
+
+        @Override
+        public AccommodationDTO[] newArray(int size) {
+            return new AccommodationDTO[size];
+        }
+    };
 
     public AccommodationType getAccommodationType() {
         return accommodationType;
@@ -205,4 +233,23 @@ public class AccommodationDTO {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeInt(minGuests);
+        dest.writeInt(maxGuests);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(address);
+        dest.writeStringList(images);
+        dest.writeDouble(defaultPrice);
+        dest.writeInt(deadlineForCancellation);
+        dest.writeByte((byte) (verified ? 1 : 0));
+        dest.writeLong(hostId);
+    }
 }

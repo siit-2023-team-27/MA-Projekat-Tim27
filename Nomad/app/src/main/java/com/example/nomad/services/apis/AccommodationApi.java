@@ -7,8 +7,12 @@ import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -18,7 +22,7 @@ import retrofit2.http.Url;
 public interface AccommodationApi {
 
 
-    String BASE_URL = "http://192.168.1.144:8080/api/";
+    String BASE_URL = "http://172.20.10.2:8080/api/";
     @Headers(
             value = {
                     "Accept: application/json",
@@ -29,5 +33,9 @@ public interface AccommodationApi {
 
     @POST("./unavailable/id/")
     public Call<String> makeUnavailable(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
+
+
+    @GET("./accommodations/verified")
+    public Call<ArrayList<AccommodationDTO>> getAccommodations(@Header("Authorization") String authHeader);
 
 }

@@ -2,18 +2,55 @@ package com.example.nomad.services;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.UserRegistrationDTO;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccomodationsService {
+//    private ArrayList<AccommodationDTO> accommodations;
+private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
+
+    public void loadAccommodations() {
+        Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodations("Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<ArrayList<AccommodationDTO>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AccommodationDTO>> call, Response<ArrayList<AccommodationDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    ArrayList<AccommodationDTO> objects = response.body();
+                    //accommodations = objects;
+                    accommodations.setValue(objects);
+                    Log.d("onResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    // You may want to check response.errorBody() for more details
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AccommodationDTO>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+            }
+        });
+    }
+
+    public LiveData<List<AccommodationDTO>> getAccommodations() {
+        return accommodations;
+    }
+
     public void create(AccommodationDTO accommodationDTO) {
         Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().create(accommodationDTO, "Bearer" + AuthService.token.toString());
         call.enqueue(new Callback<AccommodationDTO>() {

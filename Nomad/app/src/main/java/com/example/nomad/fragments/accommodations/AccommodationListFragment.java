@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.example.nomad.R;
 import com.example.nomad.adapters.AccommodationListAdapter;
 import com.example.nomad.databinding.FragmentAccommodationListBinding;
-import com.example.nomad.model.AccommodationDTO;
+import com.example.nomad.dto.AccommodationDTO;
 
 import java.util.ArrayList;
 
