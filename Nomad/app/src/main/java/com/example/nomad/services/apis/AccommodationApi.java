@@ -7,6 +7,8 @@ import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
 
+import org.osmdroid.library.BuildConfig;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
@@ -24,10 +26,12 @@ public interface AccommodationApi {
                     "Accept: application/json",
                     "Content-type:application/json"}
     )
-    @POST("./accommodations")
+    @POST("accommodations")
     public Call<AccommodationDTO> create(@Body AccommodationDTO accommodationDTO, @Header("Authorization") String authHeader);
 
-    @POST("./unavailable/id/")
+    @POST("accommodations/unavailable/{id}")
     public Call<String> makeUnavailable(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
+    @POST("accommodations/price/{id}")
+    public Call<String> setPrice(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
 
 }

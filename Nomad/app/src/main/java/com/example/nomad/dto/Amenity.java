@@ -38,6 +38,11 @@ public class Amenity {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-
+    @Override
+    public String toString() {
+        return "Amenity{" +
+                ", name='" + name + '\'' +
+                ", id='" + id;
+    }
 
 }

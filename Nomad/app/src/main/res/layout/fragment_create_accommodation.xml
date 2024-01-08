@@ -17,12 +17,12 @@
             android:id="@+id/editTextAccommodationName"
             android:layout_width="300dp"
             android:layout_height="60dp"
-            android:layout_marginTop="116dp"
+            android:layout_marginTop="88dp"
             android:ems="10"
             android:inputType="text"
             android:text="Name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.48"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,20 +104,6 @@
         <!--            app:layout_constraintTop_toTopOf="parent"-->
         <!--            app:layout_constraintVertical_bias="0.877" />-->
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="400dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
-            app:mcv_selectionColor="@color/nomad_brown"
-            app:mcv_selectionMode="range"
-            app:mcv_showOtherDates="all">
-
-        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
-
         <!--        <Button-->
 <!--            android:id="@+id/SetUnavailableButton"-->
 <!--            android:layout_width="wrap_content"-->
@@ -162,17 +148,90 @@
 <!--            app:layout_constraintBottom_toTopOf="@+id/CreateAccommodationButton"-->
 <!--            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal" />-->
 
-<!--        <Button-->
-<!--            android:id="@+id/CreateAccommodationButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="28dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:text="Create"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="400dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:mcv_selectionColor="@color/nomad_brown"
+            app:mcv_selectionMode="range"
+            app:mcv_showOtherDates="all">
 
-<!--        <androidx.constraintlayout.widget.Guideline-->
+        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+        <Button
+            android:id="@+id/CreateAccommodationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:text="Create"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="1052dp" />
+
+        <EditText
+            android:id="@+id/specialPriceBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="368dp"
+            android:ems="10"
+            android:inputType="numberSigned"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+        <EditText
+            android:id="@+id/defaultPriceBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:inputType="numberSigned"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/specialPriceBox" />
+
+        <Button
+            android:id="@+id/SetSpecialPriceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="96dp"
+            android:text="Set Price"
+            app:layout_constraintBottom_toBottomOf="@+id/defaultPriceBox"
+            app:layout_constraintStart_toEndOf="@+id/specialPriceBox" />
+
+        <Button
+            android:id="@+id/setUnavailableButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="92dp"
+            android:text="Set Unavailable"
+            app:layout_constraintEnd_toStartOf="@+id/CreateAccommodationButton"
+            app:layout_constraintTop_toBottomOf="@+id/defaultPriceBox" />
+
+        <Switch
+            android:id="@+id/reservationAcceptanceTypeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="108dp"
+            android:layout_marginEnd="128dp"
+            android:text="Automatically accept reservations"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SetSpecialPriceButton" />
+
+        <!--        <androidx.constraintlayout.widget.Guideline-->
 <!--            android:id="@+id/guideline4"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
