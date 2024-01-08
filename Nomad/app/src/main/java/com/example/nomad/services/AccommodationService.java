@@ -113,6 +113,7 @@ public class AccommodationService extends Service {
         {
             JSONObject amenityJson = jsonArray.getJSONObject(i);
             Amenity amenity = new Amenity(amenityJson.getString("name"), amenityJson.getString("icon"));
+            amenity.setId(amenityJson.getLong("id"));
             amenities.add(amenity);
         }
         Log.d("PARSE AMENITIES", amenities.toString());
