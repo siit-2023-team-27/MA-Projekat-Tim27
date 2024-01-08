@@ -77,7 +77,7 @@ public class AuthService {
             @Override
             public void onResponse(Call<UserTokenState> call, Response<UserTokenState> response) {
 //                AppUser user = response.body();
-                if(response.code() == 401){
+                if(response.code() == 401 || response.code() == 400){
                     return;
                 }
                 Log.d("onResponse: ", response.toString());

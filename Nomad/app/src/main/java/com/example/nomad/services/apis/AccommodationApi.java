@@ -1,6 +1,9 @@
 package com.example.nomad.services.apis;
 
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.dto.AccommodationRatingCreationDTO;
+import com.example.nomad.dto.AccommodationRatingDTO;
+import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.LoginDTO;
@@ -9,8 +12,11 @@ import com.example.nomad.dto.UserTokenState;
 
 import org.osmdroid.library.BuildConfig;
 
+import java.util.Collection;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -33,5 +39,11 @@ public interface AccommodationApi {
     public Call<String> makeUnavailable(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
     @POST("accommodations/price/{id}")
     public Call<String> setPrice(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
+    @POST("accommodation-ratings")
+    public Call<AccommodationRatingCreationDTO> addComment(@Body AccommodationRatingCreationDTO accommodationRatingCreationDTO, @Header("Authorization") String authHeader);
+    @POST("comment-reports")
+    public Call<AddCommentReportDTO> reportComment(@Body AddCommentReportDTO addCommentReportDTO, @Header("Authorization") String authHeader);
+    @GET("accommodation-ratings/for-accommodation/{id}")
+    public Call<Collection<AccommodationRatingDTO>> getComments(@Path("id") Long id, @Header("Authorization") String authHeader);
 
 }
