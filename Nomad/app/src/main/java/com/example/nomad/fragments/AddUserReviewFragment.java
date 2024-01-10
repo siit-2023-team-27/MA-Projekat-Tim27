@@ -1,4 +1,4 @@
-package com.example.nomad.fragments.accommodations;
+package com.example.nomad.fragments;
 
 import android.os.Bundle;
 
@@ -17,25 +17,29 @@ import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
+import com.example.nomad.dto.RatingCreationDTO;
+import com.example.nomad.fragments.accommodations.CommentListViewModel;
+import com.example.nomad.fragments.accommodations.FragmentAddAccommodationComment;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentAddAccommodationComment#newInstance} factory method to
+ * Use the {@link AddUserReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
-    EditText commentText;
-    Button commentButton;
-    RatingBar commentRating;
+public class AddUserReviewFragment extends BottomSheetDialogFragment {
+
+    EditText ratingText;
+    Button ratingButton;
+    RatingBar reviewRating;
     AccomodationsService accomodationsService = new AccomodationsService();
-    CommentListViewModel commentListViewModel;
-    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel) {
-        this.commentListViewModel = commentListViewModel;
+    UserRatingsViewModel userRatingsViewModel;
+    public AddUserReviewFragment(UserRatingsViewModel userRatingsViewModel) {
+        this.userRatingsViewModel = userRatingsViewModel;
     }
-    public FragmentAddAccommodationComment(){
+    public AddUserReviewFragment(){
 
     }
 
@@ -62,12 +66,12 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        commentText = view.findViewById(R.id.commentTextEdit);
-        commentButton = view.findViewById(R.id.commentButton);
-        commentRating = view.findViewById(R.id.addCommentRatingBar);
-        commentRating.setStepSize(1.0F);
+        ratingText = view.findViewById(R.id.commentTextEdit);
+        ratingButton = view.findViewById(R.id.commentButton);
+        reviewRating = view.findViewById(R.id.addCommentRatingBar);
+        reviewRating.setStepSize(1.0F);
 
-        commentButton.setOnClickListener(new View.OnClickListener() {
+        ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addComment();
@@ -76,15 +80,15 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
     }
     private void addComment(){
-        AccommodationRatingCreationDTO commentDTO = new AccommodationRatingCreationDTO();
+        RatingCreationDTO commentDTO = new RatingCreationDTO();
         commentDTO.setRatedId(1L);
-        commentDTO.setRating((int)Math.floor(commentRating.getRating()));
-        commentDTO.setText(commentText.getText().toString());
+        commentDTO.setRating((int)Math.floor(reviewRating.getRating()));
+        commentDTO.setText(ratingText.getText().toString());
         commentDTO.setUserId(AuthService.id);
-        Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
-        commentListViewModel.addComment(commentDTO);
+        Log.d("addComment: ", String.valueOf(this.userRatingsViewModel.getElements().getValue().size()));
+        userRatingsViewModel.addRating(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
-        Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
+        Log.d("addComment: ", String.valueOf(this.userRatingsViewModel.getElements().getValue().size()));
         this.dismiss();
     }
 }

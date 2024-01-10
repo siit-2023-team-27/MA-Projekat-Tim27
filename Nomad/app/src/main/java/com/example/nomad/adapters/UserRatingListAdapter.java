@@ -1,46 +1,38 @@
 package com.example.nomad.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationRatingDTO;
-import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.fragments.accommodations.AccommodationCommentFragment;
-import com.example.nomad.fragments.accommodations.AccommodationFragment;
-import com.example.nomad.fragments.accommodations.FragmentAddAccommodationComment;
-import com.example.nomad.model.AccommodationDTO;
 import com.example.nomad.services.AccomodationsService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class CommentListAdapter extends ArrayAdapter<AccommodationRatingDTO> {
-    private ArrayList<AccommodationRatingDTO> comments;
+public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
+    private ArrayList<DTO.RatingDTO> comments;
     private FragmentActivity activity;
     private AccomodationsService accomodationsService = new AccomodationsService();
-    private AccommodationCommentFragment commentFragment;
+    private UserRatingsFragment ratingsFragment;
 
-    public CommentListAdapter(Context context, ArrayList<AccommodationRatingDTO> comments, FragmentActivity activity, AccommodationCommentFragment commentFragment){
+    public UserRatingListAdapter(Context context, ArrayList<DTO.RatingDTO> comments, FragmentActivity activity, UserRatingsFragment ratingsFragment){
         super(context, R.layout.comment_card, comments);
         this.comments = comments;
         this.activity = activity;
-        this.commentFragment = commentFragment;
+        this.ratingsFragment = ratingsFragment;
 
     }
 
@@ -65,7 +57,7 @@ public class CommentListAdapter extends ArrayAdapter<AccommodationRatingDTO> {
      * */
     @Nullable
     @Override
-    public AccommodationRatingDTO getItem(int position) {
+    public DTO.RatingDTO getItem(int position) {
         return comments.get(position);
     }
     private EditText reportText;
@@ -82,7 +74,7 @@ public class CommentListAdapter extends ArrayAdapter<AccommodationRatingDTO> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        AccommodationRatingDTO comment = getItem(position);
+        DTO.RatingDTO comment = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comment_card,
                     parent, false);
@@ -103,7 +95,7 @@ public class CommentListAdapter extends ArrayAdapter<AccommodationRatingDTO> {
             commentReportButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    commentFragment.showReportDrawer(comment.getId());
+//                    ratingsFragment.showReportDrawer(comment.getId());
                 }
             });
         }

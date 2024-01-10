@@ -1,17 +1,16 @@
 package com.example.nomad.dto;
 
 
-
-public class AccommodationRatingCreationDTO {
+public class RatingCreationDTO {
     private Long userId;
     private Long ratedId;
     private String text;
     private int rating;
 
-    public AccommodationRatingCreationDTO() {
+    public RatingCreationDTO() {
     }
 
-    public AccommodationRatingCreationDTO(Long userId, Long ratedId, String text, int rating) {
+    public RatingCreationDTO(Long userId, Long ratedId, String text, int rating) {
         this.userId = userId;
         this.ratedId = ratedId;
         this.text = text;
