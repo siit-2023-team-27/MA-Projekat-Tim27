@@ -6,6 +6,7 @@ import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.RatingCreationDTO;
+import com.example.nomad.dto.UserReportDto;
 
 import java.util.Collection;
 
@@ -28,7 +29,8 @@ public interface UserApi {
     )
     @POST("host-ratings")
     public Call<RatingCreationDTO> create(@Body RatingCreationDTO accommodationDTO, @Header("Authorization") String authHeader);
-
-    @GET("host/{userId}")
-    Call<Collection<DTO.RatingDTO>> getRatings(@Path("userId") Long userId, String s);
+    @POST("user_reports")
+    public Call<UserReportDto> report(@Body UserReportDto userReportDto, @Header("Authorization") String authHeader);
+    @GET("host-ratings/host/{userId}")
+    Call<Collection<DTO.RatingDTO>> getRatings(@Path("userId") Long userId, @Header("Authorization") String s);
 }

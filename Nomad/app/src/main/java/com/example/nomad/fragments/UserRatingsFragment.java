@@ -31,6 +31,7 @@ public class UserRatingsFragment extends ListFragment {
     private UserRatingsViewModel userRatingsViewModel = new UserRatingsViewModel();
     private ListView list;
     private FloatingActionButton addRatingButton;
+    private FloatingActionButton reportButton;
 
     public UserRatingsFragment(Long userId) {
 
@@ -69,16 +70,23 @@ public class UserRatingsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_comment, container, false);
+        return inflater.inflate(R.layout.fragment_user_ratings, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        addRatingButton = view.findViewById(R.id.addCommentButton);
+        addRatingButton = view.findViewById(R.id.addUserRatingButton);
+        reportButton = view.findViewById(R.id.reportUserButton);
         addRatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showBottomDrawer();
+            }
+        });
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReportDrawer();
             }
         });
 
@@ -86,9 +94,15 @@ public class UserRatingsFragment extends ListFragment {
     }
 
     private void showBottomDrawer() {
-//        FragmentAddAccommodationComment bottomDrawerFragment = new FragmentAddAccommodationComment(userRatingsViewModel);
-//
-//        bottomDrawerFragment.show(getChildFragmentManager(), bottomDrawerFragment.getTag());
+        AddUserReviewFragment bottomDrawerFragment = new AddUserReviewFragment(userRatingsViewModel);
+
+        bottomDrawerFragment.show(getChildFragmentManager(), bottomDrawerFragment.getTag());
     }
+    private void showReportDrawer() {
+        ReportUserFragment reportUserFragment = new ReportUserFragment();
+
+        reportUserFragment.show(getChildFragmentManager(), reportUserFragment.getTag());
+    }
+
 
 }
