@@ -47,10 +47,13 @@ public class LocationService {
     }
     private static String addressToString(Address address){
         String str = "";
-        str += address.getAddressLine(0).toString() + " ";
-        str += address.getAddressLine(1).toString() + " ";
-        str += address.getAddressLine(2).toString() + " ";
-        str += address.getAddressLine(3).toString() + " ";
+        for (int i=0; i<=address.getMaxAddressLineIndex(); i++) {
+            str += address.getAddressLine(i).toString() ;
+            if(i != address.getMaxAddressLineIndex()){
+                str += " ";
+            }
+        }
+
         return str;
     }
 }

@@ -148,11 +148,15 @@ public class AccommodationLocationFragment extends Fragment {
                 Marker startMarker = new Marker(map);
                 startMarker.setPosition(p);
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                if(map.getOverlays().size() > 1){
+                    map.getOverlays().remove(1);
+                }
                 map.getOverlays().add(startMarker);
                 LocationService.getAddress(p);
 
 
                 Log.d( "singleTapConfirmedHelper: ", "singleTapConfirmedHelper: ");
+                Log.d( "singleTapConfirmedHelper: ", String.valueOf(map.getOverlays().size()));
                 return false;
             }
 
