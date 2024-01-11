@@ -19,12 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.caverock.androidsvg.BuildConfig;
 import com.example.nomad.R;
 import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.services.LocationService;
 
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.location.GeocoderNominatim;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -32,6 +35,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+
+import java.io.IOException;
 
 //import org.osmdroid.api.IGeoPoint;
 //import org.osmdroid.api.IMapController;
@@ -112,28 +117,20 @@ public class AccommodationLocationFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
-        // Configuration.getInstance().setUserAgentValue(getContext().getPackageName());
 
-        Context ctx = getContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
 
         //inflate and create the map
 
-        getActivity().setContentView(R.layout.fragment_accommodation_location);
+//        getActivity().setContentView(R.layout.fragment_accommodation_location);
 //        getActivity().setContentView(R.layout.activity_main);
+
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
 
 
 
         pinButton = (Button)view.findViewById(R.id.pin_button);
         nextButton = (Button)view.findViewById(R.id.NextButton);
-        AccommodationLocationFragment self = this;
 
         map = view.findViewById(R.id.map);
 //        map.setTileSource(TileSourceFactory.BASE_OVERLAY_NL);
@@ -143,12 +140,18 @@ public class AccommodationLocationFragment extends Fragment {
         mapController.setZoom(15);
         GeoPoint startPoint = new GeoPoint(51496994, -134733);
         mapController.setCenter(startPoint);
-        mapController.setZoom(1);
 //        map.setMinZoomLevel(2d);
         MapEventsReceiver mReceive = new MapEventsReceiver() {
 
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
+                Marker startMarker = new Marker(map);
+                startMarker.setPosition(p);
+                startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                map.getOverlays().add(startMarker);
+                LocationService.getAddress(p);
+
+
                 Log.d( "singleTapConfirmedHelper: ", "singleTapConfirmedHelper: ");
                 return false;
             }
@@ -162,12 +165,14 @@ public class AccommodationLocationFragment extends Fragment {
 
 
         };
-        MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
 
+        MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
+        map.getOverlays().add(overlay);
 //        map.getOverlays().add(overlay);
         pinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Log.d("AAAA", "onClick: ");
             }
         });
