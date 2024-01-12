@@ -64,6 +64,7 @@ dependencies {
     implementation ("org.mapsforge:mapsforge-themes:0.20.0")
     implementation ("org.mapsforge:mapsforge-map-android:0.20.0")
     implementation ("com.caverock:androidsvg:1.4")
+    implementation ("com.github.MKergall:osmbonuspack:6.9.0")
 
 
 

@@ -58,5 +58,16 @@
         android:name="com.example.nomad.fragments.accommodations.AccommodationCommentFragment"
         android:label="fragment_comments"
         tools:layout="@layout/fragment_accommodation_comment" />
+    <fragment
+        android:id="@+id/nav_user_ratings"
+        android:name="com.example.nomad.fragments.UserRatingsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_ratings" />
+    <fragment
+        android:id="@+id/nav_image_fragment"
+        android:name="com.example.nomad.fragments.ImageFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_image" />
+
 
 </navigation>
