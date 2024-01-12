@@ -182,16 +182,7 @@ public class CreateAccommodationFragment extends Fragment {
             }
             return Unit.INSTANCE;
         });
-//        setUnavailableButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setUnavailable();
-//            }
-//        });
-        Fragment self = this;
 
-
-//        calendarView = view.findViewById(R.id.calendarView);
         setUnavailableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,18 +202,20 @@ public class CreateAccommodationFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateAccommodation(v);
-                accommodation.setImages(new ArrayList<String>());
-                accommodation.setAddress("AAAAAAAAAAAA");
-                accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
-                accommodation.setDefaultPrice(10);
-                accommodation.setDeadlineForCancellation(10);
-                accommodation.setHostId(AuthService.id);
-                accommodation.setStatus(AccommodationStatus.APPROVED);
-                Log.d("BBBBB", accommodation.toString());
-                Log.d("BBBBB", String.valueOf(AuthService.id));
-                Log.d("BBBBB", AuthService.token.toString());
-                accomodationsService.create(accommodation, dateRanges, prices);
+                FragmentTransition.to(AccommodationLocationFragment.newInstance("t", "t"), getActivity(), true, R.id.accommodationCreationHostView);
+
+//                generateAccommodation(v);
+//                accommodation.setImages(new ArrayList<String>());
+//                accommodation.setAddress("AAAAAAAAAAAA");
+//                accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+//                accommodation.setDefaultPrice(10);
+//                accommodation.setDeadlineForCancellation(10);
+//                accommodation.setHostId(AuthService.id);
+//                accommodation.setStatus(AccommodationStatus.APPROVED);
+//                Log.d("BBBBB", accommodation.toString());
+//                Log.d("BBBBB", String.valueOf(AuthService.id));
+//                Log.d("BBBBB", AuthService.token.toString());
+//                accomodationsService.create(accommodation, dateRanges, prices);
             }
         });
     }

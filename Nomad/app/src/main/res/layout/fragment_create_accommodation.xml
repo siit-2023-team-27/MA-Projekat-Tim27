@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createAccommodationView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.CreateAccommodationFragment">
@@ -105,48 +106,48 @@
         <!--            app:layout_constraintVertical_bias="0.877" />-->
 
         <!--        <Button-->
-<!--            android:id="@+id/SetUnavailableButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="28dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:text="Set Unavailable"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+        <!--            android:id="@+id/SetUnavailableButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="28dp"-->
+        <!--            android:layout_marginBottom="16dp"-->
+        <!--            android:text="Set Unavailable"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
-<!--        <EditText-->
-<!--            android:id="@+id/editTextNumberDecimal2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="28dp"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="numberDecimal"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"-->
-<!--            app:layout_constraintVertical_bias="0.162" />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/editTextNumberDecimal2"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginTop="28dp"-->
+        <!--            android:ems="10"-->
+        <!--            android:inputType="numberDecimal"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"-->
+        <!--            app:layout_constraintVertical_bias="0.162" />-->
 
-<!--        <EditText-->
-<!--            android:id="@+id/editTextNumberDecimal"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="764dp"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="numberDecimal"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/editTextNumberDecimal"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginTop="764dp"-->
+        <!--            android:ems="10"-->
+        <!--            android:inputType="numberDecimal"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--        <Button-->
-<!--            android:id="@+id/SetPriceButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="36dp"-->
-<!--            android:layout_marginBottom="56dp"-->
-<!--            android:text="Set Price"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/CreateAccommodationButton"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/SetPriceButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="36dp"-->
+        <!--            android:layout_marginBottom="56dp"-->
+        <!--            android:text="Set Price"-->
+        <!--            app:layout_constraintBottom_toTopOf="@+id/CreateAccommodationButton"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal" />-->
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView"
@@ -233,11 +234,11 @@
 
 
         <!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/guideline4"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            app:layout_constraintGuide_begin="960dp" />-->
+        <!--            android:id="@+id/guideline4"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            app:layout_constraintGuide_begin="960dp" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

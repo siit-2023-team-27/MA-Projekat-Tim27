@@ -37,6 +37,9 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 //import org.osmdroid.api.IGeoPoint;
 //import org.osmdroid.api.IMapController;
@@ -177,7 +180,7 @@ public class AccommodationLocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Log.d("AAAA", "onClick: ");
+
             }
         });
 

@@ -68,6 +68,11 @@
         android:name="com.example.nomad.fragments.ImageFragment"
         android:label="fragment_comments"
         tools:layout="@layout/fragment_image" />
+    <fragment
+        android:id="@+id/nav_accommodation_creation_host"
+        android:name="com.example.nomad.fragments.AccommodationCreationHostFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_accommodation_creation_host" />
 
 
 </navigation>
