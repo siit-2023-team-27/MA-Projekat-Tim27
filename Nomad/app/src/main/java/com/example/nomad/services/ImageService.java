@@ -17,6 +17,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ImageService {
+    public static ArrayList<String> paths = new ArrayList<String>();
+
+
+
     public void upload(MultipartBody.Part images) {
         Call<List<String>> call = ImageClient.getInstance().getMyApi().upload(images, "Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<List<String>>() {
@@ -27,6 +31,7 @@ public class ImageService {
                 Log.d("onResponse: ", String.valueOf(response.code()));
                 Log.d("onResponse: ", response.toString());
                 Log.d("onResponse: ", images.toString());
+                paths.add(images.get(0));
             }
 
             @Override

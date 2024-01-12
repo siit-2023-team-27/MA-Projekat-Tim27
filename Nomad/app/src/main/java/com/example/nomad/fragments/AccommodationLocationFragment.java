@@ -68,18 +68,24 @@ public class AccommodationLocationFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private MapView map;
     private AccommodationDTO accommodation;
-    private Button pinButton;
     private Button nextButton;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     public AccommodationLocationFragment(AccommodationDTO accommodation) {
         super(R.layout.fragment_accommodation_location);
         this.accommodation = accommodation;
 
     }
+
+    public AccommodationDTO getAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(AccommodationDTO accommodation) {
+        this.accommodation = accommodation;
+    }
+
     public AccommodationLocationFragment() {
     }
 
@@ -106,8 +112,7 @@ public class AccommodationLocationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
     }
@@ -132,7 +137,6 @@ public class AccommodationLocationFragment extends Fragment {
 
 
 
-        pinButton = (Button)view.findViewById(R.id.pin_button);
         nextButton = (Button)view.findViewById(R.id.NextButton);
 
         map = view.findViewById(R.id.map);
@@ -153,10 +157,11 @@ public class AccommodationLocationFragment extends Fragment {
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 if(map.getOverlays().size() > 1){
                     map.getOverlays().remove(1);
+                }else{
+                    nextButton.setEnabled(true);
                 }
                 map.getOverlays().add(startMarker);
                 LocationService.getAddress(p);
-
 
                 Log.d( "singleTapConfirmedHelper: ", "singleTapConfirmedHelper: ");
                 Log.d( "singleTapConfirmedHelper: ", String.valueOf(map.getOverlays().size()));
@@ -175,21 +180,17 @@ public class AccommodationLocationFragment extends Fragment {
 
         MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
         map.getOverlays().add(overlay);
-//        map.getOverlays().add(overlay);
-        pinButton.setOnClickListener(new View.OnClickListener() {
+
+        nextButton = view.findViewById(R.id.NextButton);
+        nextButton.setEnabled(false);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
+                calendarFragment.setAccommodation(accommodation);
+                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
             }
         });
-
-
-//        map.setMinimumWidth(500);
-//        map.setMinimumHeight(500);
-//
-//        map = (MapView) getView().findViewById(R.id.map);
-//        map.setTileSource(TileSourceFactory.MAPNIK);
     }
     public void click(View view){
         map.invalidate();
@@ -207,24 +208,10 @@ public class AccommodationLocationFragment extends Fragment {
         map.invalidate();
     }
     public void nextFragment(){
-        CalendarFragment calendarFragment = new CalendarFragment(accommodation);
-//
-//        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//        FragmentTransaction ftt = this.getParentFragmentManager().beginTransaction();
-//        ftt.addToBackStack("");
-////                ft.replace(self.getParentFragment().getId(), new AccommodationLocationFragment(accommodation));
-//        ftt.remove(this);
-//        Log.d("A", "onClick: ");
-//        ft.add(calendarFragment, "");
-//        ft.commit();
-//        ftt.commit();
-//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, calendarFragment)
-//                .commit();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, calendarFragment)
-                .commit();
-        fragmentManager.beginTransaction().remove(this);
+
+        CalendarFragment calendarFragment = CalendarFragment.newInstance("", "");
+        calendarFragment.setAccommodation(accommodation);
+        FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
     }
 }

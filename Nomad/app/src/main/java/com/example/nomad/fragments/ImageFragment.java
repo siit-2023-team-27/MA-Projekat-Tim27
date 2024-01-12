@@ -24,7 +24,9 @@ import android.widget.ViewFlipper;
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
 import com.example.nomad.activities.SliderData;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.services.ImageService;
+import com.example.nomad.services.LocationService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -59,21 +61,20 @@ public class ImageFragment extends Fragment {
     private HashMap<String, Bitmap> images = new HashMap<>();
     private ArrayList<String> imageOrder = new ArrayList<>();
 
-
+    private AccommodationDTO accommodation;
     public ImageFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ImageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ImageFragment newInstance(String param1, String param2) {
+    public AccommodationDTO getAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(AccommodationDTO accommodation) {
+        this.accommodation = accommodation;
+    }
+
+    public static ImageFragment newInstance() {
         ImageFragment fragment = new ImageFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -220,6 +221,9 @@ public class ImageFragment extends Fragment {
         for (String key : images.keySet()){
             saveImage(key, images.get(key));
         }
+        AccommodationLocationFragment locationFragment = AccommodationLocationFragment.newInstance("t", "t");
+        locationFragment.setAccommodation(accommodation);
+        FragmentTransition.to(locationFragment, getActivity(), true, R.id.accommodationCreationHostView);
     }
     private void saveImage(String key, Bitmap selectedImageBitmap){
         File file = persistImage(selectedImageBitmap, key);

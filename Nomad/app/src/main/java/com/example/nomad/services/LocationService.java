@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class LocationService {
-    static String address = "";
+    public static String address = "";
     public static String getAddress(GeoPoint p){
 
         ExecutorService executor = Executors.newSingleThreadExecutor();

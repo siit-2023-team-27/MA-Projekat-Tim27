@@ -22,40 +22,31 @@
 
 
 <!--    </org.osmdroid.views.MapView>-->
+
     <org.osmdroid.views.MapView
         android:id="@+id/map"
-        android:layout_width="413dp"
-        android:layout_height="400dp"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022">
+        app:layout_constraintVertical_bias="0.554">
 
 
     </org.osmdroid.views.MapView>
 
     <Button
-        android:id="@+id/pin_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="268dp"
-        android:layout_marginBottom="24dp"
-        android:text="Drop pin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
         android:id="@+id/NextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="160dp"
         android:layout_marginBottom="24dp"
         android:text="Next"
-        android:onClick="openCalendarFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

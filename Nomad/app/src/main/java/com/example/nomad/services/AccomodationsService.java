@@ -37,12 +37,14 @@ public class AccomodationsService {
         call.enqueue(new Callback<AccommodationDTO>() {
             @Override
             public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
-                AccommodationDTO accommodation = response.body();
-                postUnavailable(accommodation.getId(), dateRanges);
-                postPrices(accommodation.getId(), prices);
                 Log.d("onResponse: ", String.valueOf(response.code()));
                 Log.d("onResponse: ", response.toString());
+                AccommodationDTO accommodation = response.body();
                 Log.d("onResponse: ", accommodation.toString());
+
+                postUnavailable(accommodation.getId(), dateRanges);
+                postPrices(accommodation.getId(), prices);
+
             }
 
             @Override
