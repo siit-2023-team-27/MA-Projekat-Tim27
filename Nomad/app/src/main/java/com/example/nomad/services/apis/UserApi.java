@@ -1,6 +1,5 @@
 package com.example.nomad.services.apis;
 
-<<<<<<< HEAD
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.UserDTO;
 
@@ -11,7 +10,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.PUT;
-=======
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
