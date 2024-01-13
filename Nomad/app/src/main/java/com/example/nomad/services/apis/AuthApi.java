@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 public interface AuthApi {
 
 
-    String BASE_URL = "http://192.168.1.144:8080/auth/";
+    String BASE_URL = "http://192.168.1.8:8080/auth/";
     @POST("signup")
     public Call<AppUser> register(@Body UserRegistrationDTO userDTO);
 

@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserClient {
+
     private static UserClient instance = null;
     private UserApi userApi;
 
@@ -16,7 +17,7 @@ public class UserClient {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
                 .create();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(AccommodationApi.BASE_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(UserApi.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         userApi = retrofit.create(UserApi.class);
