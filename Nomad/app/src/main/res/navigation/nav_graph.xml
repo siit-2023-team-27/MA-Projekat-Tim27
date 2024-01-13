@@ -53,6 +53,17 @@
         android:name="com.example.nomad.fragments.CalendarFragment"
         android:label="fragment_create_accommodation"
         tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/nav_unverified"
+        android:name="com.example.nomad.fragments.accommodations.UnverifiedAccommodationsPageFragment"
+        android:label="UnverifiedAccommodationsFragment"
+        tools:layout="@layout/fragment_unverified_accommodations_page"/>
+
+    <fragment
+        android:id="@+id/nav_users"
+        android:name="com.example.nomad.fragments.UserPageFragment"
+        android:label="UserPageFragment"
+        tools:layout="@layout/fragment_user_page"/>
 
 
 </navigation>

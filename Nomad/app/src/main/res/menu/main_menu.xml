@@ -23,6 +23,8 @@
                 <item android:id="@+id/nav_notifications" android:title="Notifications" android:icon="@drawable/notifications_icon"/>
                 <item android:id="@+id/nav_requests" android:title="Reservations" android:icon="@drawable/requests_icon"/>
                 <item android:id="@+id/nav_favourites" android:title="Favourites" android:icon="@drawable/favourites_icon"/>
+                <item android:id="@+id/nav_unverified" android:title="Unverified accommodations" android:icon="@drawable/favourites_icon"/>
+                <item android:id="@+id/nav_users" android:title="All users" android:icon="@drawable/favourites_icon"/>
                 <item
                     android:id="@+id/nav_create_accommodation"
                     android:layout_width="wrap_content"

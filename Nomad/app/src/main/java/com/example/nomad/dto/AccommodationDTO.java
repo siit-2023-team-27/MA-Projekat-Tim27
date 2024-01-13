@@ -2,6 +2,10 @@ package com.example.nomad.dto;
 
 
 import android.media.Rating;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 
 import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.AccommodationType;
@@ -15,7 +19,7 @@ import org.w3c.dom.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccommodationDTO {
+public class AccommodationDTO implements Parcelable {
     private long id;
     private int minGuests;
     private int maxGuests;
@@ -205,4 +209,15 @@ public class AccommodationDTO {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+    }
 }

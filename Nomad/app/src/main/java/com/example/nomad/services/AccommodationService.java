@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.Amenity;
-import com.google.android.gms.common.api.internal.ApiExceptionMapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class AccommodationService extends Service {
-    URL accommodationsUrl = new URL("http://192.168.1.144:8080/api/accommodations");
-    URL amenitiesUrl = new URL("http://192.168.1.144:8080/api/amenities");
+    URL accommodationsUrl = new URL("http://192.168.1.8:8080/api/accommodations");
+    URL amenitiesUrl = new URL("http://192.168.1.8:8080/api/amenities");
     private Future<?> future;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     HttpURLConnection client = null;

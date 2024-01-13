@@ -1,11 +1,16 @@
 package com.example.nomad.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.nomad.enums.UserType;
 
 
 import java.util.List;
 
-public class UserDTO {
+public class UserDTO implements Parcelable {
         private Long id;
         private String firstName;
         private String lastName;
@@ -118,5 +123,20 @@ public class UserDTO {
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(username);
+        dest.writeString(address);
+        dest.writeString(phoneNumber);
     }
 }
