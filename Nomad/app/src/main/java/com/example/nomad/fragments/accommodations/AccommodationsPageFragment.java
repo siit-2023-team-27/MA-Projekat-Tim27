@@ -29,6 +29,8 @@ import com.example.nomad.services.AuthService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,7 +80,6 @@ public class AccommodationsPageFragment extends Fragment {
         View root = binding.getRoot();
 
         prepareProductList();
-        //Log.d("SIZE4: ", String.valueOf(accommodations.size()));
 
         SearchView searchView = binding.searchText;
         accommodationsPageViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
@@ -129,8 +130,6 @@ public class AccommodationsPageFragment extends Fragment {
 //                // TODO Auto-generated method stub
 //            }
 //        });
-
-
 
         return root;
     }
