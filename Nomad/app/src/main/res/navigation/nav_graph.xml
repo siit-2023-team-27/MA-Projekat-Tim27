@@ -53,6 +53,26 @@
         android:name="com.example.nomad.fragments.CalendarFragment"
         android:label="fragment_create_accommodation"
         tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/nav_accommodation_comment"
+        android:name="com.example.nomad.fragments.accommodations.AccommodationCommentFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_accommodation_comment" />
+    <fragment
+        android:id="@+id/nav_user_ratings"
+        android:name="com.example.nomad.fragments.UserRatingsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_ratings" />
+    <fragment
+        android:id="@+id/nav_image_fragment"
+        android:name="com.example.nomad.fragments.ImageFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_image" />
+    <fragment
+        android:id="@+id/nav_accommodation_creation_host"
+        android:name="com.example.nomad.fragments.AccommodationCreationHostFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_accommodation_creation_host" />
 
 
 </navigation>

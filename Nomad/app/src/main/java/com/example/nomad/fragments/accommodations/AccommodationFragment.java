@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
 import com.example.nomad.activities.SliderData;
-import com.example.nomad.model.AccommodationDTO;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
@@ -68,7 +67,7 @@ public class AccommodationFragment extends Fragment {
         ArrayList<SliderData> sliderDataArrayList = new ArrayList<SliderData>();
 
         // Initialize the slider view.
-        SliderView sliderView = rootView.findViewById(R.id.slider);
+        SliderView sliderView = rootView.findViewById(R.id.imageSlider);
 
         // Add image resources to the array list.
         sliderDataArrayList.add(new SliderData(R.drawable.img1));

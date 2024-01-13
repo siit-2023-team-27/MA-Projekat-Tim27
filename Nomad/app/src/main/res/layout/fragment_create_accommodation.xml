@@ -1,243 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.CreateAccommodationFragment">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <EditText
+        android:id="@+id/editTextAccommodationName"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="88dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextAccommodationDescription"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationName" />
+
+    <EditText
+        android:id="@+id/editTextNumberMin"
+        android:layout_width="140dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="Minimum Guests"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.214"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationDescription" />
+
+    <!--        <com.puskal.multiselectspinner.MultiSelectSpinnerView-->
+    <!--            android:id="@+id/multiSelectSpinner"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginEnd="8dp"-->
+    <!--            />-->
+    <EditText
+        android:id="@+id/editTextNumberMax"
+        android:layout_width="140dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="Maximum Guests"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.789"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationDescription" />
+
+    <com.puskal.multiselectspinner.MultiSelectSpinnerView
+        android:id="@+id/multiSelectSpinner"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+
+        android:layout_marginTop="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberMax" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.376"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberMin" />
+
+
+    <Switch
+        android:id="@+id/reservationAcceptanceTypeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_marginTop="24dp"
+        android:text="Automatically accept reservations"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-        <EditText
-            android:id="@+id/editTextAccommodationName"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="88dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.48"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="48dp"
+        android:text="Next"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reservationAcceptanceTypeSwitch" />
 
-        <EditText
-            android:id="@+id/editTextAccommodationDescription"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="40dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationName" />
 
-        <EditText
-            android:id="@+id/editTextNumberMin"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.214"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationDescription" />
+    <!--        <androidx.constraintlayout.widget.Guideline-->
+    <!--            android:id="@+id/guideline4"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            app:layout_constraintGuide_begin="960dp" />-->
 
-        <!--        <com.puskal.multiselectspinner.MultiSelectSpinnerView-->
-        <!--            android:id="@+id/multiSelectSpinner"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginEnd="8dp"-->
-        <!--            />-->
-        <EditText
-            android:id="@+id/editTextNumberMax"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.789"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextAccommodationDescription" />
-
-        <com.puskal.multiselectspinner.MultiSelectSpinnerView
-            android:id="@+id/multiSelectSpinner"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
-
-            android:layout_marginTop="36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.762"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberMax" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.376"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumberMin" />
-
-        <!--        <org.osmdroid.views.MapView-->
-        <!--            android:id="@+id/map"-->
-        <!--            android:layout_width="350dp"-->
-        <!--            android:layout_height="200dp"-->
-        <!--            android:clickable="true"-->
-        <!--            android:focusable="true"-->
-        <!--            android:visibility="visible"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintHorizontal_bias="0.491"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintVertical_bias="0.877" />-->
-
-        <!--        <Button-->
-<!--            android:id="@+id/SetUnavailableButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="28dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:text="Set Unavailable"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/editTextNumberDecimal2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="28dp"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="numberDecimal"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"-->
-<!--            app:layout_constraintVertical_bias="0.162" />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/editTextNumberDecimal"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginTop="764dp"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="numberDecimal"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/SetPriceButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="36dp"-->
-<!--            android:layout_marginBottom="56dp"-->
-<!--            android:text="Set Price"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/CreateAccommodationButton"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal" />-->
-
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="400dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
-            app:mcv_selectionColor="@color/nomad_brown"
-            app:mcv_selectionMode="range"
-            app:mcv_showOtherDates="all">
-
-        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
-
-        <Button
-            android:id="@+id/CreateAccommodationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
-            android:text="Create"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="1052dp" />
-
-        <EditText
-            android:id="@+id/specialPriceBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="368dp"
-            android:ems="10"
-            android:inputType="numberSigned"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-        <EditText
-            android:id="@+id/defaultPriceBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
-            android:ems="10"
-            android:inputType="numberSigned"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/specialPriceBox" />
-
-        <Button
-            android:id="@+id/SetSpecialPriceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="96dp"
-            android:text="Set Price"
-            app:layout_constraintBottom_toBottomOf="@+id/defaultPriceBox"
-            app:layout_constraintStart_toEndOf="@+id/specialPriceBox" />
-
-        <Button
-            android:id="@+id/setUnavailableButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="92dp"
-            android:text="Set Unavailable"
-            app:layout_constraintEnd_toStartOf="@+id/CreateAccommodationButton"
-            app:layout_constraintTop_toBottomOf="@+id/defaultPriceBox" />
-
-        <Switch
-            android:id="@+id/reservationAcceptanceTypeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="108dp"
-            android:layout_marginEnd="128dp"
-            android:text="Automatically accept reservations"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SetSpecialPriceButton" />
-
-        <!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/guideline4"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            app:layout_constraintGuide_begin="960dp" />-->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
