@@ -1,15 +1,24 @@
 package com.example.nomad.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +29,7 @@ import android.widget.Button;
 
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -57,6 +67,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -101,10 +112,6 @@ public class CreateAccommodationFragment extends Fragment {
     private MaterialCalendarView calendar;
 //    private Button setPriceButton;
     private Button createButton;
-    private Button setPriceButton;
-    private EditText priceBox;
-    private Button setUnavailableButton;
-    private AccomodationsService accomodationsService = new AccomodationsService();
     private HashMap<Date, ReservationDateDTO> dates = new HashMap<Date, ReservationDateDTO>();
     private ArrayList<DateRange> dateRanges = new ArrayList<DateRange>();
     private HashMap<DateRange, Double> prices = new HashMap<DateRange, Double>();
@@ -173,47 +180,18 @@ public class CreateAccommodationFragment extends Fragment {
             }
             return Unit.INSTANCE;
         });
-//        setUnavailableButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setUnavailable();
-//            }
-//        });
-        Fragment self = this;
 
 
-//        calendarView = view.findViewById(R.id.calendarView);
-        setUnavailableButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!setUnavailable()){
-                    Toast.makeText(v.getContext(), "Please select dates", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-        setPriceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!setPrice()){
-                    Toast.makeText(v.getContext(), "Please select dates", Toast.LENGTH_SHORT);
-                }
-            }
-        });
+
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 generateAccommodation(v);
-                accommodation.setImages(new ArrayList<String>());
-                accommodation.setAddress("AAAAAAAAAAAA");
-                accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
-                accommodation.setDefaultPrice(10);
-                accommodation.setDeadlineForCancellation(10);
-                accommodation.setHostId(AuthService.id);
-                accommodation.setStatus(AccommodationStatus.APPROVED);
-                Log.d("BBBBB", accommodation.toString());
-                Log.d("BBBBB", String.valueOf(AuthService.id));
-                Log.d("BBBBB", AuthService.token.toString());
-                accomodationsService.create(accommodation, dateRanges, prices);
+                ImageFragment imageFragment = ImageFragment.newInstance();
+                imageFragment.setAccommodation(accommodation);
+                FragmentTransition.to(imageFragment, getActivity(), true, R.id.accommodationCreationHostView);
+
+//                accomodationsService.create(accommodation, dateRanges, prices);
             }
         });
     }
@@ -251,28 +229,7 @@ public class CreateAccommodationFragment extends Fragment {
         });
         return true;
     }
-    private boolean setPrice(){
-        if(calendar.getSelectedDates() == null || this.priceBox.getText().toString() == ""){
-            return false;
-        }
-        List<CalendarDay> dates = calendar.getSelectedDates();
-        for (CalendarDay date : dates){
-            Date d = new Date(date.getYear(), date.getMonth(), date.getDay());
-            double price = Double.valueOf(this.priceBox.getText().toString());
-            calendar.addDecorators(new CustomDecorator(date, String.valueOf(price), Color.RED));
 
-            if(this.dates.containsKey(d)){
-                this.dates.get(d).setPrice(price);
-            }else{
-                this.dates.put(d, new ReservationDateDTO(d, false, price));
-            }
-
-        }
-        DateRange range = new DateRange(new Date(dates.get(0).getYear()-1900, dates.get(0).getMonth()-1, dates.get(0).getDay()),
-                new Date(dates.get(dates.size()-1).getYear()-1900, dates.get(dates.size()-1).getMonth()-1, dates.get(dates.size()-1).getDay()));
-        prices.put(range,  Double.valueOf(this.priceBox.getText().toString()));
-        return true;
-    }
     public void setupSpinner(View view){
         spinner = view.findViewById(R.id.spinner);
 
@@ -294,10 +251,22 @@ public class CreateAccommodationFragment extends Fragment {
         this.accommodation.setDescription(description.getText().toString());
         this.accommodation.setAmenities(selectedAmenities);
         this.accommodation.setVerified(true);
+        this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+        this.accommodation.setHostId(AuthService.id);
+
+
+        //TODO: Try without after connecting image and location fragments
+        this.accommodation.setImages(new ArrayList<String>());
+        this.accommodation.setAddress("AAAAAAAAAAAA");
+        this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+
         if(reservationAcceptanceSwitch.isChecked()){
+            this.accommodation.setStatus(AccommodationStatus.APPROVED);
+
             this.accommodation.setConfirmationType(ConfirmationType.AUTOMATIC);
         }else{
             this.accommodation.setConfirmationType(ConfirmationType.MANUAL);
+            this.accommodation.setStatus(AccommodationStatus.PENDING);
 
         }
 
@@ -318,14 +287,60 @@ public class CreateAccommodationFragment extends Fragment {
         description = view.findViewById(R.id.editTextAccommodationDescription);
         minGuests = view.findViewById(R.id.editTextNumberMin);
         maxGuests = view.findViewById(R.id.editTextNumberMax);
-        calendar = view.findViewById(R.id.calendarView);
 //        setUnavailableButton = view.findViewById(R.id.SetUnavailableButton);
 //        setPriceButton = view.findViewById(R.id.SetPriceButton);
-        createButton = view.findViewById(R.id.CreateAccommodationButton);
-        setPriceButton = view.findViewById(R.id.SetSpecialPriceButton);
-        setUnavailableButton = view.findViewById(R.id.setUnavailableButton);
-        priceBox = view.findViewById(R.id.specialPriceBox);
+        createButton = view.findViewById(R.id.nextButton);
         reservationAcceptanceSwitch = view.findViewById(R.id.reservationAcceptanceTypeSwitch);
-
+        setUpValidation();
     }
+    private void setUpValidation(){
+        createButton.setEnabled(validate());
+
+        minGuests.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        maxGuests.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+    private boolean validate(){
+        return !description.getText().toString().isEmpty() && !name.getText().toString().isEmpty()
+                && !minGuests.getText().toString().isEmpty() && !maxGuests.getText().toString().isEmpty()
+                && (Integer.valueOf(minGuests.getText().toString())) <= Integer.valueOf(maxGuests.getText().toString()) ;
+    }
+
 }

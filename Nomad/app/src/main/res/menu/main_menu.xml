@@ -31,6 +31,36 @@
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_launcher_foreground"
                     android:title="CreateAccommodation" />
+                <item
+                    android:id="@+id/nav_accommodation_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_launcher_foreground"
+                    android:title="Comments" />
+                <item
+                    android:id="@+id/nav_user_ratings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_launcher_foreground"
+                    android:title="User Ratings" />
+                <item
+                    android:id="@+id/nav_image_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_launcher_foreground"
+                    android:title="Images" />
+                <item
+                    android:id="@+id/nav_accommodation_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_launcher_foreground"
+                    android:title="Location" />
+                <item
+                    android:id="@+id/nav_accommodation_creation_host"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_launcher_foreground"
+                    android:title="Create" />
             </group>
 
         </menu>
