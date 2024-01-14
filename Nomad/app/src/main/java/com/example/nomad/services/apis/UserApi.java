@@ -32,13 +32,12 @@ public interface UserApi {
 
     String BASE_URL = "http://192.168.1.8:8080/api/";
 
-    @Headers(
-            value = {
-                    "Accept: application/json",
-                    "Content-type:application/json"}
-    )
+
     @GET("users")
     public Call<ArrayList<UserDTO>> getAllUsers(@Header("Authorization") String authHeader);
+
+    @GET("users/{id}")
+    public Call<UserDTO> getLoggedUser(@Path("id") Long id);
 
     @PUT("users/suspend/{id}")
     public Call<UserDTO> suspendUser(@Path("id") Long id, @Header("Authorization") String authHeader);

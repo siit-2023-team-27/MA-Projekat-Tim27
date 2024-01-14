@@ -60,4 +60,7 @@ public interface AccommodationApi {
 
     @DELETE("accommodations/{id}")
     public Call<AccommodationDTO> deleteAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+    @GET("accommodations/host/{id}")
+    public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
 }

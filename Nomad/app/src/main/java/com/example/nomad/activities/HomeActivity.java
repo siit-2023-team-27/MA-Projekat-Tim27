@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,9 +26,11 @@ import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.ActivityHomeBinding;
+import com.example.nomad.dto.UserDTO;
 import com.example.nomad.fragments.AccommodationLocationFragment;
 import com.example.nomad.fragments.CalendarFragment;
 import com.example.nomad.fragments.ProfileFragment;
+import com.example.nomad.services.UserService;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -42,6 +45,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     Menu menu;
     AccommodationLocationFragment locationFragment;
+
+    UserService userService = new UserService();
+
+    UserDTO loggedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +71,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+        setNavigationMenu();
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
 //    @Override
@@ -75,6 +81,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item);
 //    }
+
+    private void setNavigationMenu() {
+        userService.getLoggedUser();
+        userService.getLogged().observe(this, new Observer<UserDTO>() {
+            @Override
+            public void onChanged(UserDTO userDTO) {
+                loggedUser = userDTO;
+                int menuResId = getMenuResourceForRole();
+                navigationView.inflateMenu(menuResId);
+            }
+        });
+    }
+
+    private int getMenuResourceForRole() {
+        switch (loggedUser.getRoles().get(0).toString()) {
+            case "ADMIN":
+                return R.menu.admin_menu;
+            case "HOST":
+                return R.menu.host_menu;
+            case "GUEST":
+                return R.menu.guest_menu;
+            default:
+                return R.menu.main_menu;
+        }
+    }
 
 
     @Override
