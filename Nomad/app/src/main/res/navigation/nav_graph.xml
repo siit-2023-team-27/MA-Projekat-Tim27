@@ -85,5 +85,15 @@
         android:label="fragment_comments"
         tools:layout="@layout/fragment_accommodation_creation_host" />
 
+    <fragment
+        android:id="@+id/nav_listing"
+        android:name="com.example.nomad.fragments.accommodations.HostListing"
+        android:label="fragment_listing"
+        tools:layout="@layout/fragment_host_listing" >
+        <action
+            android:id="@+id/action_nav_listing_to_nav_create_accommodation"
+            app:destination="@id/nav_accommodation_creation_host" />
+    </fragment>
+
 
 </navigation>

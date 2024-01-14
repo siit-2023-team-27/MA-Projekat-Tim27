@@ -21,7 +21,11 @@ public class UserService {
 
     private MutableLiveData<List<UserDTO>> users = new MutableLiveData<>();
 
-    public MutableLiveData<List<UserDTO>> getUsers () {return users;}
+    private MutableLiveData<UserDTO> logged = new MutableLiveData<>();
+
+    public MutableLiveData<UserDTO> getLogged() { return this.logged; }
+
+    public MutableLiveData<List<UserDTO>> getUsers () { return users; }
 
     public void getAllUsers() {
         Call<ArrayList<UserDTO>> call = UserClient.getInstance().getMyApi().getAllUsers("Bearer " + AuthService.token.toString());
@@ -41,6 +45,25 @@ public class UserService {
             @Override
             public void onFailure(Call<ArrayList<UserDTO>> call, Throwable t) {
                 Log.d("onResponse: ", t.getMessage());
+            }
+        });
+    }
+
+    public void getLoggedUser() {
+        Call<UserDTO> call = UserClient.getInstance().getMyApi().getLoggedUser(AuthService.id);
+
+        Log.e("ID USER", "id: " + AuthService.id);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                UserDTO object = response.body();
+                logged.setValue(object);
+                Log.d("onResponse: ", "USPEO");
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                Log.d("FAILURE: ", t.getMessage());
             }
         });
     }

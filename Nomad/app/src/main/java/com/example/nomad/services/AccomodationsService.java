@@ -32,16 +32,10 @@ import retrofit2.Response;
 public class AccomodationsService {
     private ArrayList<AccommodationRatingDTO> comments = new ArrayList<>();
 
-    public ArrayList<AccommodationRatingDTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<AccommodationRatingDTO> comments) {
-        this.comments = comments;
-    }
-
-
     private MutableLiveData<List<AccommodationDTO>> unverified = new MutableLiveData<>();
+
+    private MutableLiveData<List<AccommodationDTO>> hostAccommodations = new MutableLiveData<>();
+
 
     public void create(AccommodationDTO accommodationDTO, ArrayList<DateRange> dateRanges, HashMap<DateRange, Double> prices) {
         Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().create(accommodationDTO, "Bearer " + AuthService.token.toString());
@@ -245,7 +239,41 @@ public class AccomodationsService {
         });
     }
 
+    public void getAccommodationsForHost(Long id) {
+        Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodationsForHost(id, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<ArrayList<AccommodationDTO>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AccommodationDTO>> call, Response<ArrayList<AccommodationDTO>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<AccommodationDTO> objects = response.body();
+                    hostAccommodations.setValue(objects);
+                    Log.d("onResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    Log.d("onResponse: ", "NIJE USPEO");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AccommodationDTO>> call, Throwable t) {
+                Log.d("Failure: ", t.getMessage());
+            }
+        });
+    }
+
     public MutableLiveData<List<AccommodationDTO>> getUnverified() {
         return unverified;
+    }
+
+    public ArrayList<AccommodationRatingDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<AccommodationRatingDTO> comments) {
+        this.comments = comments;
+    }
+
+    public MutableLiveData<List<AccommodationDTO>> getHostAccommodations() {
+        return hostAccommodations;
     }
 }
