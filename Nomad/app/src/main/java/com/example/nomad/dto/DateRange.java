@@ -9,6 +9,8 @@ import java.util.Date;
 public class DateRange {
     private Date startDate;
     private Date finishDate;
+    private Double priceDouble;
+    private String price;
 
     // Constructor
     public DateRange(Date startDate, Date finishDate) {
@@ -48,6 +50,23 @@ public class DateRange {
 
     public Date getFinishDate() {
         return finishDate;
+    }
+
+    public Double getPriceDouble() {
+        return priceDouble;
+    }
+
+    public void setPrice(Double price) {
+        this.priceDouble = price;
+        this.price = price.toString();
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     @Override

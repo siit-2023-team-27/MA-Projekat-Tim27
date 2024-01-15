@@ -19,12 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.caverock.androidsvg.BuildConfig;
 import com.example.nomad.R;
 import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.services.LocationService;
 
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.location.GeocoderNominatim;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -32,6 +35,11 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 //import org.osmdroid.api.IGeoPoint;
 //import org.osmdroid.api.IMapController;
@@ -60,18 +68,24 @@ public class AccommodationLocationFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private MapView map;
     private AccommodationDTO accommodation;
-    private Button pinButton;
     private Button nextButton;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     public AccommodationLocationFragment(AccommodationDTO accommodation) {
         super(R.layout.fragment_accommodation_location);
         this.accommodation = accommodation;
 
     }
+
+    public AccommodationDTO getAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(AccommodationDTO accommodation) {
+        this.accommodation = accommodation;
+    }
+
     public AccommodationLocationFragment() {
     }
 
@@ -98,8 +112,7 @@ public class AccommodationLocationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
     }
@@ -112,28 +125,19 @@ public class AccommodationLocationFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
-        // Configuration.getInstance().setUserAgentValue(getContext().getPackageName());
 
-        Context ctx = getContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile servers will get you banned based on this string
 
         //inflate and create the map
 
-        getActivity().setContentView(R.layout.fragment_accommodation_location);
+//        getActivity().setContentView(R.layout.fragment_accommodation_location);
 //        getActivity().setContentView(R.layout.activity_main);
 
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
 
 
-        pinButton = (Button)view.findViewById(R.id.pin_button);
+
         nextButton = (Button)view.findViewById(R.id.NextButton);
-        AccommodationLocationFragment self = this;
 
         map = view.findViewById(R.id.map);
 //        map.setTileSource(TileSourceFactory.BASE_OVERLAY_NL);
@@ -143,13 +147,24 @@ public class AccommodationLocationFragment extends Fragment {
         mapController.setZoom(15);
         GeoPoint startPoint = new GeoPoint(51496994, -134733);
         mapController.setCenter(startPoint);
-        mapController.setZoom(1);
 //        map.setMinZoomLevel(2d);
         MapEventsReceiver mReceive = new MapEventsReceiver() {
 
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
+                Marker startMarker = new Marker(map);
+                startMarker.setPosition(p);
+                startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                if(map.getOverlays().size() > 1){
+                    map.getOverlays().remove(1);
+                }else{
+                    nextButton.setEnabled(true);
+                }
+                map.getOverlays().add(startMarker);
+                LocationService.getAddress(p);
+
                 Log.d( "singleTapConfirmedHelper: ", "singleTapConfirmedHelper: ");
+                Log.d( "singleTapConfirmedHelper: ", String.valueOf(map.getOverlays().size()));
                 return false;
             }
 
@@ -162,22 +177,20 @@ public class AccommodationLocationFragment extends Fragment {
 
 
         };
-        MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
 
-//        map.getOverlays().add(overlay);
-        pinButton.setOnClickListener(new View.OnClickListener() {
+        MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
+        map.getOverlays().add(overlay);
+
+        nextButton = view.findViewById(R.id.NextButton);
+        nextButton.setEnabled(false);
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("AAAA", "onClick: ");
+                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
+                calendarFragment.setAccommodation(accommodation);
+                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
             }
         });
-
-
-//        map.setMinimumWidth(500);
-//        map.setMinimumHeight(500);
-//
-//        map = (MapView) getView().findViewById(R.id.map);
-//        map.setTileSource(TileSourceFactory.MAPNIK);
     }
     public void click(View view){
         map.invalidate();
@@ -195,24 +208,10 @@ public class AccommodationLocationFragment extends Fragment {
         map.invalidate();
     }
     public void nextFragment(){
-        CalendarFragment calendarFragment = new CalendarFragment(accommodation);
-//
-//        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//        FragmentTransaction ftt = this.getParentFragmentManager().beginTransaction();
-//        ftt.addToBackStack("");
-////                ft.replace(self.getParentFragment().getId(), new AccommodationLocationFragment(accommodation));
-//        ftt.remove(this);
-//        Log.d("A", "onClick: ");
-//        ft.add(calendarFragment, "");
-//        ft.commit();
-//        ftt.commit();
-//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, calendarFragment)
-//                .commit();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, calendarFragment)
-                .commit();
-        fragmentManager.beginTransaction().remove(this);
+
+        CalendarFragment calendarFragment = CalendarFragment.newInstance("", "");
+        calendarFragment.setAccommodation(accommodation);
+        FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
     }
 }

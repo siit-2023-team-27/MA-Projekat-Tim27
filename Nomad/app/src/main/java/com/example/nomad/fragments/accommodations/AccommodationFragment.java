@@ -185,7 +185,7 @@ public class AccommodationFragment extends Fragment {
         ArrayList<SliderData> sliderDataArrayList = new ArrayList<SliderData>();
 
         // Initialize the slider view.
-        SliderView sliderView = rootView.findViewById(R.id.slider);
+        SliderView sliderView = rootView.findViewById(R.id.imageSlider);
 
         // Add image resources to the array list.
         sliderDataArrayList.add(new SliderData(R.drawable.img1));

@@ -1,13 +1,24 @@
 package com.example.nomad.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,15 +29,23 @@ import android.widget.Button;
 
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
 
+import com.example.nomad.dto.ReservationDateDTO;
 import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.ConfirmationType;
 import com.example.nomad.enums.PriceType;
 import com.example.nomad.services.AccommodationClient;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
+import com.example.nomad.utils.AddTextToDates;
+import com.example.nomad.utils.CustomDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import com.example.nomad.R;
@@ -39,6 +58,8 @@ import com.example.nomad.services.AccommodationService;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.format.CalendarWeekDayFormatter;
+import com.prolificinteractive.materialcalendarview.format.DateFormatDayFormatter;
 import com.puskal.multiselectspinner.MultiSelectSpinnerView;
 
 import org.osmdroid.api.IMapController;
@@ -46,12 +67,16 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -86,8 +111,11 @@ public class CreateAccommodationFragment extends Fragment {
 //    private Button setUnavailableButton;
     private MaterialCalendarView calendar;
 //    private Button setPriceButton;
-//    private Button createButton;
-//    private AccomodationsService accomodationsService = new AccomodationsService();
+    private Button createButton;
+    private HashMap<Date, ReservationDateDTO> dates = new HashMap<Date, ReservationDateDTO>();
+    private ArrayList<DateRange> dateRanges = new ArrayList<DateRange>();
+    private HashMap<DateRange, Double> prices = new HashMap<DateRange, Double>();
+    private Switch reservationAcceptanceSwitch;
 
 //    private MaterialCalendarView calendarView;
     public CreateAccommodationFragment() throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
@@ -122,6 +150,10 @@ public class CreateAccommodationFragment extends Fragment {
         }
     }
 
+    public HashMap<Date, ReservationDateDTO> getDates() {
+        return dates;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -148,39 +180,54 @@ public class CreateAccommodationFragment extends Fragment {
             }
             return Unit.INSTANCE;
         });
-//        setUnavailableButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setUnavailable();
-//            }
-//        });
-        Fragment self = this;
 
 
-//        calendarView = view.findViewById(R.id.calendarView);
-//        createButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                generateAccommodation(v);
-//                accommodation.setImages(new ArrayList<String>());
-//                accommodation.setAddress("AAAAAAAAAAAA");
-//                accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
-//                accommodation.setDefaultPrice(10);
-//                accommodation.setDeadlineForCancellation(10);
-//                accommodation.setConfirmationType(ConfirmationType.AUTOMATIC);
-//                accommodation.setHostId(AuthService.id);
-//                accommodation.setStatus(AccommodationStatus.APPROVED);
-//                Log.d("BBBBB", accommodation.toString());
-//                Log.d("BBBBB", String.valueOf(AuthService.id));
-//                Log.d("BBBBB", AuthService.token.toString());
-//                accomodationsService.create(accommodation);
-//            }
-//        });
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateAccommodation(v);
+                ImageFragment imageFragment = ImageFragment.newInstance();
+                imageFragment.setAccommodation(accommodation);
+                FragmentTransition.to(imageFragment, getActivity(), true, R.id.accommodationCreationHostView);
+
+//                accomodationsService.create(accommodation, dateRanges, prices);
+            }
+        });
     }
 
-    private void setUnavailable() {
+    private boolean setUnavailable() {
+        if(calendar.getSelectedDates() == null){
+            return false;
+        }
         List<CalendarDay> dates = calendar.getSelectedDates();
+        for (CalendarDay date : dates){
+            Date d = new Date(date.getYear(), date.getMonth(), date.getDay());
+            new Date();
+            if(this.dates.containsKey(d)){
+                this.dates.get(d).setTaken(true);
+            }else{
+                this.dates.put(d, new ReservationDateDTO(d, true));
+            }
+        }
+        DateRange range = new DateRange(new Date(dates.get(0).getYear()-1900, dates.get(0).getMonth()-1, dates.get(0).getDay()),
+                new Date(dates.get(dates.size()-1).getYear()-1900, dates.get(dates.size()-1).getMonth()-1, dates.get(dates.size()-1).getDay()));
+        Log.d("SET UNAVAILABLE", range.toString());
+        dateRanges.add(range);
+        CreateAccommodationFragment self = this;
+        calendar.addDecorators(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                Date dayDate = new Date(day.getYear(), day.getMonth(), day.getDay());
+                return self.getDates().values().stream().filter(x -> x.isTaken()).map(x -> x.getDate()).collect(Collectors.toList()).contains(dayDate);
+            }
 
+            @Override
+            public void decorate(DayViewFacade view) {
+                view.setBackgroundDrawable(self.getResources().getDrawable(R.drawable.gradientsplash));
+            }
+        });
+        return true;
     }
 
     public void setupSpinner(View view){
@@ -197,13 +244,32 @@ public class CreateAccommodationFragment extends Fragment {
     public void generateAccommodation(View view){
         this.accommodation = new AccommodationDTO();
         this.accommodation.setAccommodationType(AccommodationType.valueOf((String)spinner.getSelectedItem()));
+
         this.accommodation.setMinGuests(Integer.valueOf(minGuests.getText().toString()));
         this.accommodation.setMaxGuests(Integer.valueOf(maxGuests.getText().toString()));
         this.accommodation.setName(name.getText().toString());
         this.accommodation.setDescription(description.getText().toString());
         this.accommodation.setAmenities(selectedAmenities);
         this.accommodation.setVerified(true);
-        this.accommodation.setId(1l);
+        this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+        this.accommodation.setHostId(AuthService.id);
+
+
+        //TODO: Try without after connecting image and location fragments
+        this.accommodation.setImages(new ArrayList<String>());
+        this.accommodation.setAddress("AAAAAAAAAAAA");
+        this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
+
+        if(reservationAcceptanceSwitch.isChecked()){
+            this.accommodation.setStatus(AccommodationStatus.APPROVED);
+
+            this.accommodation.setConfirmationType(ConfirmationType.AUTOMATIC);
+        }else{
+            this.accommodation.setConfirmationType(ConfirmationType.MANUAL);
+            this.accommodation.setStatus(AccommodationStatus.PENDING);
+
+        }
+
         Log.d("generateAccommodation: ", String.valueOf(multiSpinner.getSelectedItemPosition()));
         Log.d("generateAccommodation: ", String.valueOf(multiSpinner.getSelectedItemPosition()));
         Log.d("generateAccommodation: ", accommodation.toString());
@@ -215,14 +281,66 @@ public class CreateAccommodationFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_accommodation, container, false);
     }
+
     private void initComponents(View view){
         name = view.findViewById(R.id.editTextAccommodationName);
         description = view.findViewById(R.id.editTextAccommodationDescription);
         minGuests = view.findViewById(R.id.editTextNumberMin);
         maxGuests = view.findViewById(R.id.editTextNumberMax);
-        calendar = view.findViewById(R.id.calendarView);
 //        setUnavailableButton = view.findViewById(R.id.SetUnavailableButton);
 //        setPriceButton = view.findViewById(R.id.SetPriceButton);
-//        createButton = view.findViewById(R.id.CreateAccommodationButton);
+        createButton = view.findViewById(R.id.nextButton);
+        reservationAcceptanceSwitch = view.findViewById(R.id.reservationAcceptanceTypeSwitch);
+        setUpValidation();
     }
+    private void setUpValidation(){
+        createButton.setEnabled(validate());
+
+        minGuests.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        maxGuests.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+    private boolean validate(){
+        return !description.getText().toString().isEmpty() && !name.getText().toString().isEmpty()
+                && !minGuests.getText().toString().isEmpty() && !maxGuests.getText().toString().isEmpty()
+                && (Integer.valueOf(minGuests.getText().toString())) <= Integer.valueOf(maxGuests.getText().toString()) ;
+    }
+
 }

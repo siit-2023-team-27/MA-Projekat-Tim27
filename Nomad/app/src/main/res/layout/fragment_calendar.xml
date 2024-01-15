@@ -10,67 +10,67 @@
     <!-- TODO: Update blank fragment layout -->
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
+        android:id="@+id/materialCalendarView"
         android:layout_width="400dp"
         android:layout_height="300dp"
         android:layout_marginStart="4dp"
-        android:layout_marginBottom="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="104dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:mcv_selectionColor="@color/nomad_brown"
         app:mcv_selectionMode="range"
         app:mcv_showOtherDates="all" />
 
     <Button
-        android:id="@+id/SetUnavailableButton"
+        android:id="@+id/setUnavailableRangeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="116dp"
         android:text="Set Unavailable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumberDecimal2"
+        android:id="@+id/setSpecialPriceBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="32dp"
         android:ems="10"
+        android:hint="Price for selected dates"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
-        app:layout_constraintVertical_bias="0.028" />
+        app:layout_constraintBottom_toTopOf="@+id/setUnavailableRangeButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumberDecimal"
+        android:id="@+id/setDefaultPriceBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
+        android:hint="Default Price"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/setSpecialPriceBox"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/SetPriceButton"
+        android:id="@+id/setSpecialPriceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="80dp"
         android:text="Set Price"
         app:layout_constraintBottom_toTopOf="@+id/CreateAccommodationButton"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/CreateAccommodationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="116dp"
         android:text="Create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
