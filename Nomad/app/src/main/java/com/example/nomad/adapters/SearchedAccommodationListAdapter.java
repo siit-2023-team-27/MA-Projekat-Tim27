@@ -52,9 +52,9 @@ public class SearchedAccommodationListAdapter extends ArrayAdapter<SearchAccommo
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        AccommodationDTO accommodation = getItem(position);
+        SearchAccommodationDTO accommodation = getItem(position);
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card,
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.search_accommodation_card,
                     parent, false);
         }
         Log.e("ZIV SAM", "Ziv sammmm");
@@ -62,11 +62,19 @@ public class SearchedAccommodationListAdapter extends ArrayAdapter<SearchAccommo
         ImageView imageView = convertView.findViewById(R.id.product_image);
         TextView productTitle = convertView.findViewById(R.id.product_title);
         TextView productDescription = convertView.findViewById(R.id.product_description);
+        TextView totalPrice = convertView.findViewById(R.id.total_price);
+        TextView pricePerNight = convertView.findViewById(R.id.price_per_night);
+        TextView average = convertView.findViewById(R.id.average_rating);
+
 
         if(accommodation != null){
             //imageView.setImageResource(product.getImage());
             productTitle.setText(accommodation.getName());
             productDescription.setText(accommodation.getDescription());
+            totalPrice.setText("Total price: "+accommodation.getTotalPrice().toString());
+            pricePerNight.setText("Price per night: "+accommodation.getPricePerNight().toString());
+            average.setText("Average rating:"+String.valueOf(accommodation.getAverageRating()));
+
             productCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
                 Log.i("ShopApp", "Clicked: " + accommodation.getName() + ", id: " +
