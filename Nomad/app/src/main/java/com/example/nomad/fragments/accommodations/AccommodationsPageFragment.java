@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -21,11 +22,16 @@ import android.widget.TextView;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.FragmentAccommodationsPageBinding;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.fragments.FragmentTransition;
-import com.example.nomad.model.AccommodationDTO;
+import com.example.nomad.services.AccomodationsService;
+import com.example.nomad.services.AuthService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,9 +39,10 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AccommodationsPageFragment extends Fragment {
-    public static ArrayList<AccommodationDTO> accommodations = new ArrayList<AccommodationDTO>();
+    public static ArrayList<AccommodationDTO> accommodations;
     private AccommodationsPageViewModel accommodationsPageViewModel;
     private FragmentAccommodationsPageBinding binding;
+    AccomodationsService accomodationsService = new AccomodationsService();
     public static AccommodationsPageFragment newInstance() {
         return new AccommodationsPageFragment();
     }
@@ -48,11 +55,20 @@ public class AccommodationsPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    private void prepareProductList(ArrayList<AccommodationDTO> products){
-        products.add(new AccommodationDTO(1L, 1, 3,"prvi","Samsung S23 Ultra White", "Description 1"));
-        products.add(new AccommodationDTO(2L, 1, 3,"drugi","Samsung S23 Ultra White", "Description 1"));
-        products.add(new AccommodationDTO(3L, 1, 3,"treci","Samsung S23 Ultra White", "Description 1"));
-        products.add(new AccommodationDTO(4L, 1, 3,"cetvrti","Samsung S23 Ultra White", "Description 1"));
+    private void prepareProductList(){
+        accomodationsService.loadAccommodations();
+        accomodationsService.getAccommodations().observe(getActivity(), new Observer<List<AccommodationDTO>>() {
+            @Override
+            public void onChanged(List<AccommodationDTO> objects) {
+                // Update your UI or perform any actions when LiveData changes
+
+                // Now, you can convert the LiveData to a List if needed
+                accommodations = (ArrayList<AccommodationDTO>) objects;
+                // Do something with the list
+                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations), getActivity(), false, R.id.scroll_products_list);
+
+            }
+        });
 
     }
     @Override
@@ -63,7 +79,7 @@ public class AccommodationsPageFragment extends Fragment {
         binding = FragmentAccommodationsPageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        prepareProductList(accommodations);
+        prepareProductList();
 
         SearchView searchView = binding.searchText;
         accommodationsPageViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
@@ -114,9 +130,6 @@ public class AccommodationsPageFragment extends Fragment {
 //                // TODO Auto-generated method stub
 //            }
 //        });
-
-
-        FragmentTransition.to(AccommodationListFragment.newInstance(accommodations), getActivity(), false, R.id.scroll_products_list);
 
         return root;
     }

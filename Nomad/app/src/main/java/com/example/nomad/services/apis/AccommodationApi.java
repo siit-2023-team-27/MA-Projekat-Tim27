@@ -1,6 +1,7 @@
 package com.example.nomad.services.apis;
 
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
@@ -9,6 +10,13 @@ import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
+import com.example.nomad.helper.Consts;
+import com.example.nomad.model.AccommodationRatingDTO;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import org.osmdroid.library.BuildConfig;
 
@@ -32,7 +40,7 @@ import retrofit2.http.Url;
 public interface AccommodationApi {
 
 
-    String BASE_URL = "http://192.168.1.8:8080/api/";
+    String BASE_URL = Consts.BASEURL+"/api/";
     @Headers(
             value = {
                     "Accept: application/json",
@@ -60,6 +68,16 @@ public interface AccommodationApi {
 
     @DELETE("accommodations/{id}")
     public Call<AccommodationDTO> deleteAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+
+    @GET("accommodations/verified")
+    public Call<ArrayList<AccommodationDTO>> getAccommodations(@Header("Authorization") String authHeader);
+
+    @GET("accommodations/taken-dates/{accommodationId}")
+    public Call<List<Long>> getTakenDates(@Path("accommodationId") Long accommodationId);
+
+    @GET("accommodations/price/{accommodationId}/{date}")
+    public Call<Double> getPrice(@Path("accommodationId") Long accommodationId, @Path("date") Date date, @Header("Authorization") String authHeader);
 
     @GET("accommodations/host/{id}")
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);

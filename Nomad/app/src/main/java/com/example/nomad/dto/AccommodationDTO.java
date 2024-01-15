@@ -19,7 +19,7 @@ import org.w3c.dom.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccommodationDTO implements Parcelable {
+public class AccommodationDTO  implements Parcelable {
     private long id;
     private int minGuests;
     private int maxGuests;
@@ -28,6 +28,7 @@ public class AccommodationDTO implements Parcelable {
     private String address;
     private List<Amenity> amenities;
     private List<String> images;
+    private List<AccommodationRating> ratings;
     private AccommodationStatus status;
     private ConfirmationType confirmationType;
     private AccommodationType accommodationType;
@@ -38,7 +39,7 @@ public class AccommodationDTO implements Parcelable {
     private long hostId;
     public AccommodationDTO(){}
 
-    public AccommodationDTO(long id, int minGuests, int maxGuests, String name, String description, String address, List<Amenity> amenities, List<String> images, AccommodationStatus status, ConfirmationType confirmationType, AccommodationType accommodationType, PriceType priceType, double defaultPrice, int deadlineForCancellation, boolean verified) {
+    public AccommodationDTO(long id, int minGuests, int maxGuests, String name, String description, String address, List<Amenity> amenities, List<String> images, List<AccommodationRating> ratings, AccommodationStatus status, ConfirmationType confirmationType, AccommodationType accommodationType, PriceType priceType, double defaultPrice, int deadlineForCancellation, boolean verified) {
         this.id = id;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
@@ -54,10 +55,51 @@ public class AccommodationDTO implements Parcelable {
         this.defaultPrice = defaultPrice;
         this.deadlineForCancellation = deadlineForCancellation;
         this.verified = verified;
+        this.ratings = ratings;
     }
 
 
+    protected AccommodationDTO(Parcel in) {
+        id = in.readLong();
+        minGuests = in.readInt();
+        maxGuests = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        address = in.readString();
+        images = in.createStringArrayList();
+        defaultPrice = in.readDouble();
+        deadlineForCancellation = in.readInt();
+        verified = in.readByte() != 0;
+        hostId = in.readLong();
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeInt(minGuests);
+        dest.writeInt(maxGuests);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(address);
+        dest.writeStringList(images);
+        dest.writeTypedList(ratings);
+        dest.writeDouble(defaultPrice);
+        dest.writeInt(deadlineForCancellation);
+        dest.writeByte((byte) (verified ? 1 : 0));
+        dest.writeLong(hostId);
+    }
+
+    public static final Creator<AccommodationDTO> CREATOR = new Creator<AccommodationDTO>() {
+        @Override
+        public AccommodationDTO createFromParcel(Parcel in) {
+            return new AccommodationDTO(in);
+        }
+
+        @Override
+        public AccommodationDTO[] newArray(int size) {
+            return new AccommodationDTO[size];
+        }
+    };
 
     public AccommodationType getAccommodationType() {
         return accommodationType;
@@ -130,8 +172,13 @@ public class AccommodationDTO implements Parcelable {
         this.status = status;
     }
 
+    public List<AccommodationRating> getRatings() {
+        return ratings;
+    }
 
-
+    public void setRatings(List<AccommodationRating> ratings) {
+        this.ratings = ratings;
+    }
 
     public void addImage(String image){
         this.images.add(image);
@@ -212,12 +259,5 @@ public class AccommodationDTO implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeString(description);
     }
 }
