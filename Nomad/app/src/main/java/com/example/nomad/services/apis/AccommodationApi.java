@@ -11,7 +11,6 @@ import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
 import com.example.nomad.helper.Consts;
-import com.example.nomad.model.AccommodationRatingDTO;
 
 import java.util.ArrayList;
 import java.util.Collection;

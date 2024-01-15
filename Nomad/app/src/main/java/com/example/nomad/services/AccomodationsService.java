@@ -15,7 +15,7 @@ import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.UserRegistrationDTO;
-import com.example.nomad.model.AccommodationRatingDTO;
+import com.example.nomad.dto.AccommodationRatingDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
