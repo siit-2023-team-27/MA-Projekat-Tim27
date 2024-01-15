@@ -17,6 +17,7 @@ import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.RatingCreationDTO;
 import com.example.nomad.dto.UserReportDto;
+import com.example.nomad.helper.Consts;
 
 import java.util.Collection;
 
@@ -30,8 +31,7 @@ import retrofit2.http.Path;
 
 public interface UserApi {
 
-    String BASE_URL = "http://192.168.1.8:8080/api/";
-
+    String BASE_URL = Consts.BASEURL+"/api/";
 
     @GET("users")
     public Call<ArrayList<UserDTO>> getAllUsers(@Header("Authorization") String authHeader);

@@ -4,6 +4,7 @@ import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
+import com.example.nomad.helper.Consts;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import retrofit2.http.Part;
 public interface ImageApi {
 
 
-    String BASE_URL = "http://192.168.1.144:8080/images/";
+    String BASE_URL = Consts.BASEURL+"/images/";
 
     @Multipart
     @POST("upload")
