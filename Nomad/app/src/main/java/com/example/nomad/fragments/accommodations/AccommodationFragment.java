@@ -51,6 +51,7 @@ public class AccommodationFragment extends Fragment {
     MapView mapView;
     private static final String ARG_PARAM = "accommodation";
     private AccommodationDTO accommodation;
+    private MaterialCalendarView calendar;
     AccomodationsService accomodationsService = new AccomodationsService();
     ReservationService reservationService = new ReservationService();
     AuthService authService = new AuthService();
@@ -88,8 +89,41 @@ public class AccommodationFragment extends Fragment {
         name.setText(accommodation.getName());
         TextView description = rootView.findViewById(R.id.description);
         description.setText(accommodation.getDescription());
+        // Set rating
+        RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
+        simpleRatingBar.setRating((float) 4.5);
 
-        MaterialCalendarView calendar = rootView.findViewById(R.id.calendarAccommodationDetails);
+
+        this.setCalendar(rootView);
+        this.handleReservation(rootView);
+        this.setImages(rootView);
+        this.setAmenities(rootView);
+        this.setComments(rootView);
+        return rootView;
+    }
+
+    public void setAmenities(View rootView){
+        LinearLayout layout = rootView.findViewById(R.id.image_container);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        for (int i = 0; i < accommodation.getAmenities().size(); i++) {
+            TextView textView = new TextView(requireContext());
+            CheckBox checkBox = new CheckBox(requireContext());
+            checkBox.setChecked(true);
+            checkBox.setEnabled(false);
+            checkBox.setClickable(false);
+            textView.setPadding(60, 0, 60, 0);
+            textView.setText(accommodation.getAmenities().get(i).getName());
+            textView.setLayoutParams(layoutParams);
+            checkBox.setLayoutParams(layoutParams);
+            layout.addView(checkBox);
+            layout.addView(textView);
+        }
+    }
+
+    public void setCalendar(View rootView){
+
+        this.calendar = rootView.findViewById(R.id.calendarAccommodationDetails);
         accomodationsService.loadTakenDates(this.accommodation.getId());
         accomodationsService.getTakenDates().observe(getActivity(), new Observer<List<Date>>() {
             @Override
@@ -109,11 +143,11 @@ public class AccommodationFragment extends Fragment {
                 calendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_RANGE);
             }
         });
-        EditText peopleNum = rootView.findViewById(R.id.peopleNumber);
+    }
 
-
+    private void handleReservation(View rootView){
         Button reserve = rootView.findViewById(R.id.reserve);
-
+        EditText peopleNum = rootView.findViewById(R.id.peopleNumber);
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +178,9 @@ public class AccommodationFragment extends Fragment {
 
             }
         });
+    }
 
+    private void setImages(View rootView){
         // Create an array list for storing image URLs.
         ArrayList<SliderData> sliderDataArrayList = new ArrayList<SliderData>();
 
@@ -157,10 +193,6 @@ public class AccommodationFragment extends Fragment {
         sliderDataArrayList.add(new SliderData(R.drawable.img3));
         sliderDataArrayList.add(new SliderData(R.drawable.img4));
 
-        // Set rating
-        RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
-        simpleRatingBar.setRating((float) 4.5);
-
         // Create and set the adapter for the slider view.
         SliderAdapter adapter = new SliderAdapter(requireContext(), sliderDataArrayList);
         sliderView.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
@@ -168,24 +200,8 @@ public class AccommodationFragment extends Fragment {
         sliderView.setScrollTimeInSec(3);
         sliderView.setAutoCycle(true);
         sliderView.startAutoCycle();
-
-        LinearLayout layout = rootView.findViewById(R.id.image_container);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        for (int i = 0; i < accommodation.getAmenities().size(); i++) {
-            TextView textView = new TextView(requireContext());
-            CheckBox checkBox = new CheckBox(requireContext());
-            checkBox.setChecked(true);
-            checkBox.setEnabled(false);
-            checkBox.setClickable(false);
-            textView.setPadding(60, 0, 60, 0);
-            textView.setText(accommodation.getAmenities().get(i).getName());
-            textView.setLayoutParams(layoutParams);
-            checkBox.setLayoutParams(layoutParams);
-            layout.addView(checkBox);
-            layout.addView(textView);
-        }
-
+    }
+    private void setComments(View rootView){
         LinearLayout layoutComments = rootView.findViewById(R.id.comments_container);
         LinearLayout.LayoutParams layoutParamsComments = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams pictureLayoutParams = new LinearLayout.LayoutParams(100, 100);
@@ -217,9 +233,6 @@ public class AccommodationFragment extends Fragment {
             layoutComments.addView(linearLayout);
             layoutComments.addView(description2);
         }
-
-        return rootView;
     }
-
 
 }
