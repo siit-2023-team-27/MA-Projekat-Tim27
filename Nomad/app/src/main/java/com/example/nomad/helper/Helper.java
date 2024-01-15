@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,5 +26,9 @@ public class Helper {
         Log.i("ShopApp", "toDate: " + date.getTime());
 
         return date;
+    }
+    public static String dateToString(Date date){
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        return dateFormat.format(date);
     }
 }

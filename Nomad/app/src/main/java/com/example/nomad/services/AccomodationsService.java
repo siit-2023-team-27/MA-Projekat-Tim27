@@ -14,6 +14,7 @@ import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
+import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 
@@ -27,6 +28,7 @@ import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.enums.ReportStatus;
+import com.example.nomad.helper.Helper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ import retrofit2.Response;
 
 public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
+    private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
+
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
 
     public void loadAccommodations() {
@@ -65,10 +69,50 @@ public class AccomodationsService {
             }
         });
     }
+    public void getSearchedAndFIltered(String city, Date from, Date to, int peopleNum, Double min, Double max, List<Long> amenities, String type) {
+        Call<Collection<SearchAccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getFilteredAndSearched(city, Helper.dateToString(from), Helper.dateToString(to), peopleNum,
+                min, max, amenities, type, "Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<SearchAccommodationDTO>>() {
+            @Override
+            public void onResponse(Call<Collection<SearchAccommodationDTO>> call, Response<Collection<SearchAccommodationDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<SearchAccommodationDTO> objects = response.body();
+                    //accommodations = objects;
+                    searchedAccommodations.setValue(objects);
+                    Log.d("onResponseSearched: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("searchedError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<SearchAccommodationDTO>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("searchedErrror", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
 
     public LiveData<List<AccommodationDTO>> getAccommodations() {
         return accommodations;
     }
+    public LiveData<Collection<SearchAccommodationDTO>> getSearchedAccommodations() {
+        return searchedAccommodations;
+    }
+
     public LiveData<List<Date>> getTakenDates() {
         return takenDates;
     }

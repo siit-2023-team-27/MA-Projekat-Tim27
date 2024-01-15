@@ -17,19 +17,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.FragmentAccommodationsPageBinding;
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.dto.ReservationDTO;
+import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.helper.Helper;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +47,8 @@ import java.util.List;
  */
 public class AccommodationsPageFragment extends Fragment {
     public static ArrayList<AccommodationDTO> accommodations;
+    public static ArrayList<SearchAccommodationDTO> searchAccommodationDTOS;
+    private MaterialCalendarView calendar;
     private AccommodationsPageViewModel accommodationsPageViewModel;
     private FragmentAccommodationsPageBinding binding;
     AccomodationsService accomodationsService = new AccomodationsService();
@@ -79,58 +88,37 @@ public class AccommodationsPageFragment extends Fragment {
         binding = FragmentAccommodationsPageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        prepareProductList();
-
-        SearchView searchView = binding.searchText;
-        accommodationsPageViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
-
-//        Button btnFilters = binding.btnFilters;
-//        btnFilters.setOnClickListener(v -> {
-//            Log.i("ShopApp", "Bottom Sheet Dialog");
-//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.FullScreenBottomSheetDialog);
-//            View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
-//            bottomSheetDialog.setContentView(dialogView);
-//            bottomSheetDialog.show();
-//        });
-//
-//        Spinner spinner = binding.btnSort;
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
-//                android.R.layout.simple_spinner_item,
-//                getResources().getStringArray(R.array.sort_array));
-//        // Specify the layout to use when the list of choices appears
-//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner.setAdapter(arrayAdapter);
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-//                dialog.setMessage("Change the sort option?")
-//                        .setCancelable(false)
-//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                Log.v("ShopApp", (String) parent.getItemAtPosition(position));
-//                                ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-//                            }
-//                        })
-//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//                AlertDialog alert = dialog.create();
-//                alert.show();
-//            }
-//
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//            }
-//        });
+        this.prepareProductList();
+        this.handleSearch(root);
 
         return root;
+    }
+    private void handleSearch(View rootView){
+        Button search = rootView.findViewById(R.id.searchButton);
+        EditText city = rootView.findViewById(R.id.adress);
+        EditText peopleNum = rootView.findViewById(R.id.peopleNumber);
+        this.calendar = rootView.findViewById(R.id.searchCalendar);
+        List<CalendarDay> selectedDays = calendar.getSelectedDates();
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accomodationsService.getSearchedAndFIltered(city.getText().toString(),
+                        Helper.toDate(selectedDays.get(0)), Helper.toDate(selectedDays.get(selectedDays.size()-1)), Integer.valueOf(peopleNum.getText().toString()),
+                        null, null, null, null);
+                accomodationsService.getSearchedAccommodations().observe(getActivity(), new Observer<Collection<SearchAccommodationDTO>>() {
+                    @Override
+                    public void onChanged(Collection<SearchAccommodationDTO> objects) {
+                        // Update your UI or perform any actions when LiveData changes
+
+                        // Now, you can convert the LiveData to a List if needed
+                        searchAccommodationDTOS = (ArrayList<SearchAccommodationDTO>) objects;
+                        // Do something with the list
+                        FragmentTransition.to(SearchedAccommodationListFragment.newInstance(searchAccommodationDTOS), getActivity(), false, R.id.scroll_products_list);
+
+                    }
+                });
+
+            }
+        });
     }
 }
