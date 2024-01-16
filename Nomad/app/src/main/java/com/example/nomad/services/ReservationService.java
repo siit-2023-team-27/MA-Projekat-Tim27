@@ -12,6 +12,7 @@ import com.example.nomad.dto.ReservationResponseDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,45 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReservationService {
+    private MutableLiveData<Collection<ReservationResponseDTO>> reservations = new MutableLiveData<>();
+    public LiveData<Collection<ReservationResponseDTO>> getReservations() {
+        return reservations;
+    }
     private MutableLiveData<Boolean> reservationSuccessful = new MutableLiveData<>();
     public LiveData<Boolean> getResponse() {
         return reservationSuccessful;
+    }
+    public void loadReservations(Long id) {
+        Call<Collection<ReservationResponseDTO>> call = ReservationClient.getInstance().getMyApi().getReservationsForGuest(id,"Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<ReservationResponseDTO>>() {
+            @Override
+            public void onResponse(Call<Collection<ReservationResponseDTO>> call, Response<Collection<ReservationResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<ReservationResponseDTO> objects = response.body();
+                    //accommodations = objects;
+                    reservations.setValue(objects);
+                    Log.d("onResponseGuestReservation: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("RetrofitErrorGuestReservations", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<ReservationResponseDTO>> call, Throwable t) {
+                Log.d("RetrofitErrorGuestReservations: ", "ERROR");
+            }
+        });
     }
     public void create(ReservationDTO reservationDTO) {
         Call<ReservationResponseDTO> call = ReservationClient.getInstance().getMyApi().createReservationRequest(reservationDTO, "Bearer " + AuthService.token.toString());

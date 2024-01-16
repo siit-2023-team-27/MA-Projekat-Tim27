@@ -34,6 +34,13 @@
         app:popUpTo="@+id/nav_search"
         app:popUpToInclusive="true"/>
     <fragment
+        android:id="@+id/nav_reservations"
+        android:name="com.example.nomad.fragments.reservations.GuestReservationsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_guest_reservations"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true"/>
+    <fragment
         android:id="@+id/nav_notifications"
         android:name="com.example.nomad.fragments.NotificationsFragment"
         android:label="fragment_notifications"
