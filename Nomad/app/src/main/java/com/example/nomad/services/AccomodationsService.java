@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
+import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.SearchAccommodationDTO;
@@ -43,6 +44,8 @@ public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
     private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
 
+    private MutableLiveData<Collection<Amenity>> amenities = new MutableLiveData<>();
+
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
 
     public void loadAccommodations() {
@@ -66,6 +69,41 @@ public class AccomodationsService {
             @Override
             public void onFailure(Call<ArrayList<AccommodationDTO>> call, Throwable t) {
                 // Handle failure (network error, etc.)
+            }
+        });
+    }
+    public void loadAmenities() {
+        Call<Collection<Amenity>> call = AccommodationClient.getInstance().getMyApi().getAmenities("Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<Amenity>>() {
+            @Override
+            public void onResponse(Call<Collection<Amenity>> call, Response<Collection<Amenity>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<Amenity> objects = response.body();
+                    //accommodations = objects;
+                    amenities.setValue(objects);
+                    Log.d("amenityResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("amenityError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<Amenity>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("amenityError", "Request failed: " + t.getMessage());
+
             }
         });
     }
@@ -104,6 +142,9 @@ public class AccomodationsService {
 
             }
         });
+    }
+    public LiveData<Collection<Amenity>> getAmenities() {
+        return amenities;
     }
 
     public LiveData<List<AccommodationDTO>> getAccommodations() {

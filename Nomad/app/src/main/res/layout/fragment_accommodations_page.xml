@@ -17,7 +17,7 @@
             android:id="@+id/adress"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:text=""
             android:hint="Where would you like to go"
@@ -25,23 +25,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.789"
             app:layout_constraintStart_toStartOf="parent"></EditText>
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/searchCalendar"
-            android:layout_width="400dp"
-            android:layout_height="300dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:mcv_selectionColor="@color/nomad_brown"
-            app:mcv_selectionMode="range"
-            app:mcv_showOtherDates="other_months">
+        <Button
+            android:id="@+id/calendarButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose date range"
+            android:layout_marginRight="10dp"
 
-        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+            tools:ignore="TextContrastCheck" />
+
         <EditText
             android:id="@+id/peopleNumber"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:text=""
             android:hint="People number"
@@ -49,14 +46,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.789"
             app:layout_constraintStart_toStartOf="parent"></EditText>
-        <Button
-            android:id="@+id/searchButton"
+
+        <LinearLayout
+            android:id="@+id/linear2"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:ems="10"
-            android:layout_marginTop="36dp"
-            android:text="search"
-            tools:ignore="TextContrastCheck" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:text="search"
+                android:layout_marginRight="10dp"
+
+                tools:ignore="TextContrastCheck" />
+
+
+            <Button
+                android:id="@+id/filterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="filters"
+                tools:ignore="TextContrastCheck" />
+            <!--            android:background="?android:attr/colorPrimary"-->
+        </LinearLayout>
 
 
         <RelativeLayout

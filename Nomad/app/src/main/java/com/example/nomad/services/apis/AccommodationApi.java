@@ -5,6 +5,7 @@ import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
+import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.LoginDTO;
@@ -82,10 +83,14 @@ public interface AccommodationApi {
 
     @GET("accommodations/host/{id}")
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
+
     @GET("accommodations/search-filter")
     public Call<Collection<SearchAccommodationDTO>> getFilteredAndSearched(@Query("city") String city, @Query("from") String from,
                                                                            @Query("to") String to, @Query("peopleNum") int peopleNum,
                                                                            @Query("minimumPrice") Double minimumPrice, @Query("maximumPrice") Double maximumPrice,
-                                                                           @Query("amenity") List<Long> amenity, @Query("maximumPrice") String type,
+                                                                           @Query("amenity") List<Long> amenity, @Query("type") String type,
                                                                            @Header("Authorization") String authHeader);
+    @GET("amenities")
+    public Call<Collection<Amenity>> getAmenities( @Header("Authorization") String authHeader);
+
 }

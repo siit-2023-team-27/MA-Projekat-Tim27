@@ -92,7 +92,13 @@ public class AccommodationFragment extends Fragment {
         // Set rating
         RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
         simpleRatingBar.setRating((float) 4.5);
-
+        Button back = rootView.findViewById(R.id.back_to_list);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStackImmediate();
+            }
+        });
 
         this.setCalendar(rootView);
         this.handleReservation(rootView);
