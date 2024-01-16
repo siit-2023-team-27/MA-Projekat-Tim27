@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -27,5 +28,7 @@ public interface ReservationApi {
 
     @GET("reservations/with-guest/{id}")
     public Call<Collection<ReservationResponseDTO>> getReservationsForGuest(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @DELETE("reservations/{id}")
+    public Call<Long> deleteReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
 
 }

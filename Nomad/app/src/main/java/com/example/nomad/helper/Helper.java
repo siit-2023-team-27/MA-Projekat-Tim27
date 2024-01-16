@@ -31,4 +31,8 @@ public class Helper {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         return dateFormat.format(date);
     }
+    public static String longToDateStirng(String dateStr){
+        Date date = new Date(Long.valueOf(dateStr));
+        return dateToString(date);
+    }
 }

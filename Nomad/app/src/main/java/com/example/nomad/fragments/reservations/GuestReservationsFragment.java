@@ -5,9 +5,13 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationDTO;
@@ -64,6 +68,15 @@ public class GuestReservationsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_guest_reservations, container, false);
         this.prepareProductList();
+        reservationService.getRefresh().observe(getActivity(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean objects) {
+                Log.i("Reshresh", "refr: ");
+                prepareProductList();
+                //testirati
+            }
+        });
+
         return root;
     }
     private void prepareProductList(){
@@ -76,9 +89,10 @@ public class GuestReservationsFragment extends Fragment {
                 // Now, you can convert the LiveData to a List if needed
                 reservations = (ArrayList<ReservationResponseDTO>) objects;
                 // Do something with the list
-                FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations), getActivity(), true, R.id.scroll_guest_reservations);
+                FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations), getActivity(), false, R.id.scroll_guest_reservations);
             }
         });
+
 
     }
 }

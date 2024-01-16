@@ -27,11 +27,61 @@ public class ReservationService {
         return reservations;
     }
     private MutableLiveData<Boolean> reservationSuccessful = new MutableLiveData<>();
+    private MutableLiveData<Boolean> deletionSuccessful = new MutableLiveData<>();
+
     public LiveData<Boolean> getResponse() {
         return reservationSuccessful;
     }
+    private static MutableLiveData<Boolean> refresh = new MutableLiveData<>();
+
+    public LiveData<Boolean> getRefresh() {
+        return refresh;
+    }
+
+    public LiveData<Boolean> getDeleteResponse() {
+        return deletionSuccessful;
+    }
+    public void setRefresh(Boolean bo) {
+         refresh.setValue(bo);
+    }
+
+    public void deleteReservation(Long id) {
+        Call<Long> call = ReservationClient.getInstance().getMyApi().deleteReservation(id,"Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Long objects = response.body();
+                    //accommodations = objects;
+                    deletionSuccessful.setValue(true);
+                    Log.d("onResponseGuestDeletion: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("RetrofitErrorGuestResDeletion", errorMessage);
+                            deletionSuccessful.setValue(false);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Log.d("RetrofitErrorGuestResDeletion: ", "ERROR");
+                deletionSuccessful.setValue(false);
+
+            }
+        });
+    }
     public void loadReservations(Long id) {
-        Call<Collection<ReservationResponseDTO>> call = ReservationClient.getInstance().getMyApi().getReservationsForGuest(id,"Bearer" + AuthService.token.toString());
+        Call<Collection<ReservationResponseDTO>> call = ReservationClient.getInstance().getMyApi().getReservationsForGuest(id,"Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<Collection<ReservationResponseDTO>>() {
             @Override
             public void onResponse(Call<Collection<ReservationResponseDTO>> call, Response<Collection<ReservationResponseDTO>> response) {
