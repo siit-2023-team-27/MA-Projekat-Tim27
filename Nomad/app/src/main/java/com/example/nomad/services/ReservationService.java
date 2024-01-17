@@ -9,6 +9,8 @@ import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
+import com.example.nomad.dto.SearchAccommodationDTO;
+import com.example.nomad.helper.Helper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +45,46 @@ public class ReservationService {
     }
     public void setRefresh(Boolean bo) {
          refresh.setValue(bo);
+    }
+    private MutableLiveData<Collection<ReservationResponseDTO>> searchedreservations = new MutableLiveData<>();
+    public LiveData<Collection<ReservationResponseDTO>> getSearchedReservations() {
+        return searchedreservations;
+    }
+    public void getSearchedAndFIlteredGuest(Long id, String name, Date from, Date to, String type) {
+        Call<Collection<ReservationResponseDTO>> call = ReservationClient.getInstance().getMyApi().getSearchedANdFIlteredGuest(id,name, Helper.dateToString(from), Helper.dateToString(to),
+                type, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<ReservationResponseDTO>>() {
+            @Override
+            public void onResponse(Call<Collection<ReservationResponseDTO>> call, Response<Collection<ReservationResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<ReservationResponseDTO> objects = response.body();
+                    //accommodations = objects;
+                    searchedreservations.setValue(objects);
+                    Log.d("onResponseSearched: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("searchedError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<ReservationResponseDTO>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("searchedErrror", "Request failed: " + t.getMessage());
+
+            }
+        });
     }
 
     public void deleteReservation(Long id) {
