@@ -1,4 +1,4 @@
-package com.example.nomad.fragments.accommodations;
+package com.example.nomad.fragments;
 
 import android.os.Bundle;
 
@@ -6,41 +6,39 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.nomad.R;
 import com.example.nomad.adapters.CommentListAdapter;
-import com.example.nomad.dto.AccommodationDTO;
-import com.example.nomad.dto.AccommodationRatingDTO;
+import com.example.nomad.adapters.CommentReportListAdapter;
+import com.example.nomad.dto.CommentReportDetailsDTO;
+import com.example.nomad.fragments.CommentReportViewModel;
 import com.example.nomad.fragments.ReportCommentFragment;
-import com.example.nomad.services.AccommodationService;
+import com.example.nomad.fragments.accommodations.AccommodationCommentFragment;
+import com.example.nomad.fragments.accommodations.FragmentAddAccommodationComment;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.ICanRateListener;
-import com.example.nomad.services.UserService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationCommentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationCommentFragment extends ListFragment implements ICanRateListener {
+public class CommentReportFragment extends ListFragment{
 
-    private ArrayList<AccommodationRatingDTO> comments = new ArrayList<AccommodationRatingDTO>();
-    private  CommentListViewModel commentListViewModel = new CommentListViewModel();
+    private ArrayList<CommentReportDetailsDTO> reports = new ArrayList<CommentReportDetailsDTO>();
+    private CommentReportViewModel commentReportViewModel = new CommentReportViewModel();
     private ListView list;
     private FloatingActionButton addCommentButton;
     private AccomodationsService accomodationsService = new AccomodationsService();
@@ -54,12 +52,11 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
         this.accommodationId = accommodationId;
     }
 
-    public AccommodationCommentFragment(Long accommodationId) {
+    public CommentReportFragment(Long accommodationId) {
         this.accommodationId = accommodationId;
-        AccomodationsService.subscribeCanRate(this);
 
     }
-    public AccommodationCommentFragment(){
+    public CommentReportFragment(){
 
     }
 
@@ -75,15 +72,15 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        commentListViewModel.getElements().observe(this, elements -> {
-            comments = elements;
-            CommentListAdapter adapter = new CommentListAdapter(getActivity(), comments, getActivity(), this);
+        commentReportViewModel.getElements().observe(this, elements -> {
+            reports = elements;
+            CommentReportListAdapter adapter = new CommentReportListAdapter(getActivity(), reports, getActivity(), this);
 
 //            adapter.setReportText(FragmentAddAccommodationComment.getReportText());
             setListAdapter(adapter);
         });
-        commentListViewModel.getComments(accommodationId);
-        CommentListAdapter adapter = new CommentListAdapter(getActivity(), comments, getActivity(), this);
+        commentReportViewModel.getUserReports();
+        CommentReportListAdapter adapter = new CommentReportListAdapter(getActivity(), reports, getActivity(), this);
         setListAdapter(adapter);
 
 
@@ -99,16 +96,8 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        addCommentButton = view.findViewById(R.id.addCommentButton);
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBottomDrawer();
-            }
-        });
-        addCommentButton.setEnabled(AccomodationsService.canRate);
+
         setupScrolling();
-        this.accomodationsService.canRate(accommodationId, AuthService.id);
         super.onViewCreated(view, savedInstanceState);
     }
     private void setupScrolling(){
@@ -132,20 +121,12 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
         });
     }
 
-    private void showBottomDrawer() {
-        FragmentAddAccommodationComment bottomDrawerFragment = new FragmentAddAccommodationComment(commentListViewModel, accommodationId);
 
-        bottomDrawerFragment.show(getChildFragmentManager(), bottomDrawerFragment.getTag());
-    }
-    public void showReportDrawer(Long commentId){
-        ReportCommentFragment reportDrawerFragment = new ReportCommentFragment(commentId);
-        reportDrawerFragment.show(getChildFragmentManager(), reportDrawerFragment.getTag());
+    public void accept(Long id) {
+        commentReportViewModel.acceptCommentReport(id);
     }
 
-
-    @Override
-    public void canRateChanged() {
-        addCommentButton.setEnabled(AccomodationsService.canRate);
-        Log.d("canRateChanged: ", String.valueOf(AccomodationsService.canRate));
+    public void archive(Long id) {
+        commentReportViewModel.archiveCommentReport(id);
     }
 }

@@ -31,9 +31,11 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
     Button commentButton;
     RatingBar commentRating;
     AccomodationsService accomodationsService = new AccomodationsService();
+    Long accommodationId;
     CommentListViewModel commentListViewModel;
-    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel) {
+    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel, Long accommodationId) {
         this.commentListViewModel = commentListViewModel;
+        this.accommodationId = accommodationId;
     }
     public FragmentAddAccommodationComment(){
 
@@ -77,7 +79,7 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
     }
     private void addComment(){
         AccommodationRatingCreationDTO commentDTO = new AccommodationRatingCreationDTO();
-        commentDTO.setRatedId(1L);
+        commentDTO.setRatedId(accommodationId);
         commentDTO.setRating((int)Math.floor(commentRating.getRating()));
         commentDTO.setText(commentText.getText().toString());
         commentDTO.setUserId(AuthService.id);
@@ -85,6 +87,7 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
         commentListViewModel.addComment(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
+        accomodationsService.canRate(accommodationId, AuthService.id);
         this.dismiss();
     }
 }

@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
 import com.example.nomad.R;
@@ -27,6 +29,7 @@ import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.helper.EventDecorator;
 import com.example.nomad.helper.Helper;
 import com.example.nomad.services.AccomodationsService;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -55,6 +59,7 @@ public class AccommodationFragment extends Fragment {
     AccomodationsService accomodationsService = new AccomodationsService();
     ReservationService reservationService = new ReservationService();
     AuthService authService = new AuthService();
+    FloatingActionButton hostActionButton;
 
     public static AccommodationFragment newInstance(AccommodationDTO accommodation) {
         AccommodationFragment fragment = new AccommodationFragment();
@@ -94,12 +99,34 @@ public class AccommodationFragment extends Fragment {
         simpleRatingBar.setRating((float) 4.5);
 
 
+        AccommodationCommentFragment fragment = new AccommodationCommentFragment(accommodation.getId());
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        // on below line replacing the fragment in child container with child fragment.
+        transaction.replace(R.id.comments_container, fragment).commit();
+
         this.setCalendar(rootView);
         this.handleReservation(rootView);
         this.setImages(rootView);
         this.setAmenities(rootView);
-        this.setComments(rootView);
+//        this.setComments(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        NestedScrollView v = view.findViewById(R.id.nestedScrollView);
+        hostActionButton = view.findViewById(R.id.hostActionButton);
+        hostActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserRatingsFragment userRatingsFragment = new UserRatingsFragment(accommodation.getHostId());
+                FragmentTransition.to(userRatingsFragment, getActivity(), true, R.id.base_accommodations);
+
+            }
+        });
+        v.setNestedScrollingEnabled(true);
     }
 
     public void setAmenities(View rootView){

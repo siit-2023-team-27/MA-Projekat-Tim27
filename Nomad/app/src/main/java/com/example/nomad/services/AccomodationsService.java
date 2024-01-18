@@ -2,6 +2,7 @@ package com.example.nomad.services;
 
 import static java.security.AccessController.getContext;
 
+import android.database.Observable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,7 +41,16 @@ import retrofit2.Response;
 public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
-
+    public static boolean canRate = true;
+    private static ArrayList<ICanRateListener> canRateListeners = new ArrayList<>();
+    public static void subscribeCanRate(ICanRateListener listener){
+        canRateListeners.add(listener);
+    }
+    private static void emmitCanRate(){
+        for (ICanRateListener listener : canRateListeners){
+            listener.canRateChanged();
+        }
+    }
     public void loadAccommodations() {
         Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodations("Bearer" + AuthService.token.toString());
         call.enqueue(new Callback<ArrayList<AccommodationDTO>>() {
@@ -86,8 +96,6 @@ public class AccomodationsService {
                         dates.add(new Date(date));
                     }
                     takenDates.setValue(dates);
-                    Log.d("onResponse takenDates: ", (new Date(objects.get(1)).toString()));
-                    Log.d("SIZE: ", String.valueOf(objects.size()));
                 } else {
                     String errorMessage = null;
 
@@ -319,7 +327,30 @@ public class AccomodationsService {
             }
         });
     }
+    public void canRate(Long accommodationId, Long userId) {
+        Call<Boolean> call = AccommodationClient.getInstance().getMyApi().canRate(accommodationId,userId, "Bearer " + AuthService.token.toString());
+        Log.d("TOKEN", AuthService.token.toString());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Log.d("canRateResponse: ", String.valueOf(response.code()));
+                if(response.code() == 401){
+                    canRate = false;
+                }else{
+                    canRate = response.body();
+                    Log.d("canRateResponse: ", String.valueOf(canRate));
 
+                }
+                emmitCanRate();
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.d("canRateFailure: ", t.getMessage());
+                Log.d("Failure: ", t.getMessage());
+            }
+        });
+    }
     public void getAccommodationsForHost(Long id) {
         Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodationsForHost(id, "Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<ArrayList<AccommodationDTO>>() {
