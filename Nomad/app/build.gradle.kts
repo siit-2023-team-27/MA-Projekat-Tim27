@@ -34,6 +34,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -65,8 +66,13 @@ dependencies {
     implementation ("org.mapsforge:mapsforge-map-android:0.20.0")
     implementation ("com.caverock:androidsvg:1.4")
     implementation ("com.github.MKergall:osmbonuspack:6.9.0")
-
-
-
-
+    implementation ("org.java-websocket:Java-WebSocket:1.5.4")
+//    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+//    implementation ("org.springframework.android:spring-android-websocket:2.0.0.M3")
+//    implementation ("org.springframework:spring-messaging:5.3.10")
+//    implementation ("org.springframework:spring-websocket:5.3.10")
+    implementation("dev.gustavoavila:java-android-websocket-client:2.0.2")
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation ("com.github.isradeleon:Notify-Android:1.0.5")
 }
