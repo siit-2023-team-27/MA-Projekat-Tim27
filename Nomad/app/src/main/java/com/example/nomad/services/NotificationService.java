@@ -24,7 +24,7 @@ import ua.naiksoftware.stomp.StompClient;
 public class NotificationService {
     private HomeActivity activity;
     private NotificationDTO notification;
-    private StompClient stompClient;
+    private static StompClient stompClient;
     public NotificationService(HomeActivity activity){
         this.activity = activity;
     }
