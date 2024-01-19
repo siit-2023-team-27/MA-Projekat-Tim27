@@ -103,7 +103,7 @@ public class AccommodationFragment extends Fragment {
         simpleRatingBar.setRating((float) 4.5);
 
 
-        AccommodationCommentFragment fragment = new AccommodationCommentFragment(accommodation.getId());
+        AccommodationCommentFragment fragment = new AccommodationCommentFragment(accommodation.getId(), accommodation);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         // on below line replacing the fragment in child container with child fragment.

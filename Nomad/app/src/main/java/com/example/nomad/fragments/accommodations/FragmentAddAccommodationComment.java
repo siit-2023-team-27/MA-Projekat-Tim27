@@ -16,6 +16,8 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
@@ -32,10 +34,12 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
     RatingBar commentRating;
     AccomodationsService accomodationsService = new AccomodationsService();
     Long accommodationId;
+    AccommodationDTO accommodationDTO;
     CommentListViewModel commentListViewModel;
-    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel, Long accommodationId) {
+    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel, Long accommodationId, AccommodationDTO accommodationDTO) {
         this.commentListViewModel = commentListViewModel;
         this.accommodationId = accommodationId;
+        this.accommodationDTO = accommodationDTO;
     }
     public FragmentAddAccommodationComment(){
 
@@ -88,6 +92,7 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
         accomodationsService.canRate(accommodationId, AuthService.id);
+        HomeActivity.notificationService.sendNotification("New comment on your accommodation", "New Comment", "NEW_ACCOMMODATION_RATING", accommodationDTO.getHostId());
         this.dismiss();
     }
 }

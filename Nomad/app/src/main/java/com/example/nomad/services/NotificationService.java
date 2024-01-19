@@ -31,11 +31,6 @@ public class NotificationService {
     @SuppressLint("CheckResult")
     public void setUpWebSocket(){
 
-
-
-
-        // ...
-
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, Consts.WEB_SOCKET_BASE_URL + "/socket");
         stompClient.connect();
         stompClient.topic("/socket-publisher/" + String.valueOf(AuthService.id)).subscribe(topicMessage -> {
@@ -90,7 +85,7 @@ public class NotificationService {
         // Show the notification
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
-    private void sendNotification(String text, String title, String type, Long targetUser){
+    public void sendNotification(String text, String title, String type, Long targetUser){
         NotificationDTO notificationToSend = new NotificationDTO();
         notificationToSend.setNotificationType(type);
         notificationToSend.setText(text);

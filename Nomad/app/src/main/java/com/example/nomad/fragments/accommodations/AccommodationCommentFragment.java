@@ -45,6 +45,7 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
     private FloatingActionButton addCommentButton;
     private AccomodationsService accomodationsService = new AccomodationsService();
     private Long accommodationId;
+    private AccommodationDTO accommodationDTO;
 
     public Long getAccommodationId() {
         return accommodationId;
@@ -56,6 +57,12 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
 
     public AccommodationCommentFragment(Long accommodationId) {
         this.accommodationId = accommodationId;
+        AccomodationsService.subscribeCanRate(this);
+
+    }
+    public AccommodationCommentFragment(Long accommodationId, AccommodationDTO accommodationDTO) {
+        this.accommodationId = accommodationId;
+        this.accommodationDTO = accommodationDTO;
         AccomodationsService.subscribeCanRate(this);
 
     }
@@ -133,7 +140,7 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
     }
 
     private void showBottomDrawer() {
-        FragmentAddAccommodationComment bottomDrawerFragment = new FragmentAddAccommodationComment(commentListViewModel, accommodationId);
+        FragmentAddAccommodationComment bottomDrawerFragment = new FragmentAddAccommodationComment(commentListViewModel, accommodationId, accommodationDTO);
 
         bottomDrawerFragment.show(getChildFragmentManager(), bottomDrawerFragment.getTag());
     }

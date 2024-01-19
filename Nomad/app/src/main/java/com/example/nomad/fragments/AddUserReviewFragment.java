@@ -16,6 +16,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.RatingCreationDTO;
 import com.example.nomad.fragments.accommodations.CommentListViewModel;
@@ -95,6 +96,8 @@ public class AddUserReviewFragment extends BottomSheetDialogFragment {
         userRatingsViewModel.addRating(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.userRatingsViewModel.getElements().getValue().size()));
+        HomeActivity.notificationService.sendNotification("New Rating on your account", "New Rating", "NEW_RATING", userId);
+
         this.dismiss();
     }
 }

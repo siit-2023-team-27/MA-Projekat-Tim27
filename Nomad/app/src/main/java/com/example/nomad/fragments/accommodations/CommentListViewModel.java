@@ -10,6 +10,7 @@ import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.services.AccommodationClient;
 import com.example.nomad.services.AuthService;
+import com.example.nomad.services.NotificationService;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     AccommodationLocationFragment locationFragment;
 
     UserService userService = new UserService();
-    NotificationService notificationService;
+    public static NotificationService notificationService;
 
     UserDTO loggedUser;
     WebSocketClient webSocketClient;
