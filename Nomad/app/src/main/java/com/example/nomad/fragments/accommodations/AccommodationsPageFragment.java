@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.FragmentAccommodationsPageBinding;
@@ -152,8 +153,6 @@ public class AccommodationsPageFragment extends Fragment {
                 bottomSheetDialog.setContentView(dialogView);
                 bottomSheetDialog.show();
             }
-
-
         });
     }
     private void handleSearch(View rootView){
@@ -164,7 +163,16 @@ public class AccommodationsPageFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(peopleNum.getText().toString().equals("") || city.getText().toString().equals("") || calendarView == null){
+                    Toast.makeText(getContext(), "You haven't entered necessary data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 calendar = calendarView.findViewById(R.id.searchCalendar);
+
+                if(calendar.getSelectedDates().size() < 2) {
+                    Toast.makeText(getContext(), "You haven't selected dates", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 List<CalendarDay> selectedDays = calendar.getSelectedDates();
 
                 Double max = null;
@@ -175,9 +183,11 @@ public class AccommodationsPageFragment extends Fragment {
                     EditText minEdit = dialogView.findViewById(R.id.minPrice);
                     EditText maxEdit = dialogView.findViewById(R.id.maxPrice);
 
-                    if(!minEdit.getText().toString().isEmpty() && !maxEdit.getText().toString().isEmpty()) {
-                        max = Double.valueOf(maxEdit.getText().toString());
+                    if(!minEdit.getText().toString().isEmpty()) {
                         min = Double.valueOf(minEdit.getText().toString());
+                    }
+                    if(!maxEdit.getText().toString().isEmpty()){
+                        max = Double.valueOf(maxEdit.getText().toString());
                     }
                     RadioGroup radioGroup = dialogView.findViewById(R.id.radio);
                     int selectedId = radioGroup.getCheckedRadioButtonId();
@@ -188,6 +198,8 @@ public class AccommodationsPageFragment extends Fragment {
                         type = radioButton.getText().toString();
                     }
                 }
+                Log.i("search",peopleNum.getText().toString()+city.getText().toString()+ Helper.toDate(selectedDays.get(0))+Helper.toDate(selectedDays.get(selectedDays.size()-1)));
+
                 accomodationsService.getSearchedAndFIltered(city.getText().toString(),
                         Helper.toDate(selectedDays.get(0)), Helper.toDate(selectedDays.get(selectedDays.size()-1)), Integer.valueOf(peopleNum.getText().toString()),
                         min, max, amenities, type);

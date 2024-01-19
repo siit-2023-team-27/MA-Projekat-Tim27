@@ -33,12 +33,16 @@ public class GuestReservationsListFragment extends ListFragment {
 
     private GuestReservationListAdapter adapter;
     private static final String ARG_PARAM = "param";
+    private static final String ARG_PARAM2 = "param2";
+
     private ArrayList<ReservationResponseDTO> reservations;
     private FragmentGuestReservationsListBinding binding;
+    private boolean isRequestPage ;
 
-    public static GuestReservationsListFragment newInstance(ArrayList<ReservationResponseDTO> products){
+    public static GuestReservationsListFragment newInstance(ArrayList<ReservationResponseDTO> products, boolean isRequestPage){
         GuestReservationsListFragment fragment = new GuestReservationsListFragment();
         Bundle args = new Bundle();
+        args.putBoolean(ARG_PARAM2, isRequestPage);
         args.putParcelableArrayList(ARG_PARAM, products);
         fragment.setArguments(args);
         return fragment;
@@ -57,8 +61,15 @@ public class GuestReservationsListFragment extends ListFragment {
         Log.i("ShopApp", "onCreate guest reservations List Fragment");
         if (getArguments() != null) {
             reservations = getArguments().getParcelableArrayList(ARG_PARAM);
-            adapter = new GuestReservationListAdapter(getActivity(), reservations, getActivity());
-            setListAdapter(adapter);
+            isRequestPage = getArguments().getBoolean(ARG_PARAM2);
+            if(isRequestPage){
+                adapter = new GuestReservationListAdapter(getActivity(), reservations, getActivity(), true);
+                setListAdapter(adapter);
+            }else{
+                adapter = new GuestReservationListAdapter(getActivity(), reservations, getActivity(), false);
+                setListAdapter(adapter);
+            }
+
         }
     }
 

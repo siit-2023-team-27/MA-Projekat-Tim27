@@ -15,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -32,6 +33,9 @@ public interface ReservationApi {
     public Call<Collection<ReservationResponseDTO>> getReservationsForGuest(@Path("id") Long id, @Header("Authorization") String authHeader);
     @DELETE("reservations/{id}")
     public Call<Long> deleteReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+    @PUT("reservations/cancel/{id}")
+    public Call<Long> cancelReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
 
     @GET("reservations/search-guest/{id}")
     public Call<Collection<ReservationResponseDTO>> getSearchedANdFIlteredGuest(@Path("id") Long id, @Query("name") String name,

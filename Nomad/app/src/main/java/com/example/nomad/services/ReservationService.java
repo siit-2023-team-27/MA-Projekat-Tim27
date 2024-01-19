@@ -30,21 +30,32 @@ public class ReservationService {
     }
     private MutableLiveData<Boolean> reservationSuccessful = new MutableLiveData<>();
     private MutableLiveData<Boolean> deletionSuccessful = new MutableLiveData<>();
+    private MutableLiveData<Boolean> cancelSuccessful = new MutableLiveData<>();
 
     public LiveData<Boolean> getResponse() {
         return reservationSuccessful;
     }
     private static MutableLiveData<Boolean> refresh = new MutableLiveData<>();
+    private static MutableLiveData<Boolean> refreshReservations = new MutableLiveData<>();
 
     public LiveData<Boolean> getRefresh() {
         return refresh;
+    }
+    public LiveData<Boolean> getRefreshReservations() {
+        return refreshReservations;
     }
 
     public LiveData<Boolean> getDeleteResponse() {
         return deletionSuccessful;
     }
+    public LiveData<Boolean> getCancelResponse() {
+        return cancelSuccessful;
+    }
     public void setRefresh(Boolean bo) {
          refresh.setValue(bo);
+    }
+    public void setRefreshReservations(Boolean bo) {
+        refreshReservations.setValue(bo);
     }
     private MutableLiveData<Collection<ReservationResponseDTO>> searchedreservations = new MutableLiveData<>();
     public LiveData<Collection<ReservationResponseDTO>> getSearchedReservations() {
@@ -86,7 +97,41 @@ public class ReservationService {
             }
         });
     }
+    public void cancelReservation(Long id) {
+        Call<Long> call = ReservationClient.getInstance().getMyApi().cancelReservation(id,"Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Long objects = response.body();
+                    //accommodations = objects;
+                    cancelSuccessful.setValue(true);
+                    Log.d("onResponseGuestCancellation: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("RetrofitErrorGuestResCancellation", errorMessage);
+                            cancelSuccessful.setValue(false);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
 
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Log.d("RetrofitErrorGuestResCancellation: ", "ERROR");
+                cancelSuccessful.setValue(false);
+
+            }
+        });
+    }
     public void deleteReservation(Long id) {
         Call<Long> call = ReservationClient.getInstance().getMyApi().deleteReservation(id,"Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<Long>() {

@@ -44,11 +44,13 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
     private ArrayList<ReservationResponseDTO> reservations;
     private FragmentActivity activity;
     ReservationService reservationService = new ReservationService();
+    private boolean isRequestsPage;
 
-    public GuestReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity){
+    public GuestReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity, boolean isRequestsPage){
         super(context, R.layout.guest_reservations_card, accommodations);
         this.reservations = accommodations;
         this.activity = activity;
+        this.isRequestsPage = isRequestsPage;
     }
     @Override
     public int getCount() {
@@ -91,32 +93,69 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                         reservation.getId());
                 Toast.makeText(getContext(), "Clicked: id: " + reservation.getId(), Toast.LENGTH_SHORT).show();
             });
-            delete.setOnClickListener(v -> {
-                if(reservation.getStatus().equals("PENDING")){
-                    reservationService.deleteReservation(reservation.getId());
-                    reservationService.getDeleteResponse().observe(activity, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(Boolean objects) {
-                            // Update your UI or perform any actions when LiveData changes
-                            Boolean responseSuccessful =  objects;
-                            Log.i("Response reservation", "Selected: " + responseSuccessful.toString());
 
-                            if(responseSuccessful){
-                                Toast.makeText(getContext(), "Reservation deleted successfully", Toast.LENGTH_SHORT).show();
-                                reservationService.setRefresh(true);
-                            }else{
-                                Toast.makeText(getContext(), "Reservation not deleted", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }else{
-                    Toast.makeText(getContext(), "Not possible to delete", Toast.LENGTH_SHORT).show();
-
-                }
-            });
+            if(isRequestsPage){
+                handleDelete(delete, reservation);
+            }else{
+                handleCancel(delete, reservation);
+            }
 
         }
 
         return convertView;
+    }
+
+    private void handleCancel(Button delete, ReservationResponseDTO reservation){
+        delete.setText("Cancel");
+        delete.setOnClickListener(v -> {
+            if(reservation.getStatus().equals("ACCEPTED")){
+                reservationService.cancelReservation(reservation.getId());
+                reservationService.getCancelResponse().observe(activity, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean objects) {
+                        // Update your UI or perform any actions when LiveData changes
+                        Boolean responseSuccessful =  objects;
+                        Log.i("Response reservation", "Selected: " + responseSuccessful.toString());
+
+                        if(responseSuccessful){
+                            Toast.makeText(getContext(), "Reservation cancelled successfully", Toast.LENGTH_SHORT).show();
+                            reservationService.setRefreshReservations(true);
+                        }else{
+                            Toast.makeText(getContext(), "Reservation not cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else{
+                Toast.makeText(getContext(), "Not possible to cancel", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void handleDelete(Button delete, ReservationResponseDTO reservation){
+
+        delete.setOnClickListener(v -> {
+            if(reservation.getStatus().equals("PENDING")){
+                reservationService.deleteReservation(reservation.getId());
+                reservationService.getDeleteResponse().observe(activity, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean objects) {
+                        // Update your UI or perform any actions when LiveData changes
+                        Boolean responseSuccessful =  objects;
+                        Log.i("Response reservation", "Selected: " + responseSuccessful.toString());
+
+                        if(responseSuccessful){
+                            Toast.makeText(getContext(), "Reservation deleted successfully", Toast.LENGTH_SHORT).show();
+                            reservationService.setRefresh(true);
+                        }else{
+                            Toast.makeText(getContext(), "Reservation not deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else{
+                Toast.makeText(getContext(), "Not possible to delete", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 }
