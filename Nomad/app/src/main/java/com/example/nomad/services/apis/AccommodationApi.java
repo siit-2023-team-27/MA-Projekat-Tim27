@@ -66,6 +66,10 @@ public interface AccommodationApi {
 
     @GET("accommodations/unverified")
     public Call<ArrayList<AccommodationDTO>> getUnverified(@Header("Authorization") String authHeader);
+    @GET("accommodation-ratings/comment/{userId}/{accommodationId}")
+    public Call<Long> getCommentForUserAndAccommodation(@Path("userId") Long userId, @Path("accommodationId") Long accommodationId, @Header("Authorization") String authHeader);
+    @DELETE("accommodation-ratings/{accommodationId}")
+    public Call<AccommodationDTO> deleteAccommodationRating(@Path("accommodationId") Long accommodationId, @Header("Authorization") String authHeader);
 
     @PUT("accommodations/verify/{id}")
     public Call<AccommodationDTO> verifyAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);

@@ -43,6 +43,7 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
     private  CommentListViewModel commentListViewModel = new CommentListViewModel();
     private ListView list;
     private FloatingActionButton addCommentButton;
+    private FloatingActionButton deleteCommentButton;
     private AccomodationsService accomodationsService = new AccomodationsService();
     private Long accommodationId;
     private AccommodationDTO accommodationDTO;
@@ -113,11 +114,29 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
                 showBottomDrawer();
             }
         });
-        addCommentButton.setEnabled(AccomodationsService.canRate);
+        deleteCommentButton = view.findViewById(R.id.deleteCommentButton);
+        deleteCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                showBottomDrawer();
+                deleteComment();
+            }
+        });
+        deleteCommentButton.setVisibility(View.GONE);
         setupScrolling();
         this.accomodationsService.canRate(accommodationId, AuthService.id);
+        this.accomodationsService.getComment(accommodationId);
+
+        addCommentButton.setEnabled(AccomodationsService.canRate);
+
+
         super.onViewCreated(view, savedInstanceState);
     }
+
+    private void deleteComment() {
+        commentListViewModel.deleteOwnComment(accommodationDTO);
+    }
+
     private void setupScrolling(){
         getListView().setOnTouchListener(new ListView.OnTouchListener() {
             @Override
@@ -153,6 +172,18 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
     @Override
     public void canRateChanged() {
         addCommentButton.setEnabled(AccomodationsService.canRate);
+        if (AccomodationsService.ownCommentId == null){
+            return;
+        }
+        if(AccomodationsService.ownCommentId != -1L){
+            addCommentButton.setVisibility(View.GONE);
+            deleteCommentButton.setVisibility(View.VISIBLE);
+
+        }else{
+            addCommentButton.setVisibility(View.VISIBLE);
+            deleteCommentButton.setVisibility(View.GONE);
+        }
         Log.d("canRateChanged: ", String.valueOf(AccomodationsService.canRate));
+        Log.d("canRateChanged: ", String.valueOf(AccomodationsService.ownCommentId));
     }
 }

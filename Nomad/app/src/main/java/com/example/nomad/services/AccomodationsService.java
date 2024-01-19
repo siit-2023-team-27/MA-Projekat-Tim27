@@ -42,6 +42,7 @@ public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
     public static boolean canRate = true;
+    public static Long ownCommentId = -1L;
     private static ArrayList<ICanRateListener> canRateListeners = new ArrayList<>();
     public static void subscribeCanRate(ICanRateListener listener){
         canRateListeners.add(listener);
@@ -50,6 +51,10 @@ public class AccomodationsService {
         for (ICanRateListener listener : canRateListeners){
             listener.canRateChanged();
         }
+    }
+    public static void setOwnCommentId(Long ownCommentId){
+        AccomodationsService.ownCommentId = ownCommentId;
+        emmitCanRate();
     }
     public void loadAccommodations() {
         Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodations("Bearer" + AuthService.token.toString());
@@ -169,48 +174,6 @@ public class AccomodationsService {
         });
     }
 
-    public void addComment(AccommodationRatingCreationDTO accommodationRatingCreationDTO) {
-        Call<AccommodationRatingCreationDTO> call = AccommodationClient.getInstance().getMyApi().addComment(accommodationRatingCreationDTO , "Bearer " + AuthService.token.toString());
-        call.enqueue(new Callback<AccommodationRatingCreationDTO>() {
-            @Override
-            public void onResponse(Call<AccommodationRatingCreationDTO> call, Response<AccommodationRatingCreationDTO> response) {
-
-                Log.d("onResponse: ", String.valueOf(response.code()));
-//                Log.d("onResponse: ", response.message());
-//                Log.d("onResponse: ", response.body());
-            }
-
-            @Override
-            public void onFailure(Call<AccommodationRatingCreationDTO> call, Throwable t) {
-//                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
-                Log.d("onResponse: ", t.getMessage());
-            }
-
-        });
-    }
-    public void getComments(Long accommodationId) {
-        Call<Collection<AccommodationRatingDTO>> call = AccommodationClient.getInstance().getMyApi().getComments(accommodationId, "Bearer " + AuthService.token.toString());
-        call.enqueue(new Callback<Collection<AccommodationRatingDTO>>() {
-            @Override
-            public void onResponse(Call<Collection<AccommodationRatingDTO>> call, Response<Collection<AccommodationRatingDTO>> response) {
-
-                Log.d("onResponse: ", String.valueOf(response.code()));
-                Log.d("onResponse: ", response.body().toString());
-//                Log.d("onResponse: ", response.message());
-//                Log.d("onResponse: ", response.body());
-                comments = new ArrayList<>(response.body().stream().collect(Collectors.toList()));
-                Log.d("onResponse: ", comments.toString());
-
-            }
-
-            @Override
-            public void onFailure(Call<Collection<AccommodationRatingDTO>> call, Throwable t) {
-//                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
-                Log.d("onResponse: ", t.getMessage());
-            }
-
-        });
-    }
 
     public void setPrice(Long accommodationId, DateRange range){
         Call<String> call = AccommodationClient.getInstance().getMyApi().setPrice(accommodationId,range , "Bearer " + AuthService.token.toString());
@@ -293,6 +256,22 @@ public class AccomodationsService {
             public void onFailure(Call<ArrayList<AccommodationDTO>> call, Throwable t) {
 //                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
                 Log.d("onResponse: ", t.getMessage());
+            }
+        });
+    }
+    public void getComment(Long accommodationId){
+        Call<Long> call = AccommodationClient.getInstance().getMyApi().getCommentForUserAndAccommodation(AuthService.id, accommodationId, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                Log.d("onResponse: ", String.valueOf(response.code()));
+                ownCommentId = response.body();
+                emmitCanRate();
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Log.d("Failure: ", t.getMessage());
             }
         });
     }
