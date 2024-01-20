@@ -12,8 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
+import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
+import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 
@@ -27,6 +29,7 @@ import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.enums.ReportStatus;
+import com.example.nomad.helper.Helper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -39,7 +42,53 @@ import retrofit2.Response;
 
 public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
+    private MutableLiveData<AccommodationDTO> accommodation = new MutableLiveData<>();
+
+    private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
+
+    private MutableLiveData<Collection<Amenity>> amenities = new MutableLiveData<>();
+
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
+    public LiveData<AccommodationDTO> getAccommodation() {
+        return accommodation;
+    }
+    public void loadAccommodation(Long id) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    AccommodationDTO objects = response.body();
+                    //accommodations = objects;
+                    accommodation.setValue(objects);
+                    Log.d("onResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects));
+                } else {
+                    // Handle unsuccessful response
+                    // You may want to check response.errorBody() for more details
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("getAccError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("getAccError", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
 
     public void loadAccommodations() {
         Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodations("Bearer" + AuthService.token.toString());
@@ -65,10 +114,88 @@ public class AccomodationsService {
             }
         });
     }
+    public void loadAmenities() {
+        Call<Collection<Amenity>> call = AccommodationClient.getInstance().getMyApi().getAmenities("Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<Amenity>>() {
+            @Override
+            public void onResponse(Call<Collection<Amenity>> call, Response<Collection<Amenity>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<Amenity> objects = response.body();
+                    //accommodations = objects;
+                    amenities.setValue(objects);
+                    Log.d("amenityResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("amenityError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<Amenity>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("amenityError", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
+    public void getSearchedAndFIltered(String city, Date from, Date to, int peopleNum, Double min, Double max, List<Long> amenities, String type) {
+        Call<Collection<SearchAccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getFilteredAndSearched(city, Helper.dateToString(from), Helper.dateToString(to), peopleNum,
+                min, max, amenities, type, "Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<SearchAccommodationDTO>>() {
+            @Override
+            public void onResponse(Call<Collection<SearchAccommodationDTO>> call, Response<Collection<SearchAccommodationDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<SearchAccommodationDTO> objects = response.body();
+                    //accommodations = objects;
+                    searchedAccommodations.setValue(objects);
+                    Log.d("onResponseSearched: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("searchedError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<SearchAccommodationDTO>> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("searchedErrror", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
+    public LiveData<Collection<Amenity>> getAmenities() {
+        return amenities;
+    }
 
     public LiveData<List<AccommodationDTO>> getAccommodations() {
         return accommodations;
     }
+    public LiveData<Collection<SearchAccommodationDTO>> getSearchedAccommodations() {
+        return searchedAccommodations;
+    }
+
     public LiveData<List<Date>> getTakenDates() {
         return takenDates;
     }

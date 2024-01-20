@@ -5,9 +5,11 @@ import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
+import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.LoginDTO;
+import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
 import com.example.nomad.helper.Consts;
@@ -34,6 +36,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface AccommodationApi {
@@ -80,4 +83,16 @@ public interface AccommodationApi {
 
     @GET("accommodations/host/{id}")
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("accommodations/{id}")
+    public Call<AccommodationDTO> getAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+    @GET("accommodations/search-filter")
+    public Call<Collection<SearchAccommodationDTO>> getFilteredAndSearched(@Query("city") String city, @Query("from") String from,
+                                                                           @Query("to") String to, @Query("peopleNum") int peopleNum,
+                                                                           @Query("minimumPrice") Double minimumPrice, @Query("maximumPrice") Double maximumPrice,
+                                                                           @Query("amenity") List<Long> amenity, @Query("type") String type,
+                                                                           @Header("Authorization") String authHeader);
+    @GET("amenities")
+    public Call<Collection<Amenity>> getAmenities( @Header("Authorization") String authHeader);
+
 }
