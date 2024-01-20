@@ -1,11 +1,13 @@
 package com.example.nomad.services.apis;
 
 import com.example.nomad.dto.AppUser;
+import com.example.nomad.dto.RatingDTO;
 import com.example.nomad.dto.UserDTO;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -16,6 +18,7 @@ import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.RatingCreationDTO;
+import com.example.nomad.dto.UserReportDetailsDTO;
 import com.example.nomad.dto.UserReportDto;
 import com.example.nomad.helper.Consts;
 
@@ -35,6 +38,14 @@ public interface UserApi {
 
     @GET("users")
     public Call<ArrayList<UserDTO>> getAllUsers(@Header("Authorization") String authHeader);
+    @GET("user_reports/details")
+    public Call<Collection<UserReportDetailsDTO>> getUserReportDetails(@Header("Authorization") String authHeader);
+    @PUT("user_reports/archive/{id}")
+    public Call<UserReportDto> archiveReport(@Path("id") Long reportId,@Header("Authorization") String authHeader);
+
+    @PUT("user_reports/accept/{id}")
+    public Call<UserReportDto> acceptReport(@Path("id") Long reportId,@Header("Authorization") String authHeader);
+
 
     @GET("users/{id}")
     public Call<UserDTO> getLoggedUser(@Path("id") Long id);
@@ -47,10 +58,12 @@ public interface UserApi {
 
     @POST("host-ratings")
     public Call<RatingCreationDTO> create(@Body RatingCreationDTO accommodationDTO, @Header("Authorization") String authHeader);
+    @GET("host-comments/can-rate/{hostId}/{userId}")
+    public Call<Boolean> canRate(@Path("hostId") Long hostId, @Path("userId") Long userId,@Header("Authorization") String authHeader);
     @POST("user_reports")
     public Call<UserReportDto> report(@Body UserReportDto userReportDto, @Header("Authorization") String authHeader);
     @GET("host-ratings/host/{userId}")
-    Call<Collection<DTO.RatingDTO>> getRatings(@Path("userId") Long userId, @Header("Authorization") String s);
+    Call<Collection<RatingDTO>> getRatings(@Path("userId") Long userId, @Header("Authorization") String s);
 
 }
 

@@ -16,6 +16,8 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
@@ -31,9 +33,13 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
     Button commentButton;
     RatingBar commentRating;
     AccomodationsService accomodationsService = new AccomodationsService();
+    Long accommodationId;
+    AccommodationDTO accommodationDTO;
     CommentListViewModel commentListViewModel;
-    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel) {
+    public FragmentAddAccommodationComment(CommentListViewModel commentListViewModel, Long accommodationId, AccommodationDTO accommodationDTO) {
         this.commentListViewModel = commentListViewModel;
+        this.accommodationId = accommodationId;
+        this.accommodationDTO = accommodationDTO;
     }
     public FragmentAddAccommodationComment(){
 
@@ -77,7 +83,7 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
     }
     private void addComment(){
         AccommodationRatingCreationDTO commentDTO = new AccommodationRatingCreationDTO();
-        commentDTO.setRatedId(1L);
+        commentDTO.setRatedId(accommodationId);
         commentDTO.setRating((int)Math.floor(commentRating.getRating()));
         commentDTO.setText(commentText.getText().toString());
         commentDTO.setUserId(AuthService.id);
@@ -85,6 +91,8 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
         commentListViewModel.addComment(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
+        accomodationsService.canRate(accommodationId, AuthService.id);
+        HomeActivity.notificationService.sendNotification("New comment on your accommodation", "New Comment", "NEW_ACCOMMODATION_RATING", accommodationDTO.getHostId());
         this.dismiss();
     }
 }
