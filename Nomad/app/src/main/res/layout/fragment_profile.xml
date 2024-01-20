@@ -37,53 +37,73 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name and Surname"
+                android:text="Name"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/dark_brown"/>
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Jane Doe"
+                android:text="Jane"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/textViewSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Surname"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextName"
+                android:textColor="@color/dark_brown"/>
+
+            <EditText
+                android:id="@+id/editTextSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Doe"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSurname" />
+
+            <TextView
+                android:id="@+id/textViewAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Adress"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText"
+                app:layout_constraintTop_toBottomOf="@+id/editTextSurname"
                 android:textColor="@color/dark_brown"/>
 
             <EditText
-                android:id="@+id/editTextText2"
+                android:id="@+id/editTextAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="text"
                 android:text="BW 115, Belgrade"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewAddress" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/textViewPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone number"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+                app:layout_constraintTop_toBottomOf="@+id/editTextAddress"
                 android:textColor="@color/dark_brown"/>
 
             <EditText
@@ -94,10 +114,10 @@
                 android:inputType="phone"
                 android:text="+381000000"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewPhone" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/textViewUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Username"
@@ -107,14 +127,14 @@
                 android:textColor="@color/dark_brown"/>
 
             <EditText
-                android:id="@+id/editTextText3"
+                android:id="@+id/editTextUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="text"
                 android:text="janedoe"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewUsername" />
 
             <Button
                 android:id="@+id/button_edit"
@@ -123,7 +143,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Edit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
 
             <Button
                 android:id="@+id/button_change_password"
@@ -133,6 +153,71 @@
                 android:text="Change password"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button_edit" />
+
+            <LinearLayout
+                android:id="@+id/password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_change_password"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textViewOldPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Old password"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/dark_brown"/>
+
+                <EditText
+                    android:id="@+id/editTextOldPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    android:id="@+id/textViewNewPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New password"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/dark_brown"/>
+
+                <EditText
+                    android:id="@+id/editTextNewPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    android:id="@+id/textViewConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Confirm new password"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/dark_brown"/>
+
+                <EditText
+                    android:id="@+id/editTextConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+                <Button
+                    android:id="@+id/button_save_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save password"
+                    android:layout_marginBottom="30dp"
+                    ></Button>
+
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

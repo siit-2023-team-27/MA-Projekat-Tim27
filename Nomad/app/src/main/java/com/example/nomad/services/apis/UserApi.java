@@ -6,6 +6,7 @@ import com.example.nomad.dto.UserDTO;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -38,6 +39,12 @@ public interface UserApi {
 
     @GET("users/{id}")
     public Call<UserDTO> getLoggedUser(@Path("id") Long id);
+
+    @PUT("users/{id}")
+    public Call<UserDTO> editUSer(@Path("id") Long id, @Body UserDTO userDto);
+
+    @DELETE("users/{id}")
+    public Call<String> deleteUser(@Path("id") Long id);
 
     @PUT("users/suspend/{id}")
     public Call<UserDTO> suspendUser(@Path("id") Long id, @Header("Authorization") String authHeader);

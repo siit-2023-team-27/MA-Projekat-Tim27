@@ -2,10 +2,14 @@ package com.example.nomad.services;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.auth0.android.jwt.JWT;
 import com.example.nomad.activities.LoginActivity;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AppUser;
 import com.example.nomad.dto.LoginDTO;
+import com.example.nomad.dto.UserDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
 import com.example.nomad.enums.UserType;
@@ -13,6 +17,7 @@ import com.example.nomad.services.apis.AuthApi;
 import com.example.nomad.utils.PropertyUtil;
 
 import java.util.Collection;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +52,7 @@ public class AuthService {
     public JWT getToken() {
         return token;
     }
+
 
     public void setToken(String tokenString) {
         this.token = new JWT(tokenString);
@@ -94,6 +100,34 @@ public class AuthService {
                 activity.loginFail();
             }
 
+        });
+    }
+
+    private MutableLiveData<Boolean> isReauthenticated = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getIsReauthenticated() {return isReauthenticated;}
+
+    public void reauthenticate (LoginDTO loginDTO) {
+        Call<LoginDTO> call = RetrofitClient.getInstance().getMyApi().reauthenticate(loginDTO);
+
+        call.enqueue(new Callback<LoginDTO>() {
+            @Override
+            public void onResponse(Call<LoginDTO> call, Response<LoginDTO> response) {
+                if (response.isSuccessful()) {
+                    Log.d("onResponse: ", "Correct username and password");
+                    isReauthenticated.setValue(true);
+                } else {
+                    Log.d("onResponse: ", "Incorrect username and password");
+                    isReauthenticated.setValue(false);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginDTO> call, Throwable t) {
+                Log.d("onResponse: ", "Incorrect username and password");
+                isReauthenticated.setValue(false);
+            }
         });
     }
 }

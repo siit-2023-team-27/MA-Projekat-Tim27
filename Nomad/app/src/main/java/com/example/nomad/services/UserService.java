@@ -1,7 +1,10 @@
 package com.example.nomad.services;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AppUser;
@@ -64,6 +67,38 @@ public class UserService {
             @Override
             public void onFailure(Call<UserDTO> call, Throwable t) {
                 Log.d("FAILURE: ", t.getMessage());
+            }
+        });
+    }
+
+    public void editUser(Long id, UserDTO userDTO) {
+        Call<UserDTO> call = UserClient.getInstance().getMyApi().editUSer(id, userDTO);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                Log.d("SUCCESS: ", "Successfully updated user");
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                Log.d("FAILURE: ", t.getMessage());
+            }
+        });
+    }
+
+    public void deleteUser(Long id, FragmentActivity fragment) {
+        Call<String> call = UserClient.getInstance().getMyApi().deleteUser(id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("SUCCESS: ", response.body());
+                Toast.makeText(fragment, response.body(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("FAILURE: ", t.getMessage());
+                Toast.makeText(fragment, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

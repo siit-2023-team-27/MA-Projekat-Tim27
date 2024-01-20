@@ -65,8 +65,6 @@ dependencies {
     implementation ("org.mapsforge:mapsforge-map-android:0.20.0")
     implementation ("com.caverock:androidsvg:1.4")
     implementation ("com.github.MKergall:osmbonuspack:6.9.0")
-
-
-
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

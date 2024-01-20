@@ -80,7 +80,6 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationDTO> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card,
                     parent, false);
         }
-        Log.e("ZIV SAM", "Ziv sammmm");
         LinearLayout productCard = convertView.findViewById(R.id.product_card_item);
         ImageView imageView = convertView.findViewById(R.id.product_image);
         TextView productTitle = convertView.findViewById(R.id.product_title);

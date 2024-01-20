@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_marginVertical="10dp"
+    android:id="@+id/guest_reservation_card"
+
+    >
+    <ImageView
+        android:id="@+id/accommodation_image"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/img1"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/accommodation_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/accommodation_address"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/reservation_dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textColor="@color/common_google_signin_btn_text_light_disabled"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/reservation_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/dark_brown"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/button_accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:text="Cancel" />
+
+    </LinearLayout>
+</LinearLayout>

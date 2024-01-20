@@ -1,82 +1,47 @@
 package com.example.nomad.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.example.nomad.dto.ReservationDateDTO;
 import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.ConfirmationType;
 import com.example.nomad.enums.PriceType;
-import com.example.nomad.services.AccommodationClient;
-import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
-import com.example.nomad.utils.AddTextToDates;
-import com.example.nomad.utils.CustomDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import com.example.nomad.R;
-import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.enums.AccommodationType;
 import com.example.nomad.services.AccommodationService;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.material.textfield.TextInputEditText;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.format.CalendarWeekDayFormatter;
-import com.prolificinteractive.materialcalendarview.format.DateFormatDayFormatter;
 import com.puskal.multiselectspinner.MultiSelectSpinnerView;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -90,23 +55,18 @@ import kotlin.Unit;
  */
 public class CreateAccommodationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ACCOMMODATION = "accommodation";
 
-    // TODO: Rename and change types of parameters
     private EditText name;
     private EditText description;
     private EditText minGuests;
     private EditText maxGuests;
-    private String mParam1;
-    private String mParam2;
     private MultiSelectSpinnerView multiSpinner;
     private AccommodationService accommodationService;
     private ArrayList<Amenity> amenities;
     private ArrayList<Amenity> selectedAmenities = new ArrayList<>();
     private AccommodationDTO accommodation;
+    ArrayAdapter<CharSequence> adapterAccommodationType;
     private Spinner spinner;
 //    private Button setUnavailableButton;
     private MaterialCalendarView calendar;
@@ -123,20 +83,16 @@ public class CreateAccommodationFragment extends Fragment {
 
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateAccommodationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CreateAccommodationFragment newInstance(String param1, String param2) throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
+    public static CreateAccommodationFragment newInstance() throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
+        Log.d("BUG", "new instance od Create bez parametara");
+        CreateAccommodationFragment fragment = new CreateAccommodationFragment();
+        return fragment;
+    }
+
+    public static CreateAccommodationFragment newInstance(AccommodationDTO accommodation) throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
         CreateAccommodationFragment fragment = new CreateAccommodationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ACCOMMODATION, accommodation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -145,8 +101,7 @@ public class CreateAccommodationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            accommodation = getArguments().getParcelable(ACCOMMODATION);
         }
     }
 
@@ -180,8 +135,6 @@ public class CreateAccommodationFragment extends Fragment {
             }
             return Unit.INSTANCE;
         });
-
-
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,16 +186,17 @@ public class CreateAccommodationFragment extends Fragment {
     public void setupSpinner(View view){
         spinner = view.findViewById(R.id.spinner);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        adapterAccommodationType = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.accommodation_types_array,
                 android.R.layout.simple_spinner_item
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        adapterAccommodationType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterAccommodationType);
     }
     public void generateAccommodation(View view){
         this.accommodation = new AccommodationDTO();
+        this.accommodation.setStatus(AccommodationStatus.PENDING);
         this.accommodation.setAccommodationType(AccommodationType.valueOf((String)spinner.getSelectedItem()));
 
         this.accommodation.setMinGuests(Integer.valueOf(minGuests.getText().toString()));
@@ -261,13 +215,9 @@ public class CreateAccommodationFragment extends Fragment {
         this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
 
         if(reservationAcceptanceSwitch.isChecked()){
-            this.accommodation.setStatus(AccommodationStatus.APPROVED);
-
             this.accommodation.setConfirmationType(ConfirmationType.AUTOMATIC);
         }else{
             this.accommodation.setConfirmationType(ConfirmationType.MANUAL);
-            this.accommodation.setStatus(AccommodationStatus.PENDING);
-
         }
 
         Log.d("generateAccommodation: ", String.valueOf(multiSpinner.getSelectedItemPosition()));
@@ -292,6 +242,21 @@ public class CreateAccommodationFragment extends Fragment {
         createButton = view.findViewById(R.id.nextButton);
         reservationAcceptanceSwitch = view.findViewById(R.id.reservationAcceptanceTypeSwitch);
         setUpValidation();
+
+        setuUpAccommodation();
+    }
+
+    private void setuUpAccommodation() {
+        if(accommodation != null ) {
+            name.setText(accommodation.getName());
+            description.setText(accommodation.getDescription());
+            minGuests.setText(accommodation.getMinGuests()+"");
+            maxGuests.setText(accommodation.getMaxGuests()+"");
+            if(accommodation.getConfirmationType() == ConfirmationType.AUTOMATIC) { reservationAcceptanceSwitch.setChecked(true); }
+            spinner.setSelection(adapterAccommodationType.getPosition("STUDIO"));
+            Log.d("accommodation type", accommodation.getAccommodationType().toString());
+            Log.d("accommodation type", accommodation.getAccommodationType() + "");
+        }
     }
     private void setUpValidation(){
         createButton.setEnabled(validate());
@@ -300,7 +265,8 @@ public class CreateAccommodationFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                createButton.setEnabled(validate());
             }
             @Override
             public void afterTextChanged(Editable s) {

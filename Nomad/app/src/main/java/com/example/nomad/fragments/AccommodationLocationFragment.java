@@ -134,9 +134,6 @@ public class AccommodationLocationFragment extends Fragment {
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
-
-
-
         nextButton = (Button)view.findViewById(R.id.NextButton);
 
         map = view.findViewById(R.id.map);

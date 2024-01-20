@@ -21,4 +21,7 @@ public interface AuthApi {
     @POST("login")
     public Call<UserTokenState> login(@Body LoginDTO loginDTO);
 
+    @POST("reauthenticate")
+    public Call<LoginDTO> reauthenticate(@Body LoginDTO loginDTO);
+
 }

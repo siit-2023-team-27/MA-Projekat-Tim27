@@ -64,7 +64,7 @@ public class HostListing extends ListFragment {
 
         Button buttonAddAccommodation = binding.buttonAddAccommodation;
         buttonAddAccommodation.setOnClickListener(v -> {
-            FragmentTransition.to(AccommodationCreationHostFragment.newInstance(), getActivity(), false, R.id.root_linear);
+            //FragmentTransition.to(AccommodationCreationHostFragment.newInstance(), getActivity(), false, R.id.root_linear_host_listing);
             NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.action_nav_listing_to_nav_create_accommodation);
         });

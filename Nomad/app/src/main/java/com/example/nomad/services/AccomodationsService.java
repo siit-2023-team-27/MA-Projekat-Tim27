@@ -36,6 +36,24 @@ public class AccomodationsService {
 
     private MutableLiveData<List<AccommodationDTO>> hostAccommodations = new MutableLiveData<>();
 
+    private MutableLiveData<AccommodationDTO> accommodation = new MutableLiveData<>();
+
+    public void getOneAccommodation(Long id) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id);
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                AccommodationDTO object = response.body();
+                accommodation.setValue(object);
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                Log.d("onResponse: ", t.getMessage());
+            }
+        });
+    }
+
 
     public void create(AccommodationDTO accommodationDTO, ArrayList<DateRange> dateRanges, HashMap<DateRange, Double> prices) {
         Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().create(accommodationDTO, "Bearer " + AuthService.token.toString());
@@ -275,5 +293,9 @@ public class AccomodationsService {
 
     public MutableLiveData<List<AccommodationDTO>> getHostAccommodations() {
         return hostAccommodations;
+    }
+
+    public MutableLiveData<AccommodationDTO> getAccommodation() {
+        return accommodation;
     }
 }
