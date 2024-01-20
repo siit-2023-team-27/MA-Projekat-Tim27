@@ -128,30 +128,47 @@ public class AccommodationsPageFragment extends Fragment {
             this.bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.FullScreenBottomSheetDialog);
             this.dialogView = getLayoutInflater().inflate(R.layout.filter_page, null);
             LinearLayout linaerLayout = dialogView.findViewById(R.id.amenitiesCheckboxes);
-
             accomodationsService.loadAmenities();
-            if(!areAmenitiesLoaded){
                 accomodationsService.getAmenities().observe(getActivity(), new Observer<Collection<Amenity>>() {
                     @Override
                     public void onChanged(Collection<Amenity> objects) {
-                        // Update your UI or perform any actions when LiveData changes
-                        // Now, you can convert the LiveData to a List if needed
+                        linaerLayout.removeAllViews();
                         areAmenitiesLoaded = true;
                         amenities = (ArrayList<Amenity>) objects;
                         for (int i = 0; i < amenities.size(); i++) {
                             CheckBox cb = new CheckBox(getContext());
                             cb.setText(amenities.get(i).getName());
+                            cb.setId(Math.toIntExact(amenities.get(i).getId()));
                             linaerLayout.addView(cb);
                         }
                         bottomSheetDialog.setContentView(dialogView);
                         bottomSheetDialog.show();
                     }
                 });
-            }else{
-                bottomSheetDialog.setContentView(dialogView);
-                bottomSheetDialog.show();
-            }
         });
+    }
+    private List<Long> getSelectedCheckboxes() {
+        List<Long> selectedCheckboxes = new ArrayList<>();
+
+        // Get the layout where you added checkboxes
+        LinearLayout checkboxContainer = dialogView.findViewById(R.id.amenitiesCheckboxes);
+
+        // Iterate through child views to check which checkboxes are selected
+        for (int i = 0; i < checkboxContainer.getChildCount(); i++) {
+            View view = checkboxContainer.getChildAt(i);
+
+            if (view instanceof CheckBox) {
+                CheckBox checkBox = (CheckBox) view;
+
+                // Check if the checkbox is selected
+                if (checkBox.isChecked()) {
+                    // Add the text or any identifier associated with the checkbox to the list
+                    selectedCheckboxes.add(Long.valueOf(checkBox.getId()));
+                }
+            }
+        }
+
+        return selectedCheckboxes;
     }
     private void handleSearch(View rootView){
         Button search = rootView.findViewById(R.id.searchButton);
@@ -193,6 +210,10 @@ public class AccommodationsPageFragment extends Fragment {
                     RadioButton radioButton = dialogView.findViewById(selectedId);
                     if(radioButton != null){
                         type = radioButton.getText().toString();
+                    }
+                    amenities = getSelectedCheckboxes();
+                    if(amenities.size() == 0){
+                        amenities = null;
                     }
                 }
                 Log.i("search",peopleNum.getText().toString()+city.getText().toString()+ Helper.toDate(selectedDays.get(0))+Helper.toDate(selectedDays.get(selectedDays.size()-1)));
