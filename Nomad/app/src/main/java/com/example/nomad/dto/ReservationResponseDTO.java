@@ -15,6 +15,8 @@ public class ReservationResponseDTO implements Parcelable {
     private String finishDate;
     private int numGuests;
     private String status;
+    private UserDTO userDetails;
+    private AccommodationDTO accommodationDetails;
 
     public ReservationResponseDTO(long id, long user, long accommodation, String startDate, String finishDate, int numGuests, String status) {
         this.id = id;
@@ -26,6 +28,7 @@ public class ReservationResponseDTO implements Parcelable {
         this.status = status;
     }
 
+
     protected ReservationResponseDTO(Parcel in) {
         id = in.readLong();
         user = in.readLong();
@@ -34,6 +37,21 @@ public class ReservationResponseDTO implements Parcelable {
         finishDate = in.readString();
         numGuests = in.readInt();
         status = in.readString();
+        userDetails = in.readParcelable(UserDTO.class.getClassLoader());
+        accommodationDetails = in.readParcelable(AccommodationDTO.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(user);
+        dest.writeLong(accommodation);
+        dest.writeString(startDate);
+        dest.writeString(finishDate);
+        dest.writeInt(numGuests);
+        dest.writeString(status);
+        dest.writeParcelable(userDetails, flags);
+        dest.writeParcelable(accommodationDetails, flags);
     }
 
     public static final Creator<ReservationResponseDTO> CREATOR = new Creator<ReservationResponseDTO>() {
@@ -109,14 +127,19 @@ public class ReservationResponseDTO implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(user);
-        dest.writeLong(accommodation);
-        dest.writeString(startDate);
-        dest.writeString(finishDate);
-        dest.writeInt(numGuests);
-        dest.writeString(status);
+    public UserDTO getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDTO userDetails) {
+        this.userDetails = userDetails;
+    }
+
+    public AccommodationDTO getAccommodationDetails() {
+        return accommodationDetails;
+    }
+
+    public void setAccommodationDetails(AccommodationDTO accommodationDetails) {
+        this.accommodationDetails = accommodationDetails;
     }
 }

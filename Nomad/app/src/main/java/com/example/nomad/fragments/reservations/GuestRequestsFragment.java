@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.example.nomad.R;
 import com.example.nomad.databinding.FragmentGuestReservationsBinding;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.helper.Helper;
+import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.ReservationService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -43,6 +45,8 @@ public class GuestRequestsFragment extends Fragment {
     private MaterialCalendarView calendar;
     BottomSheetDialog calendarDialog;
     View calendarView;
+    AccomodationsService accomodationsService = new AccomodationsService();
+
 
     private FragmentGuestReservationsBinding binding;
     ReservationService reservationService = new ReservationService();
@@ -86,7 +90,7 @@ public class GuestRequestsFragment extends Fragment {
 
         return root;    }
     private void loadRequests(){
-        reservationService.loadReservations(authService.getId());
+        reservationService.loadReservations(authService.getId(), false);
         reservationService.getReservations().observe(getActivity(), new Observer<Collection<ReservationResponseDTO>>() {
             @Override
             public void onChanged(Collection<ReservationResponseDTO> objects) {
@@ -99,11 +103,29 @@ public class GuestRequestsFragment extends Fragment {
                         reservations.add(r);
                     }
                 }
-                //reservations = (ArrayList<ReservationResponseDTO>) objects;
-                // Do something with the list
-                FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations, true), getActivity(), false, R.id.scroll_guest_requests);
+                //FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations, true), getActivity(), false, R.id.scroll_guest_requests);
+                loadAccommodationsAndUsers();
             }
         });
+    }
+    private void loadAccommodationsAndUsers(){
+        final int[] counter = {0};
+        for (ReservationResponseDTO r: reservations) {
+            accomodationsService.loadAccommodation(r.getAccommodation());
+            accomodationsService.getAccommodation().observe(getActivity(), new Observer<AccommodationDTO>() {
+                @Override
+                public void onChanged(AccommodationDTO objects) {
+                    r.setAccommodationDetails(objects);
+                    counter[0] +=1;
+                    if(counter[0] == reservations.size()){
+                        FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations, true), getActivity(), false, R.id.scroll_guest_requests);
+                    }
+                }
+            });
+
+        }
+
+
     }
     private void setCalendarDialog(View rootView){
         Button search = rootView.findViewById(R.id.calendarResButton);
@@ -118,7 +140,6 @@ public class GuestRequestsFragment extends Fragment {
     private void handleSearch(View rootView){
         Button search = rootView.findViewById(R.id.searchButton);
         EditText name = rootView.findViewById(R.id.nameReservation);
-//dodati proveru da li su uneti datumi
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,8 +156,8 @@ public class GuestRequestsFragment extends Fragment {
                 List<CalendarDay> selectedDays = calendar.getSelectedDates();
 
                 String type = null;
-                reservationService.getSearchedAndFIlteredGuest(authService.getId(), name.getText().toString(),
-                        Helper.toDate(selectedDays.get(0)), Helper.toDate(selectedDays.get(selectedDays.size()-1)), type);
+                reservationService.getSearchedAndFIltered(authService.getId(), name.getText().toString(),
+                        Helper.toDate(selectedDays.get(0)), Helper.toDate(selectedDays.get(selectedDays.size()-1)), type, false);
                 reservationService.getSearchedReservations().observe(getActivity(), new Observer<Collection<ReservationResponseDTO>>() {
                     @Override
                     public void onChanged(Collection<ReservationResponseDTO> objects) {

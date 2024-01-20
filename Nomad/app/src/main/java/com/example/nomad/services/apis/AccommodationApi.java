@@ -83,6 +83,8 @@ public interface AccommodationApi {
 
     @GET("accommodations/host/{id}")
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("accommodations/{id}")
+    public Call<AccommodationDTO> getAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
 
     @GET("accommodations/search-filter")
     public Call<Collection<SearchAccommodationDTO>> getFilteredAndSearched(@Query("city") String city, @Query("from") String from,

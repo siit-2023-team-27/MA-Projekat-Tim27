@@ -42,11 +42,53 @@ import retrofit2.Response;
 
 public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
+    private MutableLiveData<AccommodationDTO> accommodation = new MutableLiveData<>();
+
     private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
 
     private MutableLiveData<Collection<Amenity>> amenities = new MutableLiveData<>();
 
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
+    public LiveData<AccommodationDTO> getAccommodation() {
+        return accommodation;
+    }
+    public void loadAccommodation(Long id) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer" + AuthService.token.toString());
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    AccommodationDTO objects = response.body();
+                    //accommodations = objects;
+                    accommodation.setValue(objects);
+                    Log.d("onResponse: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects));
+                } else {
+                    // Handle unsuccessful response
+                    // You may want to check response.errorBody() for more details
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("getAccError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("getAccError", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
 
     public void loadAccommodations() {
         Call<ArrayList<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getAccommodations("Bearer" + AuthService.token.toString());

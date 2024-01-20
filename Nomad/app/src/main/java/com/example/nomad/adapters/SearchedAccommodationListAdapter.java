@@ -81,9 +81,7 @@ public class SearchedAccommodationListAdapter extends ArrayAdapter<SearchAccommo
                         accommodation.getId());
                 Toast.makeText(getContext(), "Clicked: " + accommodation.getName()  +
                         ", id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
-                FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, false, R.id.base_accommodations);
-
-
+                FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, true, R.id.base_accommodations);
             });
         }
 

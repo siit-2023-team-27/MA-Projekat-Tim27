@@ -88,8 +88,7 @@ public class AccommodationsPageFragment extends Fragment {
                 // Now, you can convert the LiveData to a List if needed
                 accommodations = (ArrayList<AccommodationDTO>) objects;
                 // Do something with the list
-                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations), getActivity(), true, R.id.scroll_products_list);
-
+                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations), getActivity(), false, R.id.scroll_products_list);
             }
         });
 
@@ -146,7 +145,6 @@ public class AccommodationsPageFragment extends Fragment {
                         }
                         bottomSheetDialog.setContentView(dialogView);
                         bottomSheetDialog.show();
-
                     }
                 });
             }else{
@@ -159,7 +157,6 @@ public class AccommodationsPageFragment extends Fragment {
         Button search = rootView.findViewById(R.id.searchButton);
         EditText city = rootView.findViewById(R.id.adress);
         EditText peopleNum = rootView.findViewById(R.id.peopleNumber);
-//dodati proveru da li su uneti datumi
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +208,7 @@ public class AccommodationsPageFragment extends Fragment {
                         // Now, you can convert the LiveData to a List if needed
                         searchAccommodationDTOS = (ArrayList<SearchAccommodationDTO>) objects;
                         // Do something with the list
-                        FragmentTransition.to(SearchedAccommodationListFragment.newInstance(searchAccommodationDTOS), getActivity(), true, R.id.scroll_products_list);
+                        FragmentTransition.to(SearchedAccommodationListFragment.newInstance(searchAccommodationDTOS), getActivity(), false, R.id.scroll_products_list);
 
                     }
                 });

@@ -31,12 +31,23 @@ public interface ReservationApi {
 
     @GET("reservations/with-guest/{id}")
     public Call<Collection<ReservationResponseDTO>> getReservationsForGuest(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("reservations/with-host/{id}")
+    public Call<Collection<ReservationResponseDTO>> getReservationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
     @DELETE("reservations/{id}")
     public Call<Long> deleteReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
 
     @PUT("reservations/cancel/{id}")
     public Call<Long> cancelReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
 
+    @PUT("reservations/confirm/{id}")
+    public Call<Long> acceptReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+    @PUT("reservations/reject/{id}")
+    public Call<Long> rejectReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("reservations/search-host/{id}")
+    public Call<Collection<ReservationResponseDTO>> getSearchedANdFIlteredHost(@Path("id") Long id, @Query("name") String name,
+                                                                                @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,
+                                                                                @Query("status") String status, @Header("Authorization") String authHeader);
     @GET("reservations/search-guest/{id}")
     public Call<Collection<ReservationResponseDTO>> getSearchedANdFIlteredGuest(@Path("id") Long id, @Query("name") String name,
                                                                            @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,

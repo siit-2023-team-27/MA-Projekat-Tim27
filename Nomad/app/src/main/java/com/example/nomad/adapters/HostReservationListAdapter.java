@@ -7,47 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.nomad.R;
-import com.example.nomad.dto.AccommodationDTO;
-import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
-import com.example.nomad.dto.SearchAccommodationDTO;
-import com.example.nomad.fragments.FragmentTransition;
-import com.example.nomad.fragments.accommodations.AccommodationFragment;
-import com.example.nomad.fragments.accommodations.SearchedAccommodationListFragment;
 import com.example.nomad.helper.Helper;
 import com.example.nomad.services.ReservationService;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
-public class GuestReservationListAdapter extends ArrayAdapter<ReservationResponseDTO> {
+public class HostReservationListAdapter extends ArrayAdapter<ReservationResponseDTO> {
     private ArrayList<ReservationResponseDTO> reservations;
     private FragmentActivity activity;
     ReservationService reservationService = new ReservationService();
     private boolean isRequestsPage;
 
-    public GuestReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity, boolean isRequestsPage){
-        super(context, R.layout.guest_reservations_card, accommodations);
+    public HostReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity){
+        super(context, R.layout.host_reservations_card, accommodations);
         this.reservations = accommodations;
         this.activity = activity;
         this.isRequestsPage = isRequestsPage;
@@ -73,7 +57,7 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ReservationResponseDTO reservation = getItem(position);
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.guest_reservations_card,
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.host_reservations_card,
                     parent, false);
         }
         LinearLayout productCard = convertView.findViewById(R.id.product_card_item);
@@ -81,36 +65,33 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
         TextView name = convertView.findViewById(R.id.guest_reservation_name);
         TextView status = convertView.findViewById(R.id.guest_reservation_status);
         TextView dateRange = convertView.findViewById(R.id.guest_reservation_date_range);
-        Button delete = convertView.findViewById(R.id.deleteREservation);
+        TextView userCanceled = convertView.findViewById(R.id.guest_reservation_user_canceled);
+        Button accept = convertView.findViewById(R.id.acceptREservation);
+        Button reject = convertView.findViewById(R.id.rejectREservation);
+
         if(reservation != null){
             name.setText(reservation.getAccommodationDetails().getName());
             status.setText(reservation.getStatus());
             dateRange.setText(Helper.longToDateStirng(reservation.getStartDate())+"-"+Helper.longToDateStirng(reservation.getFinishDate()));
-
+            userCanceled.setText("User canceled "+reservation.getUserDetails().getCancellationNumber()+" times");
             productCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
                 Log.i("ShopApp", "Clicked: id: " +
                         reservation.getId());
                 Toast.makeText(getContext(), "Clicked: id: " + reservation.getId(), Toast.LENGTH_SHORT).show();
             });
-
-            if(isRequestsPage){
-                handleDelete(delete, reservation);
-            }else{
-                handleCancel(delete, reservation);
-            }
-
+            this.handleAccept(accept, reservation);
+            this.handleReject(reject, reservation);
         }
 
         return convertView;
     }
 
-    private void handleCancel(Button delete, ReservationResponseDTO reservation){
-        delete.setText("Cancel");
+    private void handleAccept(Button delete, ReservationResponseDTO reservation){
         delete.setOnClickListener(v -> {
-            if(reservation.getStatus().equals("ACCEPTED")){
-                reservationService.cancelReservation(reservation.getId());
-                reservationService.getCancelResponse().observe(activity, new Observer<Boolean>() {
+            if(reservation.getStatus().equals("PENDING")){
+                reservationService.acceptReservation(reservation.getId());
+                reservationService.getAcceptResponse().observe(activity, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean objects) {
                         // Update your UI or perform any actions when LiveData changes
@@ -118,26 +99,25 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                         Log.i("Response reservation", "Selected: " + responseSuccessful.toString());
 
                         if(responseSuccessful){
-                            Toast.makeText(getContext(), "Reservation cancelled successfully", Toast.LENGTH_SHORT).show();
-                            reservationService.setRefreshReservations(true);
+                            Toast.makeText(getContext(), "Reservation accepted successfully", Toast.LENGTH_SHORT).show();
+                            reservationService.setRefreshHostReservations(true);
                         }else{
-                            Toast.makeText(getContext(), "Reservation not cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Reservation not accepted", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }else{
-                Toast.makeText(getContext(), "Not possible to cancel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Not possible to accept", Toast.LENGTH_SHORT).show();
 
             }
         });
     }
 
-    private void handleDelete(Button delete, ReservationResponseDTO reservation){
-
+    private void handleReject(Button delete, ReservationResponseDTO reservation){
         delete.setOnClickListener(v -> {
             if(reservation.getStatus().equals("PENDING")){
-                reservationService.deleteReservation(reservation.getId());
-                reservationService.getDeleteResponse().observe(activity, new Observer<Boolean>() {
+                reservationService.rejectReservation(reservation.getId());
+                reservationService.getRejectResponse().observe(activity, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean objects) {
                         // Update your UI or perform any actions when LiveData changes
@@ -145,15 +125,15 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                         Log.i("Response reservation", "Selected: " + responseSuccessful.toString());
 
                         if(responseSuccessful){
-                            Toast.makeText(getContext(), "Reservation deleted successfully", Toast.LENGTH_SHORT).show();
-                            reservationService.setRefresh(true);
+                            Toast.makeText(getContext(), "Reservation rejected successfully", Toast.LENGTH_SHORT).show();
+                            reservationService.setRefreshHostReservations(true);
                         }else{
-                            Toast.makeText(getContext(), "Reservation not deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Reservation not rejected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }else{
-                Toast.makeText(getContext(), "Not possible to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Not possible to reject", Toast.LENGTH_SHORT).show();
 
             }
         });

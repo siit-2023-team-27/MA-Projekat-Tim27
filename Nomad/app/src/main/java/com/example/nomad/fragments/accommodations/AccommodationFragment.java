@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
@@ -26,6 +28,7 @@ import com.example.nomad.activities.SliderData;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.ReservationDTO;
+import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.helper.EventDecorator;
 import com.example.nomad.helper.Helper;
@@ -97,6 +100,9 @@ public class AccommodationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStackImmediate();
+//                FragmentTransition.to(BaseAccommodationFragment.newInstance(), getActivity(), false, R.id.root_linear);
+//                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//                navController.navigate(R.id.action_accommodation_to_search);
             }
         });
 
