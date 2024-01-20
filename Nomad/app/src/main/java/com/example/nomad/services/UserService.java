@@ -49,8 +49,8 @@ public class UserService {
         });
     }
 
-    public void getLoggedUser() {
-        Call<UserDTO> call = UserClient.getInstance().getMyApi().getLoggedUser(AuthService.id);
+    public void getLoggedUser(Long id) {
+        Call<UserDTO> call = UserClient.getInstance().getMyApi().getLoggedUser(id);
 
         Log.e("ID USER", "id: " + AuthService.id);
         call.enqueue(new Callback<UserDTO>() {

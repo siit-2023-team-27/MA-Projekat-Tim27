@@ -44,6 +44,9 @@ import com.example.nomad.fragments.ProfileFragment;
 import com.example.nomad.helper.Consts;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.NotificationService;
+
+import com.example.nomad.services.AuthService;
+
 import com.example.nomad.services.UserService;
 import com.google.android.material.navigation.NavigationView;
 
@@ -116,7 +119,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //    }
 
     private void setNavigationMenu() {
-        userService.getLoggedUser();
+        userService.getLoggedUser(AuthService.id);
         userService.getLogged().observe(this, new Observer<UserDTO>() {
             @Override
             public void onChanged(UserDTO userDTO) {

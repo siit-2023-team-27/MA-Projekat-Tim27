@@ -1,8 +1,13 @@
 package com.example.nomad.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
-public class ReservationDTO {
+public class ReservationDTO implements Parcelable {
     private long id;
     private long user;
     private long accommodation;
@@ -27,6 +32,26 @@ public class ReservationDTO {
         this.numGuests = numGuests;
         this.status = status;
     }
+
+    protected ReservationDTO(Parcel in) {
+        id = in.readLong();
+        user = in.readLong();
+        accommodation = in.readLong();
+        numGuests = in.readInt();
+        status = in.readString();
+    }
+
+    public static final Creator<ReservationDTO> CREATOR = new Creator<ReservationDTO>() {
+        @Override
+        public ReservationDTO createFromParcel(Parcel in) {
+            return new ReservationDTO(in);
+        }
+
+        @Override
+        public ReservationDTO[] newArray(int size) {
+            return new ReservationDTO[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -82,5 +107,19 @@ public class ReservationDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(user);
+        dest.writeLong(accommodation);
+        dest.writeInt(numGuests);
+        dest.writeString(status);
     }
 }

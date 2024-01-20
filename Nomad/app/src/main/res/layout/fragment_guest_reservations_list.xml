@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="60dp"
-    tools:context=".fragments.accommodations.BaseAccommodationFragment"
-    android:id="@+id/base_accommodations">
+    android:orientation="vertical">
 
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/guest_reservations_card"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

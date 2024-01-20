@@ -15,6 +15,15 @@
         android:orientation="vertical"
         tools:context=".fragments.accommodations.AccommodationFragment">
 
+        <Button
+            android:id="@+id/back_to_list"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:text="Back to search"
+            tools:ignore="TextContrastCheck" />
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/imageSlider"
             android:layout_width="match_parent"

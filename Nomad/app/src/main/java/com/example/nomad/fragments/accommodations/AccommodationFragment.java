@@ -25,6 +25,8 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.nomad.R;
 import com.example.nomad.activities.SliderAdapter;
@@ -32,6 +34,7 @@ import com.example.nomad.activities.SliderData;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.ReservationDTO;
+import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.helper.EventDecorator;
@@ -101,7 +104,16 @@ public class AccommodationFragment extends Fragment {
         // Set rating
         RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
         simpleRatingBar.setRating((float) 4.5);
-
+        Button back = rootView.findViewById(R.id.back_to_list);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStackImmediate();
+//                FragmentTransition.to(BaseAccommodationFragment.newInstance(), getActivity(), false, R.id.root_linear);
+//                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//                navController.navigate(R.id.action_accommodation_to_search);
+            }
+        });
 
         AccommodationCommentFragment fragment = new AccommodationCommentFragment(accommodation.getId(), accommodation);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
