@@ -96,9 +96,14 @@ public class CommentReportListAdapter extends ArrayAdapter<CommentReportDetailsD
             commentView.setText(report.getReportedCommentText());
             rating.setRating(report.getReportedCommentRating());
             rating.setIsIndicator(true);
-            if(report.getReportStatus()!="PENDING"){
-                acceptButton.setVisibility(View.INVISIBLE);
-                archiveButton.setVisibility(View.INVISIBLE);
+            acceptButton.setVisibility(View.VISIBLE);
+            archiveButton.setVisibility(View.VISIBLE);
+            acceptButton.setEnabled(true);
+            archiveButton.setEnabled(true);
+
+            if(!report.getReportStatus().contains("PENDING")){
+                acceptButton.setVisibility(View.GONE);
+                archiveButton.setVisibility(View.GONE);
 
                 acceptButton.setEnabled(false);
                 archiveButton.setEnabled(false);

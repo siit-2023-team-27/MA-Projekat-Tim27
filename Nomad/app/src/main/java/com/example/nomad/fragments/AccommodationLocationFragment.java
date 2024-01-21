@@ -70,7 +70,7 @@ public class AccommodationLocationFragment extends Fragment {
     private AccommodationDTO accommodation;
     private Button nextButton;
 
-
+    private boolean isBackNeeded;
 
     public AccommodationLocationFragment(AccommodationDTO accommodation) {
         super(R.layout.fragment_accommodation_location);
@@ -99,10 +99,10 @@ public class AccommodationLocationFragment extends Fragment {
      * @return A new instance of fragment AccommodationLocationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccommodationLocationFragment newInstance(String param1, String param2) {
+    public static AccommodationLocationFragment newInstance(Boolean isBackNeeded, String param2) {
         AccommodationLocationFragment fragment = new AccommodationLocationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putBoolean(ARG_PARAM1, isBackNeeded);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -112,7 +112,7 @@ public class AccommodationLocationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            isBackNeeded = getArguments().getBoolean(ARG_PARAM1);
         }
 
     }
@@ -183,6 +183,18 @@ public class AccommodationLocationFragment extends Fragment {
 
         nextButton = view.findViewById(R.id.NextButton);
         nextButton.setEnabled(false);
+        Button backButton = view.findViewById(R.id.backButton);
+        backButton.setEnabled(false);
+        if(isBackNeeded){
+            backButton.setEnabled(true);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    backFragment();
+                }
+            });
+        }
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,5 +225,8 @@ public class AccommodationLocationFragment extends Fragment {
         calendarFragment.setAccommodation(accommodation);
         FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
+    }
+    public void backFragment(){
+        getFragmentManager().popBackStackImmediate();
     }
 }

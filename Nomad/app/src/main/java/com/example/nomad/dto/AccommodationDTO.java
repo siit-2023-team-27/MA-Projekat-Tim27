@@ -1,20 +1,14 @@
 package com.example.nomad.dto;
 
 
-import android.media.Rating;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
 
 import com.example.nomad.enums.AccommodationStatus;
 import com.example.nomad.enums.AccommodationType;
 import com.example.nomad.enums.ConfirmationType;
 import com.example.nomad.enums.PriceType;
-import com.example.nomad.services.AuthService;
 
-
-import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +81,17 @@ public class AccommodationDTO  implements Parcelable {
         dest.writeInt(deadlineForCancellation);
         dest.writeByte((byte) (verified ? 1 : 0));
         dest.writeLong(hostId);
+    }
+
+    public float getAverageGrade(){
+        float avg = 0;
+        for (AccommodationRating s: ratings) {
+            avg += s.getRating();
+        }
+        if(ratings.size() != 0){
+            return avg/ratings.size();
+        }
+        return avg;
     }
 
     public static final Creator<AccommodationDTO> CREATOR = new Creator<AccommodationDTO>() {
@@ -176,8 +181,11 @@ public class AccommodationDTO  implements Parcelable {
         return ratings;
     }
 
-    public void setRatings(List<AccommodationRating> ratings) {
-        this.ratings = ratings;
+    public void setRatings(List<AccommodationRatingDTO> ratings) {
+        this.ratings = new ArrayList<>();
+        for (AccommodationRatingDTO dto: ratings) {
+            this.ratings.add(new AccommodationRating(dto.getUserName(), dto.getText(), dto.getRating()));
+        }
     }
 
     public void addImage(String image){
