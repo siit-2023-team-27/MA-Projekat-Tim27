@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="70dp"
+    android:layout_marginTop="60dp"
     tools:context=".fragments.accommodations.BaseAccommodationFragment"
     android:id="@+id/base_accommodations">
 

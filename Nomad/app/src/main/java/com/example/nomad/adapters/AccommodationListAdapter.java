@@ -18,10 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nomad.R;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.fragments.accommodations.AccommodationListFragment;
-import com.example.nomad.model.AccommodationDTO;
 
 import java.util.ArrayList;
 
@@ -95,7 +95,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationDTO> {
                         accommodation.getId());
                 Toast.makeText(getContext(), "Clicked: " + accommodation.getName()  +
                         ", id: " + accommodation.getId(), Toast.LENGTH_SHORT).show();
-                FragmentTransition.to( AccommodationFragment.newInstance("Pera"), activity, false, R.id.base_accommodations);
+                FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, true, R.id.base_accommodations);
 
 
             });

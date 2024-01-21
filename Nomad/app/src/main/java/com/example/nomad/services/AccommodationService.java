@@ -6,6 +6,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.example.nomad.dto.Amenity;
+import com.example.nomad.helper.Consts;
+import com.google.android.gms.common.api.internal.ApiExceptionMapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,13 +32,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class AccommodationService extends Service {
-    URL accommodationsUrl = new URL("http://192.168.1.8:8080/api/accommodations");
-    URL amenitiesUrl = new URL("http://192.168.1.8:8080/api/amenities");
+    URL accommodationsUrl = new URL(Consts.BASEURL+"/api/accommodations");
+    URL amenitiesUrl = new URL(Consts.BASEURL+"/api/amenities");
     private Future<?> future;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     HttpURLConnection client = null;
     public AccommodationService() throws MalformedURLException {
     }
+
     public ArrayList<Amenity> getAmenities() throws ExecutionException, InterruptedException, TimeoutException {
         future = executor.submit(() -> {return _getAmenities();});
         ArrayList<Amenity> amenities = (ArrayList<Amenity>) future.get(1000, TimeUnit.SECONDS);

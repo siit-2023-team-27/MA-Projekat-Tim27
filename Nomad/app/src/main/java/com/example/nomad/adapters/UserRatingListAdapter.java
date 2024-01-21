@@ -14,23 +14,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nomad.R;
-import com.example.nomad.dto.AccommodationRatingDTO;
+import com.example.nomad.dto.RatingDTO;
 import com.example.nomad.fragments.UserRatingsFragment;
-import com.example.nomad.fragments.accommodations.AccommodationCommentFragment;
 import com.example.nomad.services.AccomodationsService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
-    private ArrayList<DTO.RatingDTO> comments;
+public class UserRatingListAdapter extends ArrayAdapter<RatingDTO> {
+    private ArrayList<RatingDTO> ratings;
     private FragmentActivity activity;
     private AccomodationsService accomodationsService = new AccomodationsService();
     private UserRatingsFragment ratingsFragment;
 
-    public UserRatingListAdapter(Context context, ArrayList<DTO.RatingDTO> comments, FragmentActivity activity, UserRatingsFragment ratingsFragment){
-        super(context, R.layout.comment_card, comments);
-        this.comments = comments;
+    public UserRatingListAdapter(Context context, ArrayList<RatingDTO> ratings, FragmentActivity activity, UserRatingsFragment ratingsFragment){
+        super(context, R.layout.comment_card, ratings);
+        this.ratings = ratings;
         this.activity = activity;
         this.ratingsFragment = ratingsFragment;
 
@@ -49,7 +48,7 @@ public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
      * */
     @Override
     public int getCount() {
-        return comments.size();
+        return ratings.size();
     }
 
     /*
@@ -57,8 +56,8 @@ public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
      * */
     @Nullable
     @Override
-    public DTO.RatingDTO getItem(int position) {
-        return comments.get(position);
+    public RatingDTO getItem(int position) {
+        return ratings.get(position);
     }
     private EditText reportText;
     /*
@@ -74,14 +73,14 @@ public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        DTO.RatingDTO comment = getItem(position);
+        RatingDTO comment = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comment_card,
                     parent, false);
         }
 
-        TextView nameView = convertView.findViewById(R.id.nameView);
-        TextView commentView = convertView.findViewById(R.id.commentView);
+        TextView nameView = convertView.findViewById(R.id.reportingNameView);
+        TextView commentView = convertView.findViewById(R.id.reportedNameView);
         RatingBar rating = convertView.findViewById(R.id.commentRatingBar);
         FloatingActionButton commentReportButton = convertView.findViewById(R.id.commentReportButton);
 //        FragmentAddAccommodationComment fragmentAddAccommodationComment = ().getBottomDrawerFragment();
@@ -95,7 +94,7 @@ public class UserRatingListAdapter extends ArrayAdapter<DTO.RatingDTO> {
             commentReportButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ratingsFragment.showReportDrawer(comment.getId());
+                    ratingsFragment.showReportCommentFragment(comment.getId());
                 }
             });
         }

@@ -26,6 +26,9 @@ public class BaseAccommodationFragment extends Fragment {
     public BaseAccommodationFragment() {
         // Required empty public constructor
     }
+    public static AccommodationsPageFragment newInstance() {
+        return new AccommodationsPageFragment();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class BaseAccommodationFragment extends Fragment {
         binding = FragmentBaseAccommodationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        FragmentTransition.to(AccommodationsPageFragment.newInstance(), getActivity(), false, R.id.base_accommodations);
+        FragmentTransition.to(AccommodationsPageFragment.newInstance(), getActivity(), true, R.id.base_accommodations);
 
         return root;
     }

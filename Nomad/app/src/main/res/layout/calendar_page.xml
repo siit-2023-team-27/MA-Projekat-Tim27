@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/searchCalendar"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:mcv_selectionColor="@color/nomad_brown"
+        app:mcv_selectionMode="range"
+        app:mcv_showOtherDates="other_months">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+</LinearLayout>

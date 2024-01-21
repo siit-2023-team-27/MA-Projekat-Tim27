@@ -11,6 +11,8 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,6 +45,12 @@ public class LocationService {
             }
         });
 
+        // Wait for the background task to complete
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait
+        }
+
         return address;
     }
     private static String addressToString(Address address){
@@ -55,5 +63,42 @@ public class LocationService {
         }
 
         return str;
+    }
+
+
+    public static List<Address> getAddressesFromLocationName(String locationName, int maxResults) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        // Define a list to store the resulting addresses
+        final List<Address>[] addressList = new List[]{null};
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Background work here
+                GeocoderNominatim geocoder = new GeocoderNominatim(Configuration.getInstance().getNormalizedUserAgent());
+                try {
+                    // Use the getFromLocationName method to retrieve addresses
+                    addressList[0] = geocoder.getFromLocationName(locationName, maxResults);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI Thread work here
+                    }
+                });
+            }
+        });
+
+        // Wait for the background task to complete
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait
+        }
+
+        return addressList[0];
     }
 }

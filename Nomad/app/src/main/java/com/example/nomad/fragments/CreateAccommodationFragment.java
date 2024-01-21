@@ -195,7 +195,9 @@ public class CreateAccommodationFragment extends Fragment {
         spinner.setAdapter(adapterAccommodationType);
     }
     public void generateAccommodation(View view){
-        this.accommodation = new AccommodationDTO();
+        if(this.accommodation == null) {
+            this.accommodation = new AccommodationDTO();}
+
         this.accommodation.setStatus(AccommodationStatus.PENDING);
         this.accommodation.setAccommodationType(AccommodationType.valueOf((String)spinner.getSelectedItem()));
 
@@ -211,7 +213,11 @@ public class CreateAccommodationFragment extends Fragment {
 
         //TODO: Try without after connecting image and location fragments
         this.accommodation.setImages(new ArrayList<String>());
-        this.accommodation.setAddress("AAAAAAAAAAAA");
+
+        if(this.accommodation.getAddress() == null) {
+            this.accommodation.setAddress("AAAAAAAAAAAA");
+        }
+
         this.accommodation.setPriceType(PriceType.FOR_ACCOMMODATION);
 
         if(reservationAcceptanceSwitch.isChecked()){

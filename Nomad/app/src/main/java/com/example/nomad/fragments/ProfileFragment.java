@@ -23,11 +23,6 @@ import com.example.nomad.dto.UserDTO;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.UserService;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileFragment extends Fragment {
 
     UserDTO loggedUser;
@@ -96,7 +91,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setLoggedUser() {
-        userService.getLoggedUser();
+        userService.getLoggedUser(AuthService.id);
         userService.getLogged().observe(getActivity(), new Observer<UserDTO>() {
             @Override
             public void onChanged(UserDTO userDTO) {

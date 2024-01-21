@@ -5,6 +5,7 @@ import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.UserDTO;
 import com.example.nomad.dto.UserRegistrationDTO;
 import com.example.nomad.dto.UserTokenState;
+import com.example.nomad.helper.Consts;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -14,7 +15,7 @@ import retrofit2.http.POST;
 public interface AuthApi {
 
 
-    String BASE_URL = "http://192.168.1.8:8080/auth/";
+    String BASE_URL = Consts.BASEURL+"/auth/";
     @POST("signup")
     public Call<AppUser> register(@Body UserRegistrationDTO userDTO);
 

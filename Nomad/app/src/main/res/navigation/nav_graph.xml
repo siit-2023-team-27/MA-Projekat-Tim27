@@ -19,26 +19,49 @@
         app:popUpTo="@+id/nav_search"
         app:popUpToInclusive="true">
     </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/nav_favourites"-->
+<!--        android:name="com.example.nomad.fragments.FavouritesFragment"-->
+<!--        android:label="fragment_favourites"-->
+<!--        tools:layout="@layout/fragment_favourites"-->
+<!--        app:popUpTo="@+id/nav_search"-->
+<!--        app:popUpToInclusive="true"/>-->
+<!--    <fragment-->
+<!--        android:id="@+id/nav_requests"-->
+<!--        android:name="com.example.nomad.fragments.RequestsFragment"-->
+<!--        android:label="fragment_requests"-->
+<!--        tools:layout="@layout/fragment_requests"-->
+<!--        app:popUpTo="@+id/nav_search"-->
+<!--        app:popUpToInclusive="true"/>-->
+<!--    <fragment-->
+<!--        android:id="@+id/nav_reservations_guest"-->
+<!--        android:name="com.example.nomad.fragments.GuestReservationsFragment"-->
+<!--        android:label="fragment_reservations_guest"-->
+<!--        tools:layout="@layout/fragment_guest_reservations"-->
+<!--        app:popUpTo="@+id/nav_reservations_guest"-->
+<!--        app:popUpToInclusive="true"/>-->
     <fragment
-        android:id="@+id/nav_favourites"
-        android:name="com.example.nomad.fragments.FavouritesFragment"
-        android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites"
-        app:popUpTo="@+id/nav_search"
-        app:popUpToInclusive="true"/>
-    <fragment
-        android:id="@+id/nav_requests"
-        android:name="com.example.nomad.fragments.RequestsFragment"
-        android:label="fragment_requests"
-        tools:layout="@layout/fragment_requests"
-        app:popUpTo="@+id/nav_search"
-        app:popUpToInclusive="true"/>
-    <fragment
-        android:id="@+id/nav_reservations_guest"
-        android:name="com.example.nomad.fragments.GuestReservationsFragment"
-        android:label="fragment_reservations_guest"
+        android:id="@+id/nav_reservations"
+        android:name="com.example.nomad.fragments.reservations.GuestReservationsFragment"
+        android:label="fragment_reservations"
         tools:layout="@layout/fragment_guest_reservations"
-        app:popUpTo="@+id/nav_reservations_guest"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_host_reservations"
+        android:name="com.example.nomad.fragments.reservations.HostReservationsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_guest_reservations"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_guest_requests"
+        android:name="com.example.nomad.fragments.reservations.GuestRequestsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_guest_requests"
+        app:popUpTo="@+id/nav_search"
         app:popUpToInclusive="true"/>
     <fragment
         android:id="@+id/nav_notifications"
@@ -86,14 +109,7 @@
         android:id="@+id/nav_accommodation_creation_host"
         android:name="com.example.nomad.fragments.AccommodationCreationHostFragment"
         android:label="fragment_comments"
-        tools:layout="@layout/fragment_accommodation_creation_host">
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_host_reports"
-        android:name="com.example.nomad.fragments.HostReportsFragment"
-        android:label="fragment_comments"
-        tools:layout="@layout/fragment_host_reports" />
+        tools:layout="@layout/fragment_accommodation_creation_host" />
 
     <fragment
         android:id="@+id/nav_listing"
@@ -104,6 +120,33 @@
             android:id="@+id/action_nav_listing_to_nav_create_accommodation"
             app:destination="@id/nav_accommodation_creation_host" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_user_reports"
+        android:name="com.example.nomad.fragments.UserReportsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_reports" />
+    <fragment
+        android:id="@+id/nav_comment_reports"
+        android:name="com.example.nomad.fragments.CommentReportFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comment_report" />
+    <fragment
+        android:id="@+id/nav_accommodation_details"
+        android:name="com.example.nomad.fragments.accommodations.AccommodationFragment"
+        android:label="fragment_accommodation"
+        tools:layout="@layout/fragment_accommodation" >
+        <action
+            android:id="@+id/action_accommodation_to_search"
+            app:destination="@id/nav_search" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_host_reports"
+        android:name="com.example.nomad.fragments.HostReportsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_host_reports" />
+
+
 
 
 </navigation>

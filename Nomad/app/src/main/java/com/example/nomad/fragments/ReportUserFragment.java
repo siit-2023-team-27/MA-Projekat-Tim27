@@ -32,10 +32,11 @@ public class ReportUserFragment extends BottomSheetDialogFragment {
     EditText reportText;
     Button reportButton;
     UserService userService = new UserService();
+    private Long userId;
 //    UserRatingsViewModel userRatingsViewModel;
 
-    public ReportUserFragment(){
-
+    public ReportUserFragment(Long userId){
+        this.userId = userId;
     }
 
     public static FragmentAddAccommodationComment newInstance(String param1, String param2) {
@@ -74,7 +75,7 @@ public class ReportUserFragment extends BottomSheetDialogFragment {
     }
     private void addReport(){
         UserReportDto userReportDto = new UserReportDto();
-        userReportDto.setReportedUser(1L);
+        userReportDto.setReportedUser(userId);
         userReportDto.setReason(reportText.getText().toString());
         userReportDto.setReportingUser(AuthService.id);
         userService.reportUser(userReportDto);

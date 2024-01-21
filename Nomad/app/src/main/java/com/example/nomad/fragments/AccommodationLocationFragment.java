@@ -1,6 +1,7 @@
 package com.example.nomad.fragments;
 
 import android.content.Context;
+import android.location.Address;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.caverock.androidsvg.BuildConfig;
 import com.example.nomad.R;
@@ -38,8 +40,11 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+
 
 //import org.osmdroid.api.IGeoPoint;
 //import org.osmdroid.api.IMapController;
@@ -69,6 +74,10 @@ public class AccommodationLocationFragment extends Fragment {
     private MapView map;
     private AccommodationDTO accommodation;
     private Button nextButton;
+    private EditText selectedLocation;
+
+    List<Marker> markers = new ArrayList<>();
+
 
 
 
@@ -84,6 +93,7 @@ public class AccommodationLocationFragment extends Fragment {
 
     public void setAccommodation(AccommodationDTO accommodation) {
         this.accommodation = accommodation;
+        Log.i("ADRESA", "set Ac: " +  accommodation.getAddress());
     }
 
     public AccommodationLocationFragment() {
@@ -135,6 +145,16 @@ public class AccommodationLocationFragment extends Fragment {
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         nextButton = (Button)view.findViewById(R.id.NextButton);
+        nextButton.setEnabled(false);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
+                calendarFragment.setAccommodation(accommodation);
+                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
+            }
+        });
+        selectedLocation = view.findViewById(R.id.editTextSelectedLocation);
 
         map = view.findViewById(R.id.map);
 //        map.setTileSource(TileSourceFactory.BASE_OVERLAY_NL);
@@ -145,20 +165,27 @@ public class AccommodationLocationFragment extends Fragment {
         GeoPoint startPoint = new GeoPoint(51496994, -134733);
         mapController.setCenter(startPoint);
 //        map.setMinZoomLevel(2d);
+
+
+        setLocation();
+
         MapEventsReceiver mReceive = new MapEventsReceiver() {
 
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
+                removeMarkers();
                 Marker startMarker = new Marker(map);
                 startMarker.setPosition(p);
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                if(map.getOverlays().size() > 1){
-                    map.getOverlays().remove(1);
-                }else{
-                    nextButton.setEnabled(true);
-                }
+//                if(map.getOverlays().size() > 1){
+//                    map.getOverlays().remove(1);
+//                }else{
+//                    nextButton.setEnabled(true);
+//                }
                 map.getOverlays().add(startMarker);
-                LocationService.getAddress(p);
+                markers.add(startMarker);
+                selectedLocation.setText(LocationService.getAddress(p));
+                nextButton.setEnabled(true);
 
                 Log.d( "singleTapConfirmedHelper: ", "singleTapConfirmedHelper: ");
                 Log.d( "singleTapConfirmedHelper: ", String.valueOf(map.getOverlays().size()));
@@ -178,16 +205,6 @@ public class AccommodationLocationFragment extends Fragment {
         MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
         map.getOverlays().add(overlay);
 
-        nextButton = view.findViewById(R.id.NextButton);
-        nextButton.setEnabled(false);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
-                calendarFragment.setAccommodation(accommodation);
-                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
-            }
-        });
     }
     public void click(View view){
         map.invalidate();
@@ -201,8 +218,11 @@ public class AccommodationLocationFragment extends Fragment {
         Marker startMarker = new Marker(map);
         startMarker.setPosition(point);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        removeMarkers();
         map.getOverlays().add(startMarker);
+        markers.add(startMarker);
         map.invalidate();
+        //selectedLocation.setText();
     }
     public void nextFragment(){
 
@@ -210,5 +230,38 @@ public class AccommodationLocationFragment extends Fragment {
         calendarFragment.setAccommodation(accommodation);
         FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
+    }
+
+    public void setLocation() {
+        Log.i("ADRESA", "set location: " +  accommodation.getAddress());
+        if (accommodation != null ){
+            selectedLocation.setText(accommodation.getAddress());
+            nextButton.setEnabled(true);
+            List<Address> addresses = LocationService.getAddressesFromLocationName(accommodation.getAddress(), 1);
+            if(addresses != null) {
+                if(addresses.size() > 0 ){
+                    Log.e("LOCATION", addresses.get(0).getCountryName());
+                    Log.e("LOCATION", addresses.get(0).getLatitude() + " " + addresses.get(0).getLongitude());
+                    GeoPoint point = new GeoPoint(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                    map.getController().setZoom(15);
+                    map.getController().setCenter(point);
+                    removeMarkers();
+                    Marker startMarker = new Marker(map);
+                    startMarker.setPosition(point);
+                    startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                    map.getOverlays().add(startMarker);
+                    markers.add(startMarker);
+                    map.invalidate();
+                }
+            }
+
+        }
+    }
+
+    private void removeMarkers() {
+        for (Marker marker : markers) {
+            map.getOverlays().remove(marker);
+        }
+        markers.clear();
     }
 }

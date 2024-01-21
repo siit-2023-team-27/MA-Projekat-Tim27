@@ -21,7 +21,8 @@
             <group android:checkableBehavior="single">
 
                 <item android:id="@+id/nav_notifications" android:title="Notifications" android:icon="@drawable/notifications_icon"/>
-                <item android:id="@+id/nav_reservations_guest" android:title="Reservations" android:icon="@drawable/listing_icon"/>
+                <item android:id="@+id/nav_reservations" android:title="Reservations" android:icon="@drawable/listing_icon"/>
+                <item android:id="@+id/nav_guest_requests" android:title="Requests" android:icon="@drawable/listing_icon"/>
                 <item android:id="@+id/nav_favourites" android:title="Favourites" android:icon="@drawable/favourites_icon"/>
 
             </group>

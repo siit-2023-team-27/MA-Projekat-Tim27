@@ -57,13 +57,13 @@ public class ReportCommentFragment extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_accommodation_comment, container, false);
+        return inflater.inflate(R.layout.fragment_report_user, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        reportText = view.findViewById(R.id.commentTextEdit);
-        reportButton = view.findViewById(R.id.commentButton);
+        reportText = view.findViewById(R.id.userReportTextEdit);
+        reportButton = view.findViewById(R.id.userReportButton);
 
 
         reportButton.setOnClickListener(new View.OnClickListener() {

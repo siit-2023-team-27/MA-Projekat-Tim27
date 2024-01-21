@@ -1,29 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/root_linear">
+    android:layout_marginTop="60dp"
+    tools:context=".fragments.accommodations.AccommodationsPageFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Your reservations"
-        android:textAlignment="center"
-        android:layout_marginTop="70dp"
-        android:textSize="20dp">
-
-    </TextView>
-
-
-    <ListView
-        android:id="@android:id/list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/guest_reservation_card"
-        />
+        android:orientation="vertical"
+        tools:context=".fragments.products.ProductsPageFragment"
+        >
+        <EditText
+            android:id="@+id/nameReservation"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:text=""
+            android:hint="Enter accommodation name"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.789"
+            app:layout_constraintStart_toStartOf="parent"></EditText>
+        <Button
+            android:id="@+id/calendarResButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose date range"
+            android:layout_marginRight="10dp"
 
-</LinearLayout>
+            tools:ignore="TextContrastCheck" />
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:text="search"
+                android:layout_marginRight="10dp"
+
+                tools:ignore="TextContrastCheck" />
+            <Button
+                android:id="@+id/filterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="filters"
+                tools:ignore="TextContrastCheck" />
+            <!--            android:background="?android:attr/colorPrimary"-->
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/scroll_guest_reservations"
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

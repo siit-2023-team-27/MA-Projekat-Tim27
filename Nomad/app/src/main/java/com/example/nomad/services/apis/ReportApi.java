@@ -1,6 +1,7 @@
 package com.example.nomad.services.apis;
 
 import com.example.nomad.dto.ReportDTO;
+import com.example.nomad.helper.Consts;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface ReportApi {
 
-    String BASE_URL = "http://192.168.1.8:8080/api/";
+    String BASE_URL = Consts.BASEURL+"/api/";
 
     @GET("reports/accommodation/{hostId}/{accommodationId}/{year}")
     public Call<ArrayList<ReportDTO>> getReportForAccommodation(@Path("hostId") Long hostId,

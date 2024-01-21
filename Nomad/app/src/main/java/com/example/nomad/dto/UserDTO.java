@@ -21,9 +21,32 @@ public class UserDTO implements Parcelable {
         private boolean suspended;
         private boolean verified;
         private List<UserType> roles;
+        private int cancellationNumber;
 
     // Constructor
-    public UserDTO(Long id, String firstName, String lastName, String address, String username, String password, String phoneNumber,  List<UserType> roles) {
+    public UserDTO(Long id, String firstName, String lastName, String address, String username, String password, String phoneNumber,  List<UserType> roles, int cancellationNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.suspended = false;
+        this.verified = true;
+        this.roles = roles;
+        this.cancellationNumber = cancellationNumber;
+    }
+
+    public int getCancellationNumber() {
+        return cancellationNumber;
+    }
+
+    public void setCancellationNumber(int cancellationNumber) {
+        this.cancellationNumber = cancellationNumber;
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, String address, String username, String password, String phoneNumber, List<UserType> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,6 +58,35 @@ public class UserDTO implements Parcelable {
         this.verified = true;
         this.roles = roles;
     }
+
+    protected UserDTO(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readLong();
+        }
+        firstName = in.readString();
+        lastName = in.readString();
+        address = in.readString();
+        username = in.readString();
+        password = in.readString();
+        phoneNumber = in.readString();
+        suspended = in.readByte() != 0;
+        verified = in.readByte() != 0;
+        cancellationNumber = in.readInt();
+    }
+
+    public static final Creator<UserDTO> CREATOR = new Creator<UserDTO>() {
+        @Override
+        public UserDTO createFromParcel(Parcel in) {
+            return new UserDTO(in);
+        }
+
+        @Override
+        public UserDTO[] newArray(int size) {
+            return new UserDTO[size];
+        }
+    };
 
     public boolean isVerified() {
         return verified;
@@ -132,11 +184,22 @@ public class UserDTO implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeLong(id);
+
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
+        }
         dest.writeString(firstName);
         dest.writeString(lastName);
-        dest.writeString(username);
         dest.writeString(address);
+        dest.writeString(username);
+        dest.writeString(password);
         dest.writeString(phoneNumber);
+        dest.writeByte((byte) (suspended ? 1 : 0));
+        dest.writeByte((byte) (verified ? 1 : 0));
+        dest.writeInt(cancellationNumber);
     }
+
 }

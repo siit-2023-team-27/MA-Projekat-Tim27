@@ -28,14 +28,14 @@
         <TextView
             android:id="@+id/accommodation_title"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="20sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/accommodation_address"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="14sp"
             android:textStyle="italic"/>
