@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="320dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_marginVertical="10dp"
+    android:id="@+id/product_card_item"
+
+    >
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/img1"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true">
+
+    </ImageView>
+
+    <LinearLayout
+        android:id="@+id/guest_reservation_desc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/guest_reservation_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/guest_reservation_status"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
+        <TextView
+            android:id="@+id/guest_reservation_date_range"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
+        <TextView
+            android:id="@+id/guest_reservation_user_canceled"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:text="User canceled: "
+            android:textStyle="italic"/>
+        <Button
+            android:id="@+id/acceptREservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            android:layout_marginRight="10dp"
+
+            tools:ignore="TextContrastCheck" />
+        <Button
+            android:id="@+id/rejectREservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reject"
+            android:layout_marginRight="10dp"
+
+            tools:ignore="TextContrastCheck" />
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

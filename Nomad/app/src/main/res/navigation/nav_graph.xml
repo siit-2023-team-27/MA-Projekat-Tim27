@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_search">
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.nomad.fragments.accommodations.BaseAccommodationFragment"
+        tools:layout="@layout/fragment_base_accommodation"
+        android:label="AccommodationFragment">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.nomad.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_favourites"
+        android:name="com.example.nomad.fragments.BaseFavouritesFragment"
+        android:label="fragment_favourites"
+        tools:layout="@layout/fragment_base_favourites"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/nav_requests"
+        android:name="com.example.nomad.fragments.RequestsFragment"
+        android:label="fragment_requests"
+        tools:layout="@layout/fragment_requests"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/nav_reservations"
+        android:name="com.example.nomad.fragments.reservations.GuestReservationsBaseFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_guest_reservations_base"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_host_reservations"
+        android:name="com.example.nomad.fragments.reservations.HostReservationsBaseFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_host_reservations_base"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_guest_requests"
+        android:name="com.example.nomad.fragments.reservations.GuestRequestsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_guest_requests"
+        app:popUpTo="@+id/nav_search"
+        app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/nav_host_reports"
+        android:name="com.example.nomad.fragments.HostReportsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_host_reports" />
+    <fragment
+        android:id="@+id/nav_create_accommodation"
+        android:name="com.example.nomad.fragments.CreateAccommodationFragment"
+        android:label="fragment_create_accommodation"
+        tools:layout="@layout/fragment_create_accommodation" />
+    <fragment
+        android:id="@+id/nav_accommodation_location"
+        android:name="com.example.nomad.fragments.AccommodationLocationFragment"
+        android:label="fragment_create_accommodation"
+        tools:layout="@layout/fragment_accommodation_location" />
+    <fragment
+        android:id="@+id/nav_calendar"
+        android:name="com.example.nomad.fragments.CalendarFragment"
+        android:label="fragment_create_accommodation"
+        tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/nav_unverified"
+        android:name="com.example.nomad.fragments.accommodations.UnverifiedAccommodationsPageFragment"
+        android:label="UnverifiedAccommodationsFragment"
+        tools:layout="@layout/fragment_unverified_accommodations_page"/>
+
+    <fragment
+        android:id="@+id/nav_users"
+        android:name="com.example.nomad.fragments.UserPageFragment"
+        android:label="UserPageFragment"
+        tools:layout="@layout/fragment_user_page"/>
+    <fragment
+        android:id="@+id/nav_accommodation_comment"
+        android:name="com.example.nomad.fragments.accommodations.AccommodationCommentFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_accommodation_comment" />
+    <fragment
+        android:id="@+id/nav_user_ratings"
+        android:name="com.example.nomad.fragments.UserRatingsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_ratings" />
+    <fragment
+        android:id="@+id/nav_image_fragment"
+        android:name="com.example.nomad.fragments.ImageFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_image" />
+    <fragment
+        android:id="@+id/nav_accommodation_creation_host"
+        android:name="com.example.nomad.fragments.AccommodationCreationHostFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_accommodation_creation_host" />
+
+    <fragment
+        android:id="@+id/nav_user_reports"
+        android:name="com.example.nomad.fragments.UserReportsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_reports" />
+    <fragment
+        android:id="@+id/nav_comment_reports"
+        android:name="com.example.nomad.fragments.CommentReportFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comment_report" />
+    <fragment
+        android:id="@+id/nav_accommodation_details"
+        android:name="com.example.nomad.fragments.accommodations.AccommodationFragment"
+        android:label="fragment_accommodation"
+        tools:layout="@layout/fragment_accommodation" >
+        <action
+            android:id="@+id/action_accommodation_to_search"
+            app:destination="@id/nav_search" />
+        </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_listing"
+        android:name="com.example.nomad.fragments.accommodations.HostListing"
+        android:label="fragment_listing"
+        tools:layout="@layout/fragment_host_listing" >
+        <action
+            android:id="@+id/action_nav_listing_to_nav_create_accommodation"
+            app:destination="@id/nav_accommodation_creation_host" />
+    </fragment>
+
+
+</navigation>
