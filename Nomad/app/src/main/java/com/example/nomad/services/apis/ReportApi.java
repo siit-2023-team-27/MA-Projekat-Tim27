@@ -6,6 +6,7 @@ import com.example.nomad.helper.Consts;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -27,4 +28,16 @@ public interface ReportApi {
                                                             @Query("from") String fromDate,
                                                             @Query("to") String toDate,
                                                             @Header("Authorization") String authHeader);
+
+    @GET("reports/generate-pdf/accommodation/{hostId}/{accommodationId}/{year}")
+    public Call<ResponseBody> generateMonthlyReport (@Path("hostId") Long hostId,
+                                                     @Path("accommodationId") Long accommodationId,
+                                                     @Path("year") int year,
+                                                     @Header("Authorization") String authHeader);
+
+    @GET("reports/generate-pdf/date-range/{hostId}")
+    public Call<ResponseBody> generateDateRangeReport (@Path("hostId") Long hostId,
+                                                       @Query("from") String fromDate,
+                                                       @Query("to") String toDate,
+                                                       @Header("Authorization") String authHeader);
 }

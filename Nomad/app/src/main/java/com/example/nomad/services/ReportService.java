@@ -1,15 +1,23 @@
 package com.example.nomad.services;
 
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.nomad.dto.ReportDTO;
 import com.example.nomad.dto.UserDTO;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,4 +78,7 @@ public class ReportService {
             }
         });
     }
+
+
+
 }

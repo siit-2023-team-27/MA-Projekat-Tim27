@@ -1,12 +1,17 @@
 package com.example.nomad.fragments;
 
+
+import android.app.DownloadManager;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +29,7 @@ import android.widget.Toast;
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.ReportDTO;
+import com.example.nomad.helper.Consts;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.ReportService;
@@ -64,8 +70,11 @@ public class HostReportsFragment extends Fragment {
     private int selectedYear;
     MaterialCalendarView materialCalendarView;
     List<CalendarDay> selectedDates;
-    private String startDate;
-    private String endDate;
+    private String startDate = "";
+    private String endDate = "";
+
+    private Button downloadMonthlyReportButton;
+    private Button downloadDateRangeReportButton;
 
     //chart
     private BarChart barChartProfit;
@@ -118,6 +127,11 @@ public class HostReportsFragment extends Fragment {
         lineChart = view.findViewById(R.id.monthlyReportChart);
         barChartProfit = view.findViewById(R.id.dateRangeProfitChart);
         barChartReservations = view.findViewById(R.id.dateRangeReservationChart);
+
+        downloadDateRangeReportButton = view.findViewById(R.id.downloadDateRangeReportButton);
+        downloadMonthlyReportButton = view.findViewById(R.id.downMonthlyReportButton);
+
+        setDownloadButtons();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -194,7 +208,7 @@ public class HostReportsFragment extends Fragment {
                     startDate = localDate.format(formatter);
 
                     year = end.getYear();
-                    month = end.getMonth() + 1;
+                    month = end.getMonth();
                     day = end.getDay();
 
                     localDate = LocalDate.of(year, month, day);
@@ -351,4 +365,65 @@ public class HostReportsFragment extends Fragment {
 
         lineChart.invalidate();
     }
+
+
+    private void setDownloadButtons() {
+        downloadMonthlyReportButton.setOnClickListener(v -> {
+            if(isValidToGenerateMonthlyReport()) {
+                String uriString = Consts.BASEURL + "/api/reports/generate-pdf/accommodation/"
+                        +AuthService.id+"/"+selectedAccommodation.getId()+"/"+selectedYear;
+                Log.e("URL", uriString);
+                Uri uri = Uri.parse(uriString);
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setTitle("Month report");
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "monthReport.pdf");
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+                DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                long reference = downloadManager.enqueue(request);
+                Toast.makeText(getActivity(), "Report is successfully downloaded. You can find it in the Downloads folder.", Toast.LENGTH_SHORT).show();
+
+            }else{
+                Toast.makeText(getActivity(), "Please select accommodation and year.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        downloadDateRangeReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isValidToGenerateDateRangeReport()) {
+                    String uriString = Consts.BASEURL + "/api/reports/generate-pdf/date-range/"
+                            +AuthService.id+"?from="+ startDate+"&to="+endDate;
+                    Log.e("URL", uriString);
+                    Uri uri = Uri.parse(uriString);
+                    DownloadManager.Request request = new DownloadManager.Request(uri);
+                    request.setTitle("Date range report");
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "dateRangeReport.pdf");
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+                    DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                    long reference = downloadManager.enqueue(request);
+                    Toast.makeText(getActivity(), "Report is successfully downloaded. You can find it in the Downloads folder.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Please select date range.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private boolean isValidToGenerateDateRangeReport() {
+        if(startDate.equals("") || endDate.equals("")){
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidToGenerateMonthlyReport() {
+        if(selectedAccommodation==null){
+            return false;
+        }
+
+        return true;
+    }
+
+
 }

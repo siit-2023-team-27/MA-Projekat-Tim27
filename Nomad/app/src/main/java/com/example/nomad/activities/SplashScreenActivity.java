@@ -1,9 +1,12 @@
 package com.example.nomad.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,7 +16,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.nomad.R;
-import com.example.nomad.databinding.ActivityHomeBinding;
 import com.example.nomad.databinding.ActivitySplashScreenBinding;
 
 import java.util.Timer;
