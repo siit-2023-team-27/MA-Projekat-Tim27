@@ -19,6 +19,8 @@ import androidx.lifecycle.Observer;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.ReservationResponseDTO;
+import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.helper.Helper;
 import com.example.nomad.services.ReservationService;
 
@@ -82,6 +84,20 @@ public class HostReservationListAdapter extends ArrayAdapter<ReservationResponse
             });
             this.handleAccept(accept, reservation);
             this.handleReject(reject, reservation);
+            if(reservation.getStatus().equals("ACCEPTED")){
+                LinearLayout layout = convertView.findViewById(R.id.buttons);
+
+                Button favorite2 = new Button(activity);
+                favorite2.setText("Report guest");
+                layout.addView(favorite2);
+                favorite2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UserRatingsFragment userRatingsFragment = new UserRatingsFragment(reservation.getUser());
+                        FragmentTransition.to(userRatingsFragment, activity, true, R.id.base_accommodations);
+                    }
+                });
+            }
         }
 
         return convertView;
