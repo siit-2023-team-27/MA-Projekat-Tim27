@@ -33,12 +33,17 @@ import com.example.nomad.activities.SliderAdapter;
 import com.example.nomad.activities.SliderData;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRating;
+import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.ReservationDTO;
+import com.example.nomad.dto.UserDTO;
 import com.example.nomad.fragments.AccommodationCreationHostFragment;
+import com.example.nomad.fragments.AccommodationLocationFragment;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.UserRatingsFragment;
+import com.example.nomad.fragments.reservations.HostReservationsListFragment;
 import com.example.nomad.helper.EventDecorator;
 import com.example.nomad.helper.Helper;
+import com.example.nomad.services.AccommodationService;
 import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.ReservationService;
@@ -63,6 +68,7 @@ public class AccommodationFragment extends Fragment {
     private static final String ARG_PARAM = "accommodation";
     private AccommodationDTO accommodation;
     private MaterialCalendarView calendar;
+    private  CommentListViewModel commentListViewModel = new CommentListViewModel();
     AccomodationsService accomodationsService = new AccomodationsService();
     ReservationService reservationService = new ReservationService();
     AuthService authService = new AuthService();
@@ -90,28 +96,16 @@ public class AccommodationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accommodation, container, false);
-//        mapView = rootView.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//        mapView.getMapAsync(googleMap -> {
-//            LatLng marker = new LatLng(0, 0);
-//            googleMap.addMarker(new MarkerOptions().position(marker).title("Markeeer"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
-//        });
         TextView name = rootView.findViewById(R.id.textView4);
         name.setText(accommodation.getName());
         TextView description = rootView.findViewById(R.id.description);
         description.setText(accommodation.getDescription());
-        // Set rating
-        RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
-        simpleRatingBar.setRating((float) 4.5);
+
         Button back = rootView.findViewById(R.id.back_to_list);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStackImmediate();
-//                FragmentTransition.to(BaseAccommodationFragment.newInstance(), getActivity(), false, R.id.root_linear);
-//                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-//                navController.navigate(R.id.action_accommodation_to_search);
             }
         });
 
@@ -125,7 +119,7 @@ public class AccommodationFragment extends Fragment {
         this.handleReservation(rootView);
         this.setImages(rootView);
         this.setAmenities(rootView);
-//        this.setComments(rootView);
+        this.setAccomodationComments(rootView);
         return rootView;
     }
 
@@ -144,7 +138,35 @@ public class AccommodationFragment extends Fragment {
             }
         });
         v.setNestedScrollingEnabled(true);
+
+        Button showLocation = view.findViewById(R.id.show_location);
+        showLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccommodationLocationFragment locationFragment = AccommodationLocationFragment.newInstance(true, "t");
+                locationFragment.setAccommodation(accommodation);
+                FragmentTransition.to(locationFragment, getActivity(), true, R.id.base_accommodations);
+
+            }
+        });
         
+    }
+
+    public void setAccomodationComments(View rootView){
+        commentListViewModel.getComments(accommodation.getId());
+        commentListViewModel.getElements().observe(getActivity(), new Observer<List<AccommodationRatingDTO>>() {
+            @Override
+            public void onChanged(List<AccommodationRatingDTO> accommodationRatingDTOS) {
+                accommodation.setRatings(accommodationRatingDTOS);
+                // Set rating
+                RatingBar simpleRatingBar = rootView.findViewById(R.id.ratingBar);
+                float avg = accommodation.getAverageGrade();
+                simpleRatingBar.setRating( avg);
+                TextView ratingNum = rootView.findViewById(R.id.textView6);
+                ratingNum.setText(String.valueOf( avg));
+            }
+
+        });
     }
 
     public void setAmenities(View rootView){

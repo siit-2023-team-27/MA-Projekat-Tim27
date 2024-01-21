@@ -79,7 +79,7 @@ public class AccommodationLocationFragment extends Fragment {
     List<Marker> markers = new ArrayList<>();
 
 
-
+    private boolean isBackNeeded;
 
     public AccommodationLocationFragment(AccommodationDTO accommodation) {
         super(R.layout.fragment_accommodation_location);
@@ -93,26 +93,16 @@ public class AccommodationLocationFragment extends Fragment {
 
     public void setAccommodation(AccommodationDTO accommodation) {
         this.accommodation = accommodation;
-        Log.i("ADRESA", "set Ac: " +  accommodation.getAddress());
     }
 
     public AccommodationLocationFragment() {
     }
 
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccommodationLocationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccommodationLocationFragment newInstance(String param1, String param2) {
+    public static AccommodationLocationFragment newInstance(Boolean isBackNeeded, String param2) {
         AccommodationLocationFragment fragment = new AccommodationLocationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putBoolean(ARG_PARAM1, isBackNeeded);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -122,7 +112,7 @@ public class AccommodationLocationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            isBackNeeded = getArguments().getBoolean(ARG_PARAM1);
         }
 
     }
@@ -143,6 +133,9 @@ public class AccommodationLocationFragment extends Fragment {
 //        getActivity().setContentView(R.layout.activity_main);
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+
+
+
 
         nextButton = (Button)view.findViewById(R.id.NextButton);
         nextButton.setEnabled(false);
@@ -205,6 +198,28 @@ public class AccommodationLocationFragment extends Fragment {
         MapEventsOverlay overlay = new MapEventsOverlay(getContext(), mReceive);
         map.getOverlays().add(overlay);
 
+        nextButton = view.findViewById(R.id.NextButton);
+        nextButton.setEnabled(false);
+        Button backButton = view.findViewById(R.id.backButton);
+        backButton.setEnabled(false);
+        if(isBackNeeded){
+            backButton.setEnabled(true);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    backFragment();
+                }
+            });
+        }
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
+                calendarFragment.setAccommodation(accommodation);
+                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
+            }
+        });
     }
     public void click(View view){
         map.invalidate();
@@ -230,6 +245,9 @@ public class AccommodationLocationFragment extends Fragment {
         calendarFragment.setAccommodation(accommodation);
         FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
+    }
+    public void backFragment(){
+        getFragmentManager().popBackStackImmediate();
     }
 
     public void setLocation() {

@@ -26,6 +26,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
@@ -33,9 +34,12 @@ import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.ReportUserFragment;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.fragments.accommodations.SearchedAccommodationListFragment;
+import com.example.nomad.fragments.reservations.GuestReservationsListFragment;
 import com.example.nomad.helper.Helper;
+import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.ReservationService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -49,11 +53,13 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
     private ArrayList<ReservationResponseDTO> reservations;
     private FragmentActivity activity;
     ReservationService reservationService = new ReservationService();
+    AccomodationsService accomodationsService = new AccomodationsService();
     private boolean isRequestsPage;
 
     public GuestReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity, boolean isRequestsPage){
         super(context, R.layout.guest_reservations_card, accommodations);
         this.reservations = accommodations;
+        loadAccommodations();
         this.activity = activity;
         this.isRequestsPage = isRequestsPage;
     }
@@ -103,24 +109,24 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                 handleDelete(delete, reservation);
             }else{
                 handleCancel(delete, reservation);
+                if(reservation.getStatus().equals("ACCEPTED")){
+                    LinearLayout layout = convertView.findViewById(R.id.buttons);
+
+                    Button favorite2 = new Button(activity);
+                    favorite2.setText("Report and comment host");
+                    layout.addView(favorite2);
+                    favorite2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserRatingsFragment userRatingsFragment = new UserRatingsFragment(reservation.getAccommodationDetails().getHostId());
+                            FragmentTransition.to(userRatingsFragment, activity, true, R.id.base_accommodations);
+                        }
+                    });
+                }
+
             }
 
-            LinearLayout layout = convertView.findViewById(R.id.buttons);
-            Button favorite = new Button(activity);
-            favorite.setText("Report user");
-            layout.addView(favorite);
-            favorite.setOnClickListener(v -> {
 
-            });
-
-            Button favorite2 = new Button(activity);
-            favorite2.setText("Report and comment host");
-            layout.addView(favorite2);
-            favorite2.setOnClickListener(v -> {
-                // Handle click on the item at 'position'
-                //FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, true, R.id.base_accommodations);
-
-            });
 
         }
 
@@ -142,6 +148,7 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                         if(responseSuccessful){
                             Toast.makeText(getContext(), "Reservation cancelled successfully", Toast.LENGTH_SHORT).show();
                             reservationService.setRefreshReservations(true);
+                            HomeActivity.notificationService.sendNotification("Your reservation has been canceled.", "Canceled reservation", "RESERVATION_CANCELED", reservation.getAccommodationDetails().getHostId());
                         }else{
                             Toast.makeText(getContext(), "Reservation not cancelled", Toast.LENGTH_SHORT).show();
                         }
@@ -179,5 +186,19 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
 
             }
         });
+    }
+
+    private void loadAccommodations(){
+        final int[] counter = {0};
+        for (ReservationResponseDTO r: reservations) {
+            accomodationsService.loadAccommodation(r.getAccommodation());
+            accomodationsService.getAccommodation().observe(activity, new Observer<AccommodationDTO>() {
+                @Override
+                public void onChanged(AccommodationDTO objects) {
+                    r.setAccommodationDetails(objects);
+                }
+            });
+
+        }
     }
 }
