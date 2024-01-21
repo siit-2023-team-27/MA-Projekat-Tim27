@@ -18,10 +18,15 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.helper.Helper;
+import com.example.nomad.services.AccommodationService;
+import com.example.nomad.services.AccomodationsService;
+import com.example.nomad.services.NotificationService;
 import com.example.nomad.services.ReservationService;
 
 import java.util.ArrayList;
@@ -30,11 +35,13 @@ public class HostReservationListAdapter extends ArrayAdapter<ReservationResponse
     private ArrayList<ReservationResponseDTO> reservations;
     private FragmentActivity activity;
     ReservationService reservationService = new ReservationService();
+    AccomodationsService accommodationService = new AccomodationsService();
     private boolean isRequestsPage;
 
     public HostReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity){
         super(context, R.layout.host_reservations_card, accommodations);
         this.reservations = accommodations;
+        loadAccommodations();
         this.activity = activity;
         this.isRequestsPage = isRequestsPage;
     }
@@ -117,6 +124,8 @@ public class HostReservationListAdapter extends ArrayAdapter<ReservationResponse
                         if(responseSuccessful){
                             Toast.makeText(getContext(), "Reservation accepted successfully", Toast.LENGTH_SHORT).show();
                             reservationService.setRefreshHostReservations(true);
+                            HomeActivity.notificationService.sendNotification("Your received response to your reservation request. Your reservation is ACCEPTED",
+                                    "Request response", "REQUEST_RESPONSE", reservation.getUser());
                         }else{
                             Toast.makeText(getContext(), "Reservation not accepted", Toast.LENGTH_SHORT).show();
                         }
@@ -143,6 +152,8 @@ public class HostReservationListAdapter extends ArrayAdapter<ReservationResponse
                         if(responseSuccessful){
                             Toast.makeText(getContext(), "Reservation rejected successfully", Toast.LENGTH_SHORT).show();
                             reservationService.setRefreshHostReservations(true);
+                            HomeActivity.notificationService.sendNotification("Your received response to your reservation request. Your reservation is REJECTED",
+                                    "Request response", "REQUEST_RESPONSE", reservation.getUser());
                         }else{
                             Toast.makeText(getContext(), "Reservation not rejected", Toast.LENGTH_SHORT).show();
                         }
@@ -153,5 +164,19 @@ public class HostReservationListAdapter extends ArrayAdapter<ReservationResponse
 
             }
         });
+    }
+
+    private void loadAccommodations(){
+        final int[] counter = {0};
+        for (ReservationResponseDTO r: reservations) {
+            accommodationService.loadAccommodation(r.getAccommodation());
+            accommodationService.getAccommodation().observe(activity, new Observer<AccommodationDTO>() {
+                @Override
+                public void onChanged(AccommodationDTO objects) {
+                    r.setAccommodationDetails(objects);
+                }
+            });
+
+        }
     }
 }
