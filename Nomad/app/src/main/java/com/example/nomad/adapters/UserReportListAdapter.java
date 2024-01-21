@@ -87,15 +87,16 @@ public class UserReportListAdapter extends ArrayAdapter<UserReportDetailsDTO> {
         Button archiveButton = convertView.findViewById(R.id.archiveUserReportButton);
         Button acceptButton = convertView.findViewById(R.id.acceptUserReportButton);
 //        FragmentAddAccommodationComment fragmentAddAccommodationComment = ().getBottomDrawerFragment();
-
+        acceptButton.setVisibility(View.VISIBLE);
+        archiveButton.setVisibility(View.VISIBLE);
         if(report != null){
             reportedNameView.setText(report.getReportedUserName());
             reportingNameView.setText(report.getReportingUserName());
             reasonView.setText(report.getReason());
             statusView.setText(report.getReportStatus());
-            if(report.getReportStatus()!="PENDING"){
-                acceptButton.setVisibility(View.INVISIBLE);
-                archiveButton.setVisibility(View.INVISIBLE);
+            if(!report.getReportStatus().contains("PENDING")){
+                acceptButton.setVisibility(View.GONE);
+                archiveButton.setVisibility(View.GONE);
 
                 acceptButton.setEnabled(false);
                 archiveButton.setEnabled(false);
