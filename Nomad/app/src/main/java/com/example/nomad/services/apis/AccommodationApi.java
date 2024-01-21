@@ -85,6 +85,11 @@ public interface AccommodationApi {
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
     @GET("accommodations/{id}")
     public Call<AccommodationDTO> getAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("favourites/guest/{guestId}")
+    public Call<Collection<AccommodationDTO>> getFavourites(@Path("guestId") Long guestId, @Header("Authorization") String authHeader);
+
+    @PUT("favourites/like-dislike/{accommodationId}/{guestId}")
+    public Call<Boolean> addToFavourite(@Path("accommodationId") long accommodationId, @Path("guestId") long guestId, @Header("Authorization") String authHeader);
 
     @GET("accommodations/search-filter")
     public Call<Collection<SearchAccommodationDTO>> getFilteredAndSearched(@Query("city") String city, @Query("from") String from,

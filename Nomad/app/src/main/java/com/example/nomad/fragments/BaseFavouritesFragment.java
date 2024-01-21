@@ -1,4 +1,4 @@
-package com.example.nomad.fragments.accommodations;
+package com.example.nomad.fragments;
 
 import android.os.Bundle;
 
@@ -9,19 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.nomad.R;
-import com.example.nomad.databinding.FragmentAccommodationListBinding;
-import com.example.nomad.databinding.FragmentAccommodationsPageBinding;
 import com.example.nomad.databinding.FragmentBaseAccommodationBinding;
-import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.accommodations.AccommodationsPageFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BaseAccommodationFragment#newInstance} factory method to
+ * Use the {@link BaseFavouritesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BaseAccommodationFragment extends Fragment {
+public class BaseFavouritesFragment extends Fragment {
+
     private FragmentBaseAccommodationBinding binding;
-    public BaseAccommodationFragment() {
+    public BaseFavouritesFragment() {
         // Required empty public constructor
     }
     public static AccommodationsPageFragment newInstance() {
@@ -41,7 +40,7 @@ public class BaseAccommodationFragment extends Fragment {
         binding = FragmentBaseAccommodationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        FragmentTransition.to(AccommodationsPageFragment.newInstance(), getActivity(), false, R.id.base_accommodations);
+        FragmentTransition.to(FavouritesFragment.newInstance(), getActivity(), false, R.id.base_accommodations);
 
         return root;
     }

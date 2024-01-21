@@ -19,7 +19,7 @@
             android:ems="10"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="1dp"
-            android:text="Back to search"
+            android:text="Back"
             tools:ignore="TextContrastCheck" />
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/imageSlider"

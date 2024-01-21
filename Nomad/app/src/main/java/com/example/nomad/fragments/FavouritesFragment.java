@@ -3,12 +3,22 @@ package com.example.nomad.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.nomad.R;
+import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.fragments.accommodations.AccommodationListFragment;
+import com.example.nomad.fragments.reservations.GuestReservationsFragment;
+import com.example.nomad.services.AccomodationsService;
+import com.example.nomad.services.AuthService;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,42 +35,45 @@ public class FavouritesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    public static ArrayList<AccommodationDTO> accommodations;
+
+    AccomodationsService accomodationsService = new AccomodationsService();
+    AuthService authService = new AuthService();
+    public static FavouritesFragment newInstance() {
+        return new FavouritesFragment();
+    }
 
     public FavouritesFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavouritesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavouritesFragment newInstance(String param1, String param2) {
-        FavouritesFragment fragment = new FavouritesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourites, container, false);
+        View root = inflater.inflate(R.layout.fragment_favourites, container, false);
+        this.prepareProductList();
+        return root;
+    }
+    private void prepareProductList(){
+        accomodationsService.loadFavourites(authService.getId());
+        accomodationsService.getFavourites().observe(getActivity(), new Observer<Collection<AccommodationDTO>>() {
+            @Override
+            public void onChanged(Collection<AccommodationDTO> objects) {
+                // Update your UI or perform any actions when LiveData changes
+
+                // Now, you can convert the LiveData to a List if needed
+                accommodations = (ArrayList<AccommodationDTO>) objects;
+                // Do something with the list
+                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations, true), getActivity(), true, R.id.scroll_products_list);
+            }
+        });
+
     }
 }

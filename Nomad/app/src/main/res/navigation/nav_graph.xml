@@ -21,9 +21,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_favourites"
-        android:name="com.example.nomad.fragments.FavouritesFragment"
+        android:name="com.example.nomad.fragments.BaseFavouritesFragment"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites"
+        tools:layout="@layout/fragment_base_favourites"
         app:popUpTo="@+id/nav_search"
         app:popUpToInclusive="true"/>
     <fragment
