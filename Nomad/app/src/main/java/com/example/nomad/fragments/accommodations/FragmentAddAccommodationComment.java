@@ -91,7 +91,7 @@ public class FragmentAddAccommodationComment extends BottomSheetDialogFragment {
         commentListViewModel.addComment(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.commentListViewModel.getElements().getValue().size()));
-        accomodationsService.canRate(accommodationId, AuthService.id);
+
         HomeActivity.notificationService.sendNotification("New comment on your accommodation", "New Comment", "NEW_ACCOMMODATION_RATING", accommodationDTO.getHostId());
         this.dismiss();
     }

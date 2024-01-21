@@ -40,6 +40,7 @@ public class CommentListViewModel extends ViewModel {
                 comments.setValue(new ArrayList<>(response.body().stream().collect(Collectors.toList())));
                 Log.d("onResponse: ", comments.toString());
 
+
             }
 
             @Override
@@ -60,6 +61,8 @@ public class CommentListViewModel extends ViewModel {
 //                Log.d("onResponse: ", response.message());
 //                Log.d("onResponse: ", response.body());
                 getComments(accommodationRatingCreationDTO.getRatedId());
+                AccomodationsService.canRate(accommodationRatingCreationDTO.getRatedId(), AuthService.id);
+                AccomodationsService.getComment(accommodationRatingCreationDTO.getRatedId());
             }
 
             @Override
@@ -80,6 +83,7 @@ public class CommentListViewModel extends ViewModel {
                 Log.d("onResponse: ", String.valueOf(response.code()));
                 AccomodationsService.setOwnCommentId(-1L);
                 getComments(accommodationDTO.getId());
+                AccomodationsService.canRate(accommodationDTO.getId(), AuthService.id);
             }
 
             @Override

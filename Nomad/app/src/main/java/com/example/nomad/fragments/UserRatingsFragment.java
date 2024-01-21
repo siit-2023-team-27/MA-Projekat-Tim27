@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class UserRatingsFragment extends ListFragment implements ICanRateListene
     private ListView list;
     private FloatingActionButton addRatingButton;
     private FloatingActionButton reportButton;
+    private FloatingActionButton deleteUserRating;
     private Long userId;
 
     public UserRatingsFragment(Long userId) {
@@ -96,7 +98,22 @@ public class UserRatingsFragment extends ListFragment implements ICanRateListene
             }
         });
         userRatingsViewModel.canRate(userId, AuthService.id);
+        
+        deleteUserRating = view.findViewById(R.id.deleteUserRatingButton);
+        deleteUserRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                showBottomDrawer();
+                deleteRating();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void deleteRating() {
+        userRatingsViewModel.deleteOwnRating(userId);
+        userRatingsViewModel.canRate(userId, AuthService.id);
+        userRatingsViewModel.getComments(userId);
     }
 
     private void showBottomDrawer() {
@@ -119,5 +136,13 @@ public class UserRatingsFragment extends ListFragment implements ICanRateListene
     @Override
     public void canRateChanged() {
         addRatingButton.setEnabled(UserRatingsViewModel.canRate);
+        if(userRatingsViewModel.getOwnRatingId() == -1){
+            addRatingButton.setVisibility(View.VISIBLE);
+            deleteUserRating.setVisibility(View.GONE);
+        }else{
+
+            addRatingButton.setVisibility(View.GONE);
+            deleteUserRating.setVisibility(View.VISIBLE);
+        }
     }
 }

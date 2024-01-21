@@ -6,11 +6,13 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.RatingCreationDTO;
 import com.example.nomad.dto.RatingDTO;
 import com.example.nomad.services.AccommodationClient;
+import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
 import com.example.nomad.services.ICanRateListener;
 import com.example.nomad.services.UserClient;
@@ -30,6 +32,18 @@ public class UserRatingsViewModel {
     }
     private ArrayList<ICanRateListener> listeners = new ArrayList<>();
     public static boolean canRate = true;
+    private static Long ownRatingId = -1L;
+
+    public void setOwnRatingId(Long id){
+        ownRatingId = id;
+        if(ownRatingId == null){
+            ownRatingId = -1L;
+        }
+        emmitCanRate();
+    }
+    public Long getOwnRatingId(){
+        return ownRatingId;
+    }
     public void subscribeCanRate(ICanRateListener canRateListener){
         listeners.add(canRateListener);
     }
@@ -49,6 +63,8 @@ public class UserRatingsViewModel {
 //                Log.d("onResponse: ", response.message());
 //                Log.d("onResponse: ", response.body());
                 comments.setValue(new ArrayList<>(response.body().stream().collect(Collectors.toList())));
+                canRate(userId, AuthService.id);
+                hasRating(userId);
                 Log.d("onResponse: ", comments.toString());
 
             }
@@ -75,6 +91,7 @@ public class UserRatingsViewModel {
                     Log.d("canRateResponse: ", String.valueOf(canRate));
 
                 }
+                hasRating(hostId);
                 emmitCanRate();
             }
 
@@ -103,6 +120,42 @@ public class UserRatingsViewModel {
                 Log.d("onResponse: ", t.getMessage());
             }
 
+        });
+    }
+    public void deleteOwnRating(Long hostId) {
+        Call<RatingDTO> call = UserClient.getInstance().getMyApi().deleteRating(ownRatingId, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<RatingDTO>() {
+            @Override
+            public void onResponse(Call<RatingDTO> call, Response<RatingDTO> response) {
+
+                Log.d("OnDelete: ", String.valueOf(response.code()));
+                AccomodationsService.setOwnCommentId(-1L);
+                getComments(hostId);
+                canRate(hostId, AuthService.id);
+            }
+
+            @Override
+            public void onFailure(Call<RatingDTO> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
+                Log.d("onResponse: ", t.getMessage());
+            }
+
+        });
+    }
+    public void hasRating(Long hostId) {
+        Call<Long> call = UserClient.getInstance().getMyApi().hasRating(AuthService.id, hostId, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                Log.d("onResponse: ", String.valueOf(response.code()));
+                setOwnRatingId(response.body());
+                emmitCanRate();
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Log.d("Failure: ", t.getMessage());
+            }
         });
     }
 
