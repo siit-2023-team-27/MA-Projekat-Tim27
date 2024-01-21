@@ -7,17 +7,27 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.nomad.activities.HomeActivity;
+import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.NotificationDTO;
+import com.example.nomad.enums.NotificationType;
 import com.example.nomad.helper.Consts;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
@@ -27,6 +37,8 @@ public class NotificationService {
     private static StompClient stompClient;
     public NotificationService(HomeActivity activity){
         this.activity = activity;
+    }
+    public NotificationService(){
     }
     @SuppressLint("CheckResult")
     public void setUpWebSocket(){
@@ -60,7 +72,7 @@ public class NotificationService {
         JSONObject jsonObject = new JSONObject(notificationStr);
         notification.setText(jsonObject.getString("text"));
         notification.setTitle(jsonObject.getString("title"));
-        notification.setNotificationType(jsonObject.getString("notificationType"));
+        notification.setNotificationType(NotificationType.valueOf(jsonObject.getString("notificationType")));
 //        notification.setNotificationType(jsonObject.getString("notificationType"));
     }
     private void showNotification() {
@@ -87,13 +99,42 @@ public class NotificationService {
     }
     public void sendNotification(String text, String title, String type, Long targetUser){
         NotificationDTO notificationToSend = new NotificationDTO();
-        notificationToSend.setNotificationType(type);
+        notificationToSend.setNotificationType(NotificationType.valueOf(type));
         notificationToSend.setText(text);
         notificationToSend.setTitle(title);
-        notificationToSend.setDate(new Date());
-        notificationToSend.setTargetAppUser(targetUser.toString());
+        notificationToSend.setDate(new Date().getTime());
+        notificationToSend.setTargetAppUser(targetUser);
         String jsonNotification =  new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create().toJson(notificationToSend);
         stompClient.send("/socket-subscriber/send/message", jsonNotification).subscribe();
+    }
+
+    private MutableLiveData<List<NotificationDTO>> notifications = new MutableLiveData<>();
+    public MutableLiveData<List<NotificationDTO>> getNotifications() {
+        return this.notifications;
+    }
+
+    public void getAllNotificationsForUser(Long userId) {
+        Call<ArrayList<NotificationDTO>> call = NotificationClient.getInstance().getMyApi().getNotificationsForUser(userId, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<ArrayList<NotificationDTO>>() {
+            @Override
+            public void onResponse(Call<ArrayList<NotificationDTO>> call, Response<ArrayList<NotificationDTO>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<NotificationDTO> objects = response.body();
+                    notifications.setValue(objects);
+                    Log.i("onResponse", "SUCCESS");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                }else{
+                    Log.e("onResponse", "FAIL");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<NotificationDTO>> call, Throwable t) {
+                Log.e("OnFailure", t.toString());
+                Log.e("OnFailure", t.getLocalizedMessage());
+
+            }
+        });
     }
 }

@@ -1,16 +1,25 @@
 package com.example.nomad.dto;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import com.example.nomad.enums.NotificationType;
+
 import java.util.Date;
 
 public class NotificationDTO {
+
     private String text;
     private String title;
-    private String targetAppUser;
-    private Date date;
-    private String notificationType;
+    private Long targetAppUser;
+    private Long date;
+    private Date dateD;
+    private NotificationType notificationType;
 
-    public NotificationDTO(String text, String title, String targetAppUser, Date date, String notificationType) {
+    public NotificationDTO(String text, String title, Long targetAppUser, Long date, NotificationType notificationType) {
         this.text = text;
         this.title = title;
         this.targetAppUser = targetAppUser;
@@ -18,6 +27,17 @@ public class NotificationDTO {
         this.notificationType = notificationType;
     }
     public NotificationDTO(){}
+
+    protected NotificationDTO(Parcel in) {
+        text = in.readString();
+        title = in.readString();
+        if (in.readByte() == 0) {
+            targetAppUser = null;
+        } else {
+            targetAppUser = in.readLong();
+        }
+    }
+
     public String getText() {
         return text;
     }
@@ -34,27 +54,28 @@ public class NotificationDTO {
         this.title = title;
     }
 
-    public String getTargetAppUser() {
+    public Long getTargetAppUser() {
         return targetAppUser;
     }
 
-    public void setTargetAppUser(String targetAppUser) {
+    public void setTargetAppUser(Long targetAppUser) {
         this.targetAppUser = targetAppUser;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
-    public String getNotificationType() {
+    public NotificationType getNotificationType() {
         return notificationType;
     }
 
-    public void setNotificationType(String notificationType) {
+    public void setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
     }
+
 }
