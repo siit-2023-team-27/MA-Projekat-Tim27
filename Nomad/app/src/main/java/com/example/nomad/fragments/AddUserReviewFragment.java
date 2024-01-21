@@ -16,6 +16,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.nomad.R;
+import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.RatingCreationDTO;
 import com.example.nomad.fragments.accommodations.CommentListViewModel;
@@ -36,11 +37,17 @@ public class AddUserReviewFragment extends BottomSheetDialogFragment {
     RatingBar reviewRating;
     AccomodationsService accomodationsService = new AccomodationsService();
     UserRatingsViewModel userRatingsViewModel;
+    private Long userId;
     public AddUserReviewFragment(UserRatingsViewModel userRatingsViewModel) {
         this.userRatingsViewModel = userRatingsViewModel;
     }
     public AddUserReviewFragment(){
 
+    }
+
+    public AddUserReviewFragment(UserRatingsViewModel userRatingsViewModel, Long userId) {
+        this.userRatingsViewModel = userRatingsViewModel;
+        this.userId = userId;
     }
 
     public static FragmentAddAccommodationComment newInstance(String param1, String param2) {
@@ -81,7 +88,7 @@ public class AddUserReviewFragment extends BottomSheetDialogFragment {
     }
     private void addComment(){
         RatingCreationDTO commentDTO = new RatingCreationDTO();
-        commentDTO.setRatedId(1L);
+        commentDTO.setRatedId(userId);
         commentDTO.setRating((int)Math.floor(reviewRating.getRating()));
         commentDTO.setText(ratingText.getText().toString());
         commentDTO.setUserId(AuthService.id);
@@ -89,6 +96,8 @@ public class AddUserReviewFragment extends BottomSheetDialogFragment {
         userRatingsViewModel.addRating(commentDTO);
         Toast.makeText(this.getContext(), "Added comment", Toast.LENGTH_SHORT);
         Log.d("addComment: ", String.valueOf(this.userRatingsViewModel.getElements().getValue().size()));
+        HomeActivity.notificationService.sendNotification("New Rating on your account", "New Rating", "NEW_RATING", userId);
+
         this.dismiss();
     }
 }

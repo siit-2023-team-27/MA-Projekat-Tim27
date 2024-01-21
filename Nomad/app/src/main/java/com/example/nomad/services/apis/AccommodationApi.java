@@ -7,6 +7,7 @@ import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.dto.AddCommentReportDTO;
 import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.AppUser;
+import com.example.nomad.dto.CommentReportDetailsDTO;
 import com.example.nomad.dto.DateRange;
 import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.dto.SearchAccommodationDTO;
@@ -59,15 +60,26 @@ public interface AccommodationApi {
     public Call<AccommodationRatingCreationDTO> addComment(@Body AccommodationRatingCreationDTO accommodationRatingCreationDTO, @Header("Authorization") String authHeader);
     @POST("comment-reports")
     public Call<AddCommentReportDTO> reportComment(@Body AddCommentReportDTO addCommentReportDTO, @Header("Authorization") String authHeader);
+    @GET("accommodation-ratings/can-rate/{accommodationId}/{userId}")
+    public Call<Boolean> canRate(@Path("accommodationId") Long accommodationId, @Path("userId") Long userId,@Header("Authorization") String authHeader);
     @GET("accommodation-ratings/for-accommodation/{id}")
     public Call<Collection<AccommodationRatingDTO>> getComments(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @GET("comment-reports/details")
+    public Call<Collection<CommentReportDetailsDTO>> getCommentReports(@Header("Authorization") String authHeader);
 
     @GET("accommodations/unverified")
     public Call<ArrayList<AccommodationDTO>> getUnverified(@Header("Authorization") String authHeader);
+    @GET("accommodation-ratings/comment/{userId}/{accommodationId}")
+    public Call<Long> getCommentForUserAndAccommodation(@Path("userId") Long userId, @Path("accommodationId") Long accommodationId, @Header("Authorization") String authHeader);
+    @DELETE("accommodation-ratings/{accommodationId}")
+    public Call<AccommodationDTO> deleteAccommodationRating(@Path("accommodationId") Long accommodationId, @Header("Authorization") String authHeader);
 
     @PUT("accommodations/verify/{id}")
     public Call<AccommodationDTO> verifyAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
-
+    @PUT("comment-reports/accept/{id}")
+    public Call<CommentReportDetailsDTO> acceptCommentReport(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @PUT("comment-reports/accept/{id}")
+    public Call<CommentReportDetailsDTO> archiveCommentReport(@Path("id") Long id, @Header("Authorization") String authHeader);
     @DELETE("accommodations/{id}")
     public Call<AccommodationDTO> deleteAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
 

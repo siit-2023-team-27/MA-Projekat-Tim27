@@ -1,30 +1,21 @@
 package com.example.nomad.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationRatingDTO;
-import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.accommodations.AccommodationCommentFragment;
-import com.example.nomad.fragments.accommodations.AccommodationFragment;
-import com.example.nomad.fragments.accommodations.FragmentAddAccommodationComment;
-import com.example.nomad.model.AccommodationDTO;
 import com.example.nomad.services.AccomodationsService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -88,8 +79,8 @@ public class CommentListAdapter extends ArrayAdapter<AccommodationRatingDTO> {
                     parent, false);
         }
 
-        TextView nameView = convertView.findViewById(R.id.nameView);
-        TextView commentView = convertView.findViewById(R.id.commentView);
+        TextView nameView = convertView.findViewById(R.id.reportingNameView);
+        TextView commentView = convertView.findViewById(R.id.reportedNameView);
         RatingBar rating = convertView.findViewById(R.id.commentRatingBar);
         FloatingActionButton commentReportButton = convertView.findViewById(R.id.commentReportButton);
 //        FragmentAddAccommodationComment fragmentAddAccommodationComment = ().getBottomDrawerFragment();

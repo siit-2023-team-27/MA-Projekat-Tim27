@@ -108,6 +108,16 @@
         android:label="fragment_comments"
         tools:layout="@layout/fragment_accommodation_creation_host" />
     <fragment
+        android:id="@+id/nav_user_reports"
+        android:name="com.example.nomad.fragments.UserReportsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_user_reports" />
+    <fragment
+        android:id="@+id/nav_comment_reports"
+        android:name="com.example.nomad.fragments.CommentReportFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comment_report" />
+    <fragment
         android:id="@+id/nav_accommodation_details"
         android:name="com.example.nomad.fragments.accommodations.AccommodationFragment"
         android:label="fragment_accommodation"
@@ -116,6 +126,7 @@
             android:id="@+id/action_accommodation_to_search"
             app:destination="@id/nav_search" />
         </fragment>
+
 
     <fragment
         android:id="@+id/nav_listing"

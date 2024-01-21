@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.core.widget.NestedScrollView
+    android:id="@+id/nestedScrollView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -39,7 +42,16 @@
             app:sliderIndicatorRadius="2dp"
             app:sliderIndicatorSelectedColor="#5A5A5A"
             app:sliderIndicatorUnselectedColor="#FFF"
-            app:sliderScrollTimeInSec="1" />
+            app:sliderScrollTimeInSec="1" >
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/hostActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/baseline_account_circle_24" />
+        </com.smarteist.autoimageslider.SliderView>
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
@@ -169,21 +181,21 @@
             android:text="Location"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:apiKey="AIzaSyAxj9NM79Qi34jP5wtLXNA9DO05RsUPoXM"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-            app:mapType="normal"
-            tools:ignore="MissingClass" />
+<!--        <com.google.android.gms.maps.MapView-->
+<!--            android:id="@+id/mapView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:apiKey="AIzaSyAxj9NM79Qi34jP5wtLXNA9DO05RsUPoXM"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            app:mapType="normal"-->
+<!--            tools:ignore="MissingClass" />-->
 
         <LinearLayout
             android:id="@+id/comments_container"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
@@ -197,5 +209,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>

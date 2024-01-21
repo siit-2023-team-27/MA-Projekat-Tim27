@@ -6,10 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.AccommodationRatingCreationDTO;
 import com.example.nomad.dto.AccommodationRatingDTO;
 import com.example.nomad.services.AccommodationClient;
+import com.example.nomad.services.AccomodationsService;
 import com.example.nomad.services.AuthService;
+import com.example.nomad.services.NotificationService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +40,7 @@ public class CommentListViewModel extends ViewModel {
                 comments.setValue(new ArrayList<>(response.body().stream().collect(Collectors.toList())));
                 Log.d("onResponse: ", comments.toString());
 
+
             }
 
             @Override
@@ -57,6 +61,8 @@ public class CommentListViewModel extends ViewModel {
 //                Log.d("onResponse: ", response.message());
 //                Log.d("onResponse: ", response.body());
                 getComments(accommodationRatingCreationDTO.getRatedId());
+                AccomodationsService.canRate(accommodationRatingCreationDTO.getRatedId(), AuthService.id);
+                AccomodationsService.getComment(accommodationRatingCreationDTO.getRatedId());
             }
 
             @Override
@@ -68,4 +74,24 @@ public class CommentListViewModel extends ViewModel {
         });
     }
 
+    public void deleteOwnComment(AccommodationDTO accommodationDTO) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().deleteAccommodationRating(AccomodationsService.ownCommentId, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+
+                Log.d("onResponse: ", String.valueOf(response.code()));
+                AccomodationsService.setOwnCommentId(-1L);
+                getComments(accommodationDTO.getId());
+                AccomodationsService.canRate(accommodationDTO.getId(), AuthService.id);
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
+                Log.d("onResponse: ", t.getMessage());
+            }
+
+        });
+    }
 }

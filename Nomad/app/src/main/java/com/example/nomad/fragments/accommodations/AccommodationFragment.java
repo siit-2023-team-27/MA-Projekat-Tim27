@@ -1,5 +1,8 @@
 package com.example.nomad.fragments.accommodations;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +20,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,6 +36,7 @@ import com.example.nomad.dto.AccommodationRating;
 import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.helper.EventDecorator;
 import com.example.nomad.helper.Helper;
 import com.example.nomad.services.AccomodationsService;
@@ -39,6 +46,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -58,6 +66,7 @@ public class AccommodationFragment extends Fragment {
     AccomodationsService accomodationsService = new AccomodationsService();
     ReservationService reservationService = new ReservationService();
     AuthService authService = new AuthService();
+    FloatingActionButton hostActionButton;
 
     public static AccommodationFragment newInstance(AccommodationDTO accommodation) {
         AccommodationFragment fragment = new AccommodationFragment();
@@ -81,13 +90,13 @@ public class AccommodationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accommodation, container, false);
-        mapView = rootView.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(googleMap -> {
-            LatLng marker = new LatLng(0, 0);
-            googleMap.addMarker(new MarkerOptions().position(marker).title("Markeeer"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
-        });
+//        mapView = rootView.findViewById(R.id.mapView);
+//        mapView.onCreate(savedInstanceState);
+//        mapView.getMapAsync(googleMap -> {
+//            LatLng marker = new LatLng(0, 0);
+//            googleMap.addMarker(new MarkerOptions().position(marker).title("Markeeer"));
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+//        });
         TextView name = rootView.findViewById(R.id.textView4);
         name.setText(accommodation.getName());
         TextView description = rootView.findViewById(R.id.description);
@@ -106,12 +115,36 @@ public class AccommodationFragment extends Fragment {
             }
         });
 
+        AccommodationCommentFragment fragment = new AccommodationCommentFragment(accommodation.getId(), accommodation);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        // on below line replacing the fragment in child container with child fragment.
+        transaction.replace(R.id.comments_container, fragment).commit();
+
         this.setCalendar(rootView);
         this.handleReservation(rootView);
         this.setImages(rootView);
         this.setAmenities(rootView);
-        this.setComments(rootView);
+//        this.setComments(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        NestedScrollView v = view.findViewById(R.id.nestedScrollView);
+        hostActionButton = view.findViewById(R.id.hostActionButton);
+        hostActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                UserRatingsFragment userRatingsFragment = new UserRatingsFragment(accommodation.getHostId());
+                FragmentTransition.to(userRatingsFragment, getActivity(), true, R.id.base_accommodations);
+
+            }
+        });
+        v.setNestedScrollingEnabled(true);
+        
     }
 
     public void setAmenities(View rootView){
@@ -166,6 +199,7 @@ public class AccommodationFragment extends Fragment {
                 List<CalendarDay> selectedDates = calendar.getSelectedDates();
                 for (CalendarDay date : selectedDates){
                     Log.i("ShopApp", "Selected: " + date.toString());
+
                 }
                 reservationService.create(new ReservationDTO(authService.getId(),
                         accommodation.getId(), Helper.toDate(selectedDates.get(0)),
@@ -245,6 +279,26 @@ public class AccommodationFragment extends Fragment {
             layoutComments.addView(linearLayout);
             layoutComments.addView(description2);
         }
+    }
+    private void sendNotification(String message) {
+        String CHANNEL_ID = "1";
+        int NOTIFICATION_ID = 0;
+        Log.d("sendNotification: ", CHANNEL_ID);
+        NotificationManager notificationManager = (NotificationManager) this.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Create a notification channel (required for Android Oreo and above)
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "My Channel", NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
+
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getActivity().getApplicationContext(), CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info) // Default Android info icon
+                .setContentTitle("My App")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH).setChannelId(CHANNEL_ID).setShowWhen(true);
+
+        // Show the notification
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
 }

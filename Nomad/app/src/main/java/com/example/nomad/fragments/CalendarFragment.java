@@ -31,6 +31,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -234,7 +235,29 @@ public class CalendarFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        setPriceButton.setEnabled(false);
+        priceBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {                setPriceButton.setEnabled(validateSetPrice());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        calendar.setOnRangeSelectedListener(new OnRangeSelectedListener() {
+            @Override
+            public void onRangeSelected(@NonNull MaterialCalendarView widget, @NonNull List<CalendarDay> dates) {
+                setPriceButton.setEnabled(validateSetPrice());
+            }
+        });
     }
+
+    private boolean validateSetPrice() {
+        return !priceBox.getText().toString().isEmpty() && !calendar.getSelectedDates().isEmpty();
+    }
+
     private boolean validate(){
         return !defaultPriceBox.getText().toString().isEmpty();
     }

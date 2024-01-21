@@ -1,10 +1,11 @@
-package DTO;
+package com.example.nomad.dto;
 
 public class RatingDTO {
 
     private String userName;
     private String text;
     private int rating;
+    private Long id;
 
     public RatingDTO() {}
 
@@ -12,6 +13,14 @@ public class RatingDTO {
         this.userName = userName;
         this.text = text;
         this.rating = rating;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
