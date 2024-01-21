@@ -28,13 +28,17 @@ public class AccommodationListFragment extends ListFragment {
 
     private AccommodationListAdapter adapter;
     private static final String ARG_PARAM = "param";
+    private static final String ARG_PARAM2 = "param2";
+
     private ArrayList<AccommodationDTO> accommodations;
+    private Boolean isFavourites;
     private FragmentAccommodationListBinding binding;
 
-    public static AccommodationListFragment newInstance(ArrayList<AccommodationDTO> products){
+    public static AccommodationListFragment newInstance(ArrayList<AccommodationDTO> products, Boolean isFavourites){
         AccommodationListFragment fragment = new AccommodationListFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM, products);
+        args.putBoolean(ARG_PARAM2, isFavourites);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +56,9 @@ public class AccommodationListFragment extends ListFragment {
         Log.i("ShopApp", "onCreate Products List Fragment");
         if (getArguments() != null) {
             accommodations = getArguments().getParcelableArrayList(ARG_PARAM);
-            adapter = new AccommodationListAdapter(getActivity(), accommodations, getActivity());
+            isFavourites = getArguments().getBoolean(ARG_PARAM2);
+            Log.d("ADAPTER", String.valueOf(accommodations.size()));
+            adapter = new AccommodationListAdapter(getActivity(), accommodations, getActivity(), isFavourites);
             setListAdapter(adapter);
         }
     }

@@ -28,50 +28,31 @@ import java.util.ArrayList;
 public class AccommodationListAdapter extends ArrayAdapter<AccommodationDTO> {
     private ArrayList<AccommodationDTO> accommodations;
     private FragmentActivity activity;
+    private Boolean isFavourites;
 
-    public AccommodationListAdapter(Context context, ArrayList<AccommodationDTO> accommodations, FragmentActivity activity){
+    public AccommodationListAdapter(Context context, ArrayList<AccommodationDTO> accommodations, FragmentActivity activity, Boolean isFavourites){
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;
         this.activity = activity;
+        this.isFavourites = isFavourites;
 
     }
-    /*
-     * Ova metoda vraca ukupan broj elemenata u listi koje treba prikazati
-     * */
     @Override
     public int getCount() {
         return accommodations.size();
     }
 
-    /*
-     * Ova metoda vraca pojedinacan element na osnovu pozicije
-     * */
     @Nullable
     @Override
     public AccommodationDTO getItem(int position) {
         return accommodations.get(position);
     }
 
-    /*
-     * Ova metoda vraca jedinstveni identifikator, za adaptere koji prikazuju
-     * listu ili niz, pozicija je dovoljno dobra. Naravno mozemo iskoristiti i
-     * jedinstveni identifikator objekta, ako on postoji.
-     * */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /*
-     * Ova metoda popunjava pojedinacan element ListView-a podacima.
-     * Ako adapter cuva listu od n elemenata, adapter ce u petlji ici
-     * onoliko puta koliko getCount() vrati. Prilikom svake iteracije
-     * uzece java objekat sa odredjene poziciuje (model) koji cuva podatke,
-     * i layout koji treba da prikaze te podatke (view) npr R.layout.product_card.
-     * Kada adapter ima model i view, prosto ce uzeti podatke iz modela,
-     * popuniti view podacima i poslati listview da prikaze, i nastavice
-     * sledecu iteraciju.
-     * */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

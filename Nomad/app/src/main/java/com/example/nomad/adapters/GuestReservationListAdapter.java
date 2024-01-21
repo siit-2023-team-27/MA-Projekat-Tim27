@@ -22,17 +22,22 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
 import com.example.nomad.dto.SearchAccommodationDTO;
+import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
+import com.example.nomad.fragments.ReportUserFragment;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.fragments.accommodations.SearchedAccommodationListFragment;
 import com.example.nomad.helper.Helper;
 import com.example.nomad.services.ReservationService;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
@@ -99,6 +104,23 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
             }else{
                 handleCancel(delete, reservation);
             }
+
+            LinearLayout layout = convertView.findViewById(R.id.buttons);
+            Button favorite = new Button(activity);
+            favorite.setText("Report user");
+            layout.addView(favorite);
+            favorite.setOnClickListener(v -> {
+
+            });
+
+            Button favorite2 = new Button(activity);
+            favorite2.setText("Report and comment host");
+            layout.addView(favorite2);
+            favorite2.setOnClickListener(v -> {
+                // Handle click on the item at 'position'
+                //FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, true, R.id.base_accommodations);
+
+            });
 
         }
 
