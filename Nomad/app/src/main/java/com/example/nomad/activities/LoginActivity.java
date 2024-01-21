@@ -14,6 +14,7 @@ import com.example.nomad.R;
 import com.example.nomad.dto.LoginDTO;
 import com.example.nomad.services.AccommodationService;
 import com.example.nomad.services.AuthService;
+import com.example.nomad.services.IAuthListener;
 
 
 import java.net.MalformedURLException;
@@ -22,7 +23,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements IAuthListener {
     Button registerButton;
     Button loginButton;
     EditText userName;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.editTextPassword);
         setupLoginButton();
         setupRegisterButton();
+        authService.subScribe(this);
+
     }
     protected void setupLoginButton(){
         loginButton.setOnClickListener(v -> {
@@ -52,15 +55,22 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
     }
-    public void loginFail(){
-        Toast.makeText(getApplicationContext(), "Greska pri loginu", Toast.LENGTH_SHORT);
 
-    }
     protected void setupRegisterButton(){
         registerButton.setOnClickListener(v -> {
 
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public void registerFailed() {
+
+    }
+
+    @Override
+    public void loginFailed() {
+        Toast.makeText(getApplicationContext(), "Pogresno korisnicko ime i lozinka", Toast.LENGTH_SHORT).show();
     }
 }

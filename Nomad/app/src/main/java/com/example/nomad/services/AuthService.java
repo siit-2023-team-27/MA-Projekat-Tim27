@@ -16,6 +16,7 @@ import com.example.nomad.enums.UserType;
 import com.example.nomad.services.apis.AuthApi;
 import com.example.nomad.utils.PropertyUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,6 +53,10 @@ public class AuthService {
     public JWT getToken() {
         return token;
     }
+    private ArrayList<IAuthListener> listeners = new ArrayList<>();
+    public void subScribe(IAuthListener listener){
+        listeners.add(listener);
+    }
 
 
     public void setToken(String tokenString) {
@@ -66,16 +71,32 @@ public class AuthService {
             @Override
             public void onResponse(Call<AppUser> call, Response<AppUser> response) {
                 AppUser user = response.body();
-                Log.d("onResponse: ", user.toString());
+                if(response.code() != 200){
+                    registerFailed();
+                }
+//                Log.d("onResponse: ", user.toString());
             }
 
             @Override
             public void onFailure(Call<AppUser> call, Throwable t) {
 //                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
                 Log.d("onResponse: ", "ERROR");
+                registerFailed();
+
             }
 
         });
+    }
+
+    private void registerFailed() {
+        for(IAuthListener listener : listeners){
+            listener.registerFailed();
+        }
+    }
+    private void loginFailed() {
+        for(IAuthListener listener : listeners){
+            listener.loginFailed();
+        }
     }
     public void login(LoginDTO loginDTO){
         Call<UserTokenState> call = RetrofitClient.getInstance().getMyApi().login(loginDTO);
@@ -84,6 +105,7 @@ public class AuthService {
             public void onResponse(Call<UserTokenState> call, Response<UserTokenState> response) {
 //                AppUser user = response.body();
                 if(response.code() == 401 || response.code() == 400){
+                    loginFailed();
                     return;
                 }
                 Log.d("onResponse: ", response.toString());
@@ -97,7 +119,7 @@ public class AuthService {
             public void onFailure(Call<UserTokenState> call, Throwable t) {
 //                Toast.makeText(getApplicationContext(), "An error has occured", Toast.LENGTH_LONG).show();
                 Log.d("onResponse: ", "ERROR");
-                activity.loginFail();
+                loginFailed();
             }
 
         });
