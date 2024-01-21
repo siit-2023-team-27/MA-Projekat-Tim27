@@ -20,11 +20,11 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string translatable="false" name="notify_channel_id">MyDefaultChannelID</string>
+    <string name="notify_channel_id" translatable="false">MyDefaultChannelID</string>
 
-    <string translatable="false" name="notify_channel_name">MyDefaultChannelName</string>
+    <string name="notify_channel_name" translatable="false">MyDefaultChannelName</string>
 
-    <string translatable="false" name="notify_channel_description">MyDefaultChannelDescription</string>
+    <string name="notify_channel_description" translatable="false">MyDefaultChannelDescription</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

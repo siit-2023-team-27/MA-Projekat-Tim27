@@ -59,8 +59,6 @@ public class UserRatingsFragment extends ListFragment implements ICanRateListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         userRatingsViewModel.getElements().observe(this, elements -> {
             ratings = elements;
             UserRatingListAdapter adapter = new UserRatingListAdapter(getActivity(), ratings, getActivity(), this);

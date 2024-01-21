@@ -33,6 +33,7 @@ import com.example.nomad.dto.SearchAccommodationDTO;
 import com.example.nomad.fragments.AccommodationCreationHostFragment;
 import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.ReportUserFragment;
+import com.example.nomad.fragments.UserRatingsFragment;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.fragments.accommodations.SearchedAccommodationListFragment;
 import com.example.nomad.helper.Helper;
@@ -103,24 +104,24 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
                 handleDelete(delete, reservation);
             }else{
                 handleCancel(delete, reservation);
+                if(reservation.getStatus().equals("ACCEPTED")){
+                    LinearLayout layout = convertView.findViewById(R.id.buttons);
+
+                    Button favorite2 = new Button(activity);
+                    favorite2.setText("Report and comment host");
+                    layout.addView(favorite2);
+                    favorite2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserRatingsFragment userRatingsFragment = new UserRatingsFragment(reservation.getAccommodationDetails().getHostId());
+                            FragmentTransition.to(userRatingsFragment, activity, true, R.id.base_accommodations);
+                        }
+                    });
+                }
+
             }
 
-            LinearLayout layout = convertView.findViewById(R.id.buttons);
-            Button favorite = new Button(activity);
-            favorite.setText("Report user");
-            layout.addView(favorite);
-            favorite.setOnClickListener(v -> {
 
-            });
-
-            Button favorite2 = new Button(activity);
-            favorite2.setText("Report and comment host");
-            layout.addView(favorite2);
-            favorite2.setOnClickListener(v -> {
-                // Handle click on the item at 'position'
-                //FragmentTransition.to( AccommodationFragment.newInstance(accommodation), activity, true, R.id.base_accommodations);
-
-            });
 
         }
 
