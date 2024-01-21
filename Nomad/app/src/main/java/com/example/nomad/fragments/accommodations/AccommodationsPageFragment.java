@@ -88,7 +88,7 @@ public class AccommodationsPageFragment extends Fragment {
                 // Now, you can convert the LiveData to a List if needed
                 accommodations = (ArrayList<AccommodationDTO>) objects;
                 // Do something with the list
-                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations), getActivity(), false, R.id.scroll_products_list);
+                FragmentTransition.to(AccommodationListFragment.newInstance(accommodations, false), getActivity(), true, R.id.scroll_products_list);
             }
         });
 
@@ -229,7 +229,7 @@ public class AccommodationsPageFragment extends Fragment {
                         // Now, you can convert the LiveData to a List if needed
                         searchAccommodationDTOS = (ArrayList<SearchAccommodationDTO>) objects;
                         // Do something with the list
-                        FragmentTransition.to(SearchedAccommodationListFragment.newInstance(searchAccommodationDTOS), getActivity(), false, R.id.scroll_products_list);
+                        FragmentTransition.to(SearchedAccommodationListFragment.newInstance(searchAccommodationDTOS), getActivity(), true, R.id.scroll_products_list);
 
                     }
                 });

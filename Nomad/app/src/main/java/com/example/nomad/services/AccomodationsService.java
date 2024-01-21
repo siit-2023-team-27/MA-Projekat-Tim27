@@ -43,6 +43,8 @@ import retrofit2.Response;
 
 public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
+    private MutableLiveData<Collection<AccommodationDTO>> favourites = new MutableLiveData<>();
+
     private MutableLiveData<AccommodationDTO> accommodation = new MutableLiveData<>();
 
     private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
@@ -69,8 +71,52 @@ public class AccomodationsService {
     public LiveData<AccommodationDTO> getAccommodation() {
         return accommodation;
     }
+    public LiveData<Collection<AccommodationDTO>> getFavourites() {
+        return favourites;
+    }
+    private MutableLiveData<Boolean> isLikedDisliked = new MutableLiveData<>();
+    public LiveData<Boolean> getLikedDisliked() {
+        return isLikedDisliked;
+    }
+    public void likeDislike(Long userId, Long accommodationId) {
+        Call<Boolean> call = AccommodationClient.getInstance().getMyApi().addToFavourite(accommodationId, userId,"Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Boolean objects = response.body();
+                    //accommodations = objects;
+                    isLikedDisliked.setValue(objects);
+                    Log.d("onResponseLikeDIslike: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects));
+                } else {
+                    // Handle unsuccessful response
+                    // You may want to check response.errorBody() for more details
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("LikeDislikeError", String.valueOf(response.code()));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                // Handle failure (network error, etc.)
+                Log.e("LikeDIslikeError", "Request failed: " + t.getMessage());
+
+            }
+        });
+    }
     public void loadAccommodation(Long id) {
-        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer" + AuthService.token.toString());
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<AccommodationDTO>() {
             @Override
             public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
@@ -103,6 +149,43 @@ public class AccomodationsService {
                 // Handle failure (network error, etc.)
                 Log.e("getAccError", "Request failed: " + t.getMessage());
 
+            }
+        });
+    }
+
+    public void loadFavourites(Long id) {
+        Call<Collection<AccommodationDTO>> call = AccommodationClient.getInstance().getMyApi().getFavourites(id,"Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<Collection<AccommodationDTO>>() {
+            @Override
+            public void onResponse(Call<Collection<AccommodationDTO>> call, Response<Collection<AccommodationDTO>> response) {
+                if (response.isSuccessful()) {
+                    // Handle the successful response
+                    Collection<AccommodationDTO> objects = response.body();
+                    //accommodations = objects;
+                    favourites.setValue(objects);
+                    Log.d("onResponseFavourites: ", "USPEO");
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
+                } else {
+                    // Handle unsuccessful response
+                    // Handle unsuccessful response
+                    // You may want to check response.errorBody() for more details
+                    String errorMessage = null;
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMessage = response.errorBody().string();
+                            // Print or log the error message
+                            Log.e("getFavouritesError", errorMessage);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Collection<AccommodationDTO>> call, Throwable t) {
+                Log.e("getFavouritesError", "Request failed: " + t.getMessage());
             }
         });
     }
@@ -230,6 +313,8 @@ public class AccomodationsService {
                         dates.add(new Date(date));
                     }
                     takenDates.setValue(dates);
+                    //Log.d("onResponse takenDates: ", (new Date(objects.get(1)).toString()));
+                    Log.d("SIZE: ", String.valueOf(objects.size()));
                 } else {
                     String errorMessage = null;
 
