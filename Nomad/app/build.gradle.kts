@@ -34,7 +34,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-
 }
 
 dependencies {
@@ -75,4 +74,6 @@ dependencies {
     implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
     implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
     implementation ("com.github.isradeleon:Notify-Android:1.0.5")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 }

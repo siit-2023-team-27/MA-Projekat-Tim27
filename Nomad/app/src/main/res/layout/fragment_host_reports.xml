@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    tools:context=".fragments.HostReportsFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reports"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="75dp"/>
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose report type:"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            android:padding="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/reportTypeRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" >
+
+            <RadioButton
+                android:id="@+id/allAccommodationsRadioButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:padding="4dp"
+                android:text="All accommodations"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/oneAccommodationRadioButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:padding="4dp"
+                android:text="Monthly for one accommodation"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/allAccommodationsForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reportTypeRadioGroup"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/downloadDateRangeReportButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Download report"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Select date range:" />
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/materialCalendarView"
+                android:layout_width="400dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp"
+                app:mcv_selectionColor="@color/nomad_brown"
+                app:mcv_selectionMode="range"
+                app:mcv_showOtherDates="all" >
+            </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+            <Button
+                android:id="@+id/submitAllAccommodationsButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="20dp"/>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/dateRangeReservationChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="70dp"
+                android:layout_above="@+id/seekBar1" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/dateRangeProfitChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="70dp"
+                android:layout_above="@+id/seekBar1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/oneAccommodationForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reportTypeRadioGroup"
+            android:visibility="invisible">
+
+            <Button
+            android:id="@+id/downMonthlyReportButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Download report"
+            android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Select accommodation:" />
+
+
+            <Spinner
+                android:id="@+id/spinnerAccommodationsNames"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Select year:" />
+
+
+            <NumberPicker
+                android:id="@+id/yearPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/submitOneAccommodationButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="20dp"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/monthlyReportChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="70dp"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

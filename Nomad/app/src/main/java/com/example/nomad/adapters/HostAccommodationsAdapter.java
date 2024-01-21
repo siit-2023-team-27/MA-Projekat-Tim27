@@ -1,6 +1,7 @@
 package com.example.nomad.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.nomad.R;
 import com.example.nomad.dto.AccommodationDTO;
+import com.example.nomad.fragments.AccommodationCreationEdit;
+import com.example.nomad.fragments.AccommodationCreationHostFragment;
+import com.example.nomad.fragments.CreateAccommodationFragment;
+import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.services.AccomodationsService;
 
 import java.util.ArrayList;
@@ -67,6 +75,16 @@ public class HostAccommodationsAdapter extends ArrayAdapter<AccommodationDTO> {
         TextView status = convertView.findViewById(R.id.accommodation_status);
 
         Button editButton = convertView.findViewById(R.id.button_edit);
+        editButton.setOnClickListener(v -> {
+//                FragmentTransition.to(AccommodationCreationEdit.newInstance(accommodation), activity, false, R.id.frame_host_listing);
+//            AccommodationCreationHostFragment fragment = AccommodationCreationHostFragment.newInstance(accommodation);
+            Bundle args = new Bundle();
+            args.putParcelable("accommodation", accommodation);
+            NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+            navController.navigate(R.id.action_nav_listing_to_nav_create_accommodation, args);
+
+//            navController.getCurrentDestination().getArguments().putAll(fragment.getArguments());
+        });
 
         if (accommodation != null) {
             title.setText(accommodation.getName());
@@ -78,5 +96,7 @@ public class HostAccommodationsAdapter extends ArrayAdapter<AccommodationDTO> {
 
         return convertView;
     }
+
+
 
 }

@@ -27,6 +27,4 @@ public interface ImageApi {
     @POST("upload")
     public Call<List<String>> upload(@Part MultipartBody.Part images, @Header("Authorization") String authHeader);
 
-
-
 }

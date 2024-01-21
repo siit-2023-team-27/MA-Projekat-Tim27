@@ -108,7 +108,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         notificationService = new NotificationService(this);
         notificationService.setUpWebSocket();
 
-
     }
 
 //    @Override

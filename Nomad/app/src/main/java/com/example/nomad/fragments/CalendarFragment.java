@@ -66,6 +66,8 @@ public class CalendarFragment extends Fragment {
     private HashMap<DateRange, Double> prices = new HashMap<DateRange, Double>();
 
     private AccommodationDTO accommodation;
+    private boolean isEdit = false;
+
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -218,7 +220,12 @@ public class CalendarFragment extends Fragment {
                 accommodation.setDefaultPrice(Double.valueOf(defaultPriceBox.getText().toString()));
                 accommodation.setAddress(LocationService.address);
 
-                accomodationsService.create(accommodation, dateRanges, prices);
+                if(isEdit) {
+                    accomodationsService.update(accommodation);
+                }else{
+                    accomodationsService.create(accommodation, dateRanges, prices);
+                }
+
                 ImageService.paths = new ArrayList<>();
                 fm.popBackStack();
 
@@ -229,11 +236,11 @@ public class CalendarFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {                createButton.setEnabled(validate());
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                createButton.setEnabled(validate());
             }
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
         setPriceButton.setEnabled(false);
         priceBox.addTextChangedListener(new TextWatcher() {
@@ -252,6 +259,13 @@ public class CalendarFragment extends Fragment {
                 setPriceButton.setEnabled(validateSetPrice());
             }
         });
+
+        if(accommodation!=null) {
+            defaultPriceBox.setText(Double.toString(accommodation.getDefaultPrice()));
+            createButton.setEnabled(true);
+            createButton.setText("Update");
+            isEdit = true;
+        }
     }
 
     private boolean validateSetPrice() {

@@ -83,15 +83,19 @@ public class UnverifiedAccommodationsListAdapter extends ArrayAdapter<Accommodat
                     Log.d("CLICK", "Klik na Accept dugme. " + accommodation.getId());
                     accomodationsService.verifyAccommodation(accommodation.getId());
                     Toast.makeText(getContext(), "Accommodation is accepted", Toast.LENGTH_SHORT).show();
+                    accommodations.remove(accommodation);
+                    notifyDataSetChanged();
                 }
             });
 
             declineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("CLICK", "Klik na Accept dugme. " + accommodation.getId());
-                    accomodationsService.deleteAccommodation(accommodation.getId());
+                    Log.d("CLICK", "Klik na Decline dugme. " + accommodation.getId());
+                    accomodationsService.declineAccommodation(accommodation.getId());
                     Toast.makeText(getContext(), "Accommodation is declined", Toast.LENGTH_SHORT).show();
+                    accommodations.remove(accommodation);
+                    notifyDataSetChanged();
                 }
             });
         }

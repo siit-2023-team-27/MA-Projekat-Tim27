@@ -5,6 +5,7 @@ import com.example.nomad.dto.ReservationDTO;
 import com.example.nomad.dto.ReservationResponseDTO;
 import com.example.nomad.helper.Consts;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -46,11 +47,11 @@ public interface ReservationApi {
     public Call<Long> rejectReservation(@Path("id") Long id, @Header("Authorization") String authHeader);
     @GET("reservations/search-host/{id}")
     public Call<Collection<ReservationResponseDTO>> getSearchedANdFIlteredHost(@Path("id") Long id, @Query("name") String name,
-                                                                                @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,
-                                                                                @Query("status") String status, @Header("Authorization") String authHeader);
+                                                                               @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,
+                                                                               @Query("status") String status, @Header("Authorization") String authHeader);
     @GET("reservations/search-guest/{id}")
     public Call<Collection<ReservationResponseDTO>> getSearchedANdFIlteredGuest(@Path("id") Long id, @Query("name") String name,
-                                                                           @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,
-                                                                           @Query("status") String status, @Header("Authorization") String authHeader);
+                                                                                @Query("minimumDate")String minimumDate, @Query("maximumDate")String maximumDate,
+                                                                                @Query("status") String status, @Header("Authorization") String authHeader);
 
 }

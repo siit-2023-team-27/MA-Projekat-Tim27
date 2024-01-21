@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:padding="10dp"
     android:layout_marginVertical="10dp"
-    android:id="@+id/unverified_card"
+    android:id="@+id/guest_reservation_card"
 
     >
     <ImageView
@@ -26,18 +26,36 @@
 
 
         <TextView
-            android:id="@+id/accommodation_title"
+            android:id="@+id/accommodation_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_margin="5dp"
             android:textSize="20sp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/accommodation_address"
             android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_margin="5dp"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/reservation_dates"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textSize="14sp"
+            android:textColor="@color/common_google_signin_btn_text_light_disabled"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/reservation_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="18sp"
+            android:textColor="@color/dark_brown"
             android:textStyle="italic"/>
 
         <Button
@@ -47,16 +65,7 @@
             android:layout_margin="5dp"
             android:textSize="14sp"
             android:textAlignment="center"
-            android:text="Accept" />
-
-        <Button
-            android:id="@+id/button_decline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="14sp"
-            android:textAlignment="center"
-            android:text="Decline" />
+            android:text="Cancel" />
 
     </LinearLayout>
 </LinearLayout>

@@ -52,6 +52,9 @@ public interface AccommodationApi {
     @POST("accommodations")
     public Call<AccommodationDTO> create(@Body AccommodationDTO accommodationDTO, @Header("Authorization") String authHeader);
 
+    @PUT("accommodations/{id}")
+    public Call<AccommodationDTO> update(@Body AccommodationDTO accommodationDTO, @Path("id") Long userId, @Header("Authorization") String authHeader);
+
     @POST("accommodations/unavailable/{id}")
     public Call<String> makeUnavailable(@Path("id") Long id, @Body DateRange dateRange, @Header("Authorization") String authHeader);
     @POST("accommodations/price/{id}")
@@ -76,6 +79,8 @@ public interface AccommodationApi {
 
     @PUT("accommodations/verify/{id}")
     public Call<AccommodationDTO> verifyAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
+    @PUT("accommodations/decline/{id}")
+    public Call<AccommodationDTO> declineAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
     @PUT("comment-reports/accept/{id}")
     public Call<CommentReportDetailsDTO> acceptCommentReport(@Path("id") Long id, @Header("Authorization") String authHeader);
     @PUT("comment-reports/accept/{id}")
@@ -95,6 +100,9 @@ public interface AccommodationApi {
 
     @GET("accommodations/host/{id}")
     public Call<ArrayList<AccommodationDTO>> getAccommodationsForHost(@Path("id") Long id, @Header("Authorization") String authHeader);
+
+    @GET("accommodations/{id}")
+    public Call<AccommodationDTO> getAccommodation(@Path("id") Long id);
     @GET("accommodations/{id}")
     public Call<AccommodationDTO> getAccommodation(@Path("id") Long id, @Header("Authorization") String authHeader);
     @GET("favourites/guest/{guestId}")

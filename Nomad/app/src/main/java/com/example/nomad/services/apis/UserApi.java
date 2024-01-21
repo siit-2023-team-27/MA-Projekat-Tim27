@@ -50,6 +50,12 @@ public interface UserApi {
     @GET("users/{id}")
     public Call<UserDTO> getLoggedUser(@Path("id") Long id);
 
+    @PUT("users/{id}")
+    public Call<UserDTO> editUSer(@Path("id") Long id, @Body UserDTO userDto);
+
+    @DELETE("users/{id}")
+    public Call<String> deleteUser(@Path("id") Long id);
+
     @PUT("users/suspend/{id}")
     public Call<UserDTO> suspendUser(@Path("id") Long id, @Header("Authorization") String authHeader);
 

@@ -45,6 +45,9 @@ public class AccomodationsService {
     private MutableLiveData<List<AccommodationDTO>> accommodations = new MutableLiveData<>();
     private MutableLiveData<Collection<AccommodationDTO>> favourites = new MutableLiveData<>();
 
+    public MutableLiveData<AccommodationDTO> getAccommodation() {
+        return accommodation;
+    }
     private MutableLiveData<AccommodationDTO> accommodation = new MutableLiveData<>();
 
     private MutableLiveData<Collection<SearchAccommodationDTO>> searchedAccommodations = new MutableLiveData<>();
@@ -52,6 +55,22 @@ public class AccomodationsService {
     private MutableLiveData<Collection<Amenity>> amenities = new MutableLiveData<>();
 
     private MutableLiveData<List<Date>> takenDates = new MutableLiveData<>();
+
+    public MutableLiveData<List<AccommodationDTO>> getUnverified() {
+        return unverified;
+    }
+
+    public ArrayList<AccommodationRatingDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<AccommodationRatingDTO> comments) {
+        this.comments = comments;
+    }
+
+    public MutableLiveData<List<AccommodationDTO>> getHostAccommodations() {
+        return hostAccommodations;
+    }
 
     public static boolean canRate = true;
     public static Long ownCommentId = -1L;
@@ -68,9 +87,7 @@ public class AccomodationsService {
         AccomodationsService.ownCommentId = ownCommentId;
         emmitCanRate();
     }
-    public LiveData<AccommodationDTO> getAccommodation() {
-        return accommodation;
-    }
+
     public LiveData<Collection<AccommodationDTO>> getFavourites() {
         return favourites;
     }
@@ -116,7 +133,7 @@ public class AccomodationsService {
         });
     }
     public void loadAccommodation(Long id) {
-        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer " + AuthService.token.toString());
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id,"Bearer" + AuthService.token.toString());
         call.enqueue(new Callback<AccommodationDTO>() {
             @Override
             public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
@@ -344,6 +361,22 @@ public class AccomodationsService {
 
     private MutableLiveData<List<AccommodationDTO>> hostAccommodations = new MutableLiveData<>();
 
+    public void getOneAccommodation(Long id) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().getAccommodation(id);
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                AccommodationDTO object = response.body();
+                accommodation.setValue(object);
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                Log.d("onResponse: ", t.getMessage());
+            }
+        });
+    }
+
 
     public void create(AccommodationDTO accommodationDTO, ArrayList<DateRange> dateRanges, HashMap<DateRange, Double> prices) {
         Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().create(accommodationDTO, "Bearer " + AuthService.token.toString());
@@ -368,6 +401,25 @@ public class AccomodationsService {
 
         });
     }
+
+    public void update(AccommodationDTO accommodation) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().update(accommodation, accommodation.getId(), "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                Log.d("onResponse: ", String.valueOf(response.code()));
+                Log.d("onResponse: ", response.toString());
+                AccommodationDTO accommodation = response.body();
+                Log.d("onResponse: ", accommodation.toString());
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                Log.d("onFailure: ", t.getMessage());
+            }
+        });
+    }
+
     public void makeUnavailable(Long accommodationId, DateRange dateRange) {
         Call<String> call = AccommodationClient.getInstance().getMyApi().makeUnavailable(accommodationId,dateRange , "Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<String>() {
@@ -505,6 +557,21 @@ public class AccomodationsService {
         });
     }
 
+    public void declineAccommodation(Long id) {
+        Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().declineAccommodation(id, "Bearer " + AuthService.token.toString());
+        call.enqueue(new Callback<AccommodationDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDTO> call, Response<AccommodationDTO> response) {
+                Log.d("onResponse: ", String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationDTO> call, Throwable t) {
+                Log.d("Failure: ", t.getMessage());
+            }
+        });
+    }
+
     public void deleteAccommodation(Long id) {
         Call<AccommodationDTO> call = AccommodationClient.getInstance().getMyApi().deleteAccommodation(id, "Bearer " + AuthService.token.toString());
         Log.d("TOKEN", AuthService.token.toString());
@@ -564,21 +631,5 @@ public class AccomodationsService {
                 Log.d("Failure: ", t.getMessage());
             }
         });
-    }
-
-    public MutableLiveData<List<AccommodationDTO>> getUnverified() {
-        return unverified;
-    }
-
-    public ArrayList<AccommodationRatingDTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(ArrayList<AccommodationRatingDTO> comments) {
-        this.comments = comments;
-    }
-
-    public MutableLiveData<List<AccommodationDTO>> getHostAccommodations() {
-        return hostAccommodations;
     }
 }
