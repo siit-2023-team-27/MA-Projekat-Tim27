@@ -124,8 +124,8 @@ public class AccommodationCommentFragment extends ListFragment implements ICanRa
         });
         deleteCommentButton.setVisibility(View.GONE);
         setupScrolling();
-        this.accomodationsService.canRate(accommodationId, AuthService.id);
-        this.accomodationsService.getComment(accommodationId);
+        AccomodationsService.canRate(accommodationId, AuthService.id);
+        AccomodationsService.getComment(accommodationId);
 
         addCommentButton.setEnabled(AccomodationsService.canRate);
 

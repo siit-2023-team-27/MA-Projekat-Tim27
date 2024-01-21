@@ -388,7 +388,7 @@ public class AccomodationsService {
             }
         });
     }
-    public void getComment(Long accommodationId){
+    public static void getComment(Long accommodationId){
         Call<Long> call = AccommodationClient.getInstance().getMyApi().getCommentForUserAndAccommodation(AuthService.id, accommodationId, "Bearer " + AuthService.token.toString());
         call.enqueue(new Callback<Long>() {
             @Override
@@ -435,7 +435,7 @@ public class AccomodationsService {
             }
         });
     }
-    public void canRate(Long accommodationId, Long userId) {
+    public static void canRate(Long accommodationId, Long userId) {
         Call<Boolean> call = AccommodationClient.getInstance().getMyApi().canRate(accommodationId,userId, "Bearer " + AuthService.token.toString());
         Log.d("TOKEN", AuthService.token.toString());
         call.enqueue(new Callback<Boolean>() {

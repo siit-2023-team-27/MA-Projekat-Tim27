@@ -64,6 +64,10 @@ public interface UserApi {
     public Call<UserReportDto> report(@Body UserReportDto userReportDto, @Header("Authorization") String authHeader);
     @GET("host-ratings/host/{userId}")
     Call<Collection<RatingDTO>> getRatings(@Path("userId") Long userId, @Header("Authorization") String s);
+    @GET("host-ratings/host-rating/{userId}/{hostId}")
+    Call<Long> hasRating(@Path("userId") Long userId, @Path("hostId") Long hostId, @Header("Authorization") String s);
+    @DELETE("host-ratings/{ratingId}")
+    Call<RatingDTO> deleteRating(@Path("ratingId") Long ratingId, @Header("Authorization") String s);
 
 }
 
