@@ -221,7 +221,7 @@ public class ImageFragment extends Fragment {
         for (String key : images.keySet()){
             saveImage(key, images.get(key));
         }
-        AccommodationLocationFragment locationFragment = AccommodationLocationFragment.newInstance("t", "t");
+        AccommodationLocationFragment locationFragment = AccommodationLocationFragment.newInstance(false, "t");
         locationFragment.setAccommodation(accommodation);
         FragmentTransition.to(locationFragment, getActivity(), true, R.id.accommodationCreationHostView);
     }
