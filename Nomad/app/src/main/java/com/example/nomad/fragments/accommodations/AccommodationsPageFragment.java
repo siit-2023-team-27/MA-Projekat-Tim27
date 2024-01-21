@@ -1,11 +1,25 @@
 package com.example.nomad.fragments.accommodations;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
+import android.hardware.TriggerEvent;
+import android.hardware.TriggerEventListener;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -53,7 +67,7 @@ import java.util.List;
  * Use the {@link AccommodationsPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationsPageFragment extends Fragment {
+public class AccommodationsPageFragment extends Fragment implements SensorEventListener {
     public static ArrayList<AccommodationDTO> accommodations;
     public static ArrayList<Amenity> amenities;
     BottomSheetDialog bottomSheetDialog;
@@ -61,10 +75,17 @@ public class AccommodationsPageFragment extends Fragment {
     View dialogView;
     View calendarView;
     boolean areAmenitiesLoaded;
+    private SensorManager sensorMgr;
     public static ArrayList<SearchAccommodationDTO> searchAccommodationDTOS;
     private MaterialCalendarView calendar;
     private AccommodationsPageViewModel accommodationsPageViewModel;
     private FragmentAccommodationsPageBinding binding;
+    private long lastUpdate = 0;
+    private float last_x = 0;
+    private float last_gyro_x = 0;
+    private float last_y = 0;
+    private float last_z = 0;
+    private float SHAKE_THRESHOLD = 50;
     AccomodationsService accomodationsService = new AccomodationsService();
     public static AccommodationsPageFragment newInstance() {
         return new AccommodationsPageFragment();
@@ -107,7 +128,21 @@ public class AccommodationsPageFragment extends Fragment {
         this.setCalendarDialog();
         this.handleSearch(root);
 
+
+
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        this.sensorMgr  = (SensorManager) requireActivity().getSystemService(SENSOR_SERVICE);
+        Sensor mAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor mGyro = sensorMgr.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+
+        sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorMgr.registerListener(this, mGyro, SensorManager.SENSOR_DELAY_NORMAL);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void setCalendarDialog(){
@@ -236,5 +271,62 @@ public class AccommodationsPageFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        Log.d("sensor", "changeDetected");
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long curTime = System.currentTimeMillis();
+            if ((curTime - lastUpdate) > 1000) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
+
+                float speed = Math.abs(x+y+z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    Log.d("sensor", "shake detected w/ speed: " + speed);
+                    Toast.makeText(this.getActivity().getApplicationContext(), "shake detected w/ speed: " + speed, Toast.LENGTH_SHORT).show();
+
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        }
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                    Log.d("sensor", "changeDetected");
+                    Log.d("sensor", String.valueOf(event.values[0]));
+
+            long curTime = System.currentTimeMillis();
+            if ((curTime - lastUpdate) > 1000) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float x = event.values[0];
+
+                float speed = Math.abs(x - last_gyro_x);
+
+                if (speed > 1.1) {
+                    Log.d("sensor", "shake detected w/ speed: " + speed);
+                    Toast.makeText(this.getActivity().getApplicationContext(), "gyro detected w/ speed: " + speed, Toast.LENGTH_SHORT).show();
+                    this.calendarDialog = new BottomSheetDialog(getActivity(), R.style.FullScreenBottomSheetDialog);
+                    this.calendarView = getLayoutInflater().inflate(R.layout.calendar_page, null);
+                    calendarDialog.setContentView(this.calendarView);
+                    calendarDialog.show();
+                }
+                last_gyro_x = x;
+
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
