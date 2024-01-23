@@ -62,6 +62,10 @@ public class ImageFragment extends Fragment {
     private ArrayList<String> imageOrder = new ArrayList<>();
 
     private AccommodationDTO accommodation;
+
+    private boolean isEdit;
+    public void setIsEdit(boolean isEdit) {this.isEdit = isEdit;}
+
     public ImageFragment() {
         // Required empty public constructor
     }
@@ -223,6 +227,7 @@ public class ImageFragment extends Fragment {
         }
         AccommodationLocationFragment locationFragment = AccommodationLocationFragment.newInstance(false, "t");
         locationFragment.setAccommodation(accommodation);
+        locationFragment.setIsEdit(isEdit);
         FragmentTransition.to(locationFragment, getActivity(), true, R.id.accommodationCreationHostView);
     }
     private void saveImage(String key, Bitmap selectedImageBitmap){

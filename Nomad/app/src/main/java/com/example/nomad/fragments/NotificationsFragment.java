@@ -33,6 +33,7 @@ import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -126,13 +127,23 @@ public class NotificationsFragment extends ListFragment {
                     int month = start.getMonth();
                     int day = start.getDay();
 
-                    Date dateStart = new Date(year, month, day);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month-1);
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+
+                    Date dateStart = calendar.getTime();
 
                     year = end.getYear();
                     month = end.getMonth();
                     day = end.getDay();
 
-                    Date endDate = new Date(year, month, day);
+                    calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month-1);
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+
+                    Date endDate = calendar.getTime();
 
                     adapter.filterNotifications(dateStart, endDate);
                 }

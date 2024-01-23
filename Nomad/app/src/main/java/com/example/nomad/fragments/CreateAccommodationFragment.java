@@ -76,6 +76,8 @@ public class CreateAccommodationFragment extends Fragment {
     private ArrayList<DateRange> dateRanges = new ArrayList<DateRange>();
     private HashMap<DateRange, Double> prices = new HashMap<DateRange, Double>();
     private Switch reservationAcceptanceSwitch;
+    private boolean isEdit;
+    public void setIsEdit(boolean isEdit) {this.isEdit = isEdit;}
 
 //    private MaterialCalendarView calendarView;
     public CreateAccommodationFragment() throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
@@ -86,6 +88,7 @@ public class CreateAccommodationFragment extends Fragment {
     public static CreateAccommodationFragment newInstance() throws MalformedURLException, ExecutionException, InterruptedException, TimeoutException {
         Log.d("BUG", "new instance od Create bez parametara");
         CreateAccommodationFragment fragment = new CreateAccommodationFragment();
+        fragment.isEdit = false;
         return fragment;
     }
 
@@ -94,6 +97,7 @@ public class CreateAccommodationFragment extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable(ACCOMMODATION, accommodation);
         fragment.setArguments(args);
+        fragment.isEdit = true;
         return fragment;
     }
 
@@ -142,6 +146,7 @@ public class CreateAccommodationFragment extends Fragment {
                 generateAccommodation(v);
                 ImageFragment imageFragment = ImageFragment.newInstance();
                 imageFragment.setAccommodation(accommodation);
+                imageFragment.setIsEdit(isEdit);
                 FragmentTransition.to(imageFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
 //                accomodationsService.create(accommodation, dateRanges, prices);

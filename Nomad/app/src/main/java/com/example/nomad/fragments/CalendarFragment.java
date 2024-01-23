@@ -66,7 +66,8 @@ public class CalendarFragment extends Fragment {
     private HashMap<DateRange, Double> prices = new HashMap<DateRange, Double>();
 
     private AccommodationDTO accommodation;
-    private boolean isEdit = false;
+    private boolean isEdit;
+    public void setIsEdit(boolean isEdit) {this.isEdit = isEdit;}
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -216,7 +217,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 accommodation.setImages(ImageService.paths);
-
+                accommodation.setVerified(false);
                 accommodation.setDefaultPrice(Double.valueOf(defaultPriceBox.getText().toString()));
                 accommodation.setAddress(LocationService.address);
 
@@ -231,7 +232,7 @@ public class CalendarFragment extends Fragment {
 
             }
         });
-        createButton.setEnabled(false);
+
         defaultPriceBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -260,12 +261,13 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        if(accommodation!=null) {
+        createButton.setEnabled(false);
+        if(isEdit) {
             defaultPriceBox.setText(Double.toString(accommodation.getDefaultPrice()));
             createButton.setEnabled(true);
             createButton.setText("Update");
-            isEdit = true;
         }
+
     }
 
     private boolean validateSetPrice() {

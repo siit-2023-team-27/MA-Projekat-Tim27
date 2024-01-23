@@ -289,7 +289,7 @@ public class AccommodationsPageFragment extends Fragment implements SensorEventL
                 float speed = Math.abs(x+y+z - last_x - last_y - last_z) / diffTime * 10000;
 
                 if (speed > SHAKE_THRESHOLD) {
-                    Log.d("sensor", "shake detected w/ speed: " + speed);
+//                    Log.d("sensor", "shake detected w/ speed: " + speed);
                     Toast.makeText(this.getActivity().getApplicationContext(), "shake detected w/ speed: " + speed, Toast.LENGTH_SHORT).show();
 
                 }
@@ -299,8 +299,8 @@ public class AccommodationsPageFragment extends Fragment implements SensorEventL
             }
         }
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-                    Log.d("sensor", "changeDetected");
-                    Log.d("sensor", String.valueOf(event.values[0]));
+//                    Log.d("sensor", "changeDetected");
+//                    Log.d("sensor", String.valueOf(event.values[0]));
 
             long curTime = System.currentTimeMillis();
             if ((curTime - lastUpdate) > 1000) {
@@ -312,7 +312,7 @@ public class AccommodationsPageFragment extends Fragment implements SensorEventL
                 float speed = Math.abs(x - last_gyro_x);
 
                 if (speed > 1.1) {
-                    Log.d("sensor", "shake detected w/ speed: " + speed);
+//                    Log.d("sensor", "shake detected w/ speed: " + speed);
                     Toast.makeText(this.getActivity().getApplicationContext(), "gyro detected w/ speed: " + speed, Toast.LENGTH_SHORT).show();
                     this.calendarDialog = new BottomSheetDialog(getActivity(), R.style.FullScreenBottomSheetDialog);
                     this.calendarView = getLayoutInflater().inflate(R.layout.calendar_page, null);

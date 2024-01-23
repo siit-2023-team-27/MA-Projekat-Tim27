@@ -22,7 +22,9 @@ import com.example.nomad.fragments.FragmentTransition;
 import com.example.nomad.fragments.accommodations.AccommodationFragment;
 import com.example.nomad.services.NotificationService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -31,11 +33,13 @@ import java.util.List;
 public class NotificationAdapter extends ArrayAdapter<NotificationDTO> {
 
     private ArrayList<NotificationDTO> notifications;
+    private ArrayList<NotificationDTO> allNotifications;
     private FragmentActivity activity;
 
     public NotificationAdapter(Context context, ArrayList<NotificationDTO> notifications, FragmentActivity activity){
         super(context, R.layout.accommodation_card, notifications);
         this.notifications = notifications;
+        this.allNotifications = notifications;
         this.activity = activity;
     }
 
@@ -71,7 +75,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationDTO> {
         if(notification != null) {
             title.setText(notification.getTitle());
             text.setText(notification.getText());
-            date.setText(notification.getDate().toString());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            String notificationDate = format.format(notification.getDate());
+            date.setText(notificationDate);
         }
 
         return convertView;
@@ -80,13 +86,11 @@ public class NotificationAdapter extends ArrayAdapter<NotificationDTO> {
     public void filterNotifications(Date start, Date finish) {
         ArrayList<NotificationDTO> filteredNotifications = new ArrayList<>();
 
-        // Iterate through the existing notifications
-        for (NotificationDTO notification : notifications) {
+
+        for (NotificationDTO notification : allNotifications) {
             Date notificationDate = new Date(notification.getDate());
 
-            // Check if the notification date is within the specified date range
-            if (notificationDate != null && !notificationDate.before(start) && !notificationDate.after(finish)) {
-                // Add the notification to the filtered list if it's within the range
+            if (!notificationDate.before(start) && !notificationDate.after(finish)) {
                 filteredNotifications.add(notification);
             }
         }

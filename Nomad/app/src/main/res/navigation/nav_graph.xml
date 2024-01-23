@@ -62,6 +62,11 @@
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_host_reports" />
     <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.example.nomad.fragments.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
         android:id="@+id/nav_create_accommodation"
         android:name="com.example.nomad.fragments.CreateAccommodationFragment"
         android:label="fragment_create_accommodation"

@@ -69,6 +69,7 @@ public class LocationService {
     public static List<Address> getAddressesFromLocationName(String locationName, int maxResults) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
+        address = locationName;
 
         // Define a list to store the resulting addresses
         final List<Address>[] addressList = new List[]{null};

@@ -59,7 +59,7 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationRespons
     public GuestReservationListAdapter(Context context, ArrayList<ReservationResponseDTO> accommodations, FragmentActivity activity, boolean isRequestsPage){
         super(context, R.layout.guest_reservations_card, accommodations);
         this.reservations = accommodations;
-        loadAccommodations();
+        //loadAccommodations();
         this.activity = activity;
         this.isRequestsPage = isRequestsPage;
     }

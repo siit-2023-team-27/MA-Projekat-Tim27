@@ -28,9 +28,9 @@ public class ImageService {
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 List<String> images = response.body();
 
-                Log.d("onResponse: ", String.valueOf(response.code()));
-                Log.d("onResponse: ", response.toString());
-                Log.d("onResponse: ", images.toString());
+//                Log.d("onResponse: ", String.valueOf(response.code()));
+//                Log.d("onResponse: ", response.toString());
+//                Log.d("onResponse: ", images.toString());
                 paths.add(images.get(0));
             }
 

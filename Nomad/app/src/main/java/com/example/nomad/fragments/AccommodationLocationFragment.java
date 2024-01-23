@@ -76,6 +76,9 @@ public class AccommodationLocationFragment extends Fragment {
     private Button nextButton;
     private EditText selectedLocation;
 
+    private boolean isEdit;
+    public void setIsEdit(boolean isEdit) {this.isEdit = isEdit;}
+
     List<Marker> markers = new ArrayList<>();
 
 
@@ -126,24 +129,19 @@ public class AccommodationLocationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-
-        //inflate and create the map
-
-//        getActivity().setContentView(R.layout.fragment_accommodation_location);
-//        getActivity().setContentView(R.layout.activity_main);
-
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
-
-
-
         nextButton = (Button)view.findViewById(R.id.NextButton);
-        nextButton.setEnabled(false);
+        if(isEdit) {
+            nextButton.setEnabled(true);
+        }else{nextButton.setEnabled(false);}
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
                 calendarFragment.setAccommodation(accommodation);
+                calendarFragment.setIsEdit(isEdit);
                 FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
             }
         });
@@ -159,9 +157,7 @@ public class AccommodationLocationFragment extends Fragment {
         mapController.setCenter(startPoint);
 //        map.setMinZoomLevel(2d);
 
-
         setLocation();
-
         MapEventsReceiver mReceive = new MapEventsReceiver() {
 
             @Override
@@ -199,7 +195,9 @@ public class AccommodationLocationFragment extends Fragment {
         map.getOverlays().add(overlay);
 
         nextButton = view.findViewById(R.id.NextButton);
-        nextButton.setEnabled(false);
+        if(isEdit) {
+            nextButton.setEnabled(true);
+        }else{nextButton.setEnabled(false);}
         Button backButton = view.findViewById(R.id.backButton);
         backButton.setEnabled(false);
         if(isBackNeeded){
@@ -212,14 +210,6 @@ public class AccommodationLocationFragment extends Fragment {
             });
         }
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarFragment calendarFragment = CalendarFragment.newInstance("t", "t");
-                calendarFragment.setAccommodation(accommodation);
-                FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
-            }
-        });
     }
     public void click(View view){
         map.invalidate();
@@ -243,6 +233,7 @@ public class AccommodationLocationFragment extends Fragment {
 
         CalendarFragment calendarFragment = CalendarFragment.newInstance("", "");
         calendarFragment.setAccommodation(accommodation);
+        calendarFragment.setIsEdit(isEdit);
         FragmentTransition.to(calendarFragment, getActivity(), true, R.id.accommodationCreationHostView);
 
     }
@@ -252,7 +243,7 @@ public class AccommodationLocationFragment extends Fragment {
 
     public void setLocation() {
         Log.i("ADRESA", "set location: " +  accommodation.getAddress());
-        if (accommodation != null ){
+        if (isEdit || isBackNeeded){
             selectedLocation.setText(accommodation.getAddress());
             nextButton.setEnabled(true);
             List<Address> addresses = LocationService.getAddressesFromLocationName(accommodation.getAddress(), 1);
