@@ -13,6 +13,7 @@ import com.example.nomad.activities.HomeActivity;
 import com.example.nomad.dto.AccommodationDTO;
 import com.example.nomad.dto.Amenity;
 import com.example.nomad.dto.NotificationDTO;
+import com.example.nomad.dto.NotificationDTOCreation;
 import com.example.nomad.enums.NotificationType;
 import com.example.nomad.helper.Consts;
 import com.google.gson.GsonBuilder;
@@ -98,12 +99,12 @@ public class NotificationService {
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
     public void sendNotification(String text, String title, String type, Long targetUser){
-        NotificationDTO notificationToSend = new NotificationDTO();
+        NotificationDTOCreation notificationToSend = new NotificationDTOCreation();
         notificationToSend.setNotificationType(NotificationType.valueOf(type));
         notificationToSend.setText(text);
         notificationToSend.setTitle(title);
         notificationToSend.setDate(new Date().getTime());
-        notificationToSend.setTargetAppUser(targetUser);
+        notificationToSend.setTargetAppUser(targetUser.toString());
         String jsonNotification =  new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create().toJson(notificationToSend);
         stompClient.send("/socket-subscriber/send/message", jsonNotification).subscribe();

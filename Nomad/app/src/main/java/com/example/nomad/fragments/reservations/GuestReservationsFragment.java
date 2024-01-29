@@ -183,8 +183,8 @@ public class GuestReservationsFragment extends Fragment {
                                 reservations.add(r);
                             }
                         }                        // Do something with the list
-                        FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations, false), getActivity(), false, R.id.scroll_guest_reservations);
-
+                        //FragmentTransition.to(GuestReservationsListFragment.newInstance(reservations, false), getActivity(), false, R.id.scroll_guest_reservations);
+                        loadAccommodationsAndUsers();
                     }
                 });
 
